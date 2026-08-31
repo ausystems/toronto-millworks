@@ -1,0 +1,14 @@
+# macOS
+.DS_Store
+
+# editor / tooling
+.vscode/
+.idea/
+__pycache__/
+*.pyc
+
+# local dev server config used by the coding agent
+.claude/
+
+# vercel local state
+.vercel/

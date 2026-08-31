@@ -1,0 +1,39 @@
+# Toronto Millworks
+
+> Custom millwork, cabinetry and interior renovation in Toronto. We measure on site, draw it, mill it in our own shop, then install and finish it. Residential and commercial work across Toronto and the Greater Toronto Area.
+
+## Core pages
+
+- [Home](https://toronto-millworks.vercel.app/): Custom millwork, cabinetry and interior renovation in Toronto.
+- [Services](https://toronto-millworks.vercel.app/services/): The five things we make.
+- [Projects](https://toronto-millworks.vercel.app/projects/): A commercial bar fit-out and residential joinery.
+- [About](https://toronto-millworks.vercel.app/about/): One shop that measures, draws, mills and installs.
+- [Contact](https://toronto-millworks.vercel.app/contact/): Get a measured quote.
+- [FAQ](https://toronto-millworks.vercel.app/faq/): Cost, timing, materials and process.
+
+## Services
+
+- [Custom Kitchens](https://toronto-millworks.vercel.app/services/custom-kitchens/): Custom kitchen cabinetry in Toronto, milled and installed by our own shop. Islands, pantries and appliance surrounds built to your measured drawings.
+- [Cabinetry & Built-Ins](https://toronto-millworks.vercel.app/services/cabinetry-and-built-ins/): Custom built-in cabinetry in Toronto. Wall units, wardrobes, libraries, media walls and storage designed around the room and installed by our own team.
+- [Architectural Millwork](https://toronto-millworks.vercel.app/services/architectural-millwork/): Architectural millwork in Toronto. Wall panelling, coffered ceilings, crown moulding, wainscoting, stair details and custom trim profiles milled to match.
+- [Commercial Fit-Outs](https://toronto-millworks.vercel.app/services/commercial-fit-outs/): Commercial millwork in Toronto for restaurants, bars, cafes, offices and retail. Built to spec in our shop and installed on schedule with minimal downtime.
+- [Interior Renovation](https://toronto-millworks.vercel.app/services/interior-renovation/): Millwork-led interior renovation in Toronto. One team handling the joinery, surfaces and finishing so the cabinetry and the room are built to the same standard.
+
+## Service areas
+
+- [Toronto](https://toronto-millworks.vercel.app/service-areas/toronto/): Custom millwork and cabinetry across Toronto, from downtown condos to Forest Hill and the Annex. Measured, milled and installed by our own shop.
+- [North York](https://toronto-millworks.vercel.app/service-areas/north-york/): Custom cabinetry and architectural millwork in North York, including Willowdale, Bayview Village and York Mills. Kitchens, built-ins, panelling and interior renovation.
+- [Etobicoke](https://toronto-millworks.vercel.app/service-areas/etobicoke/): Custom kitchens, cabinetry and architectural millwork in Etobicoke, from Mimico and The Kingsway to the Humber Bay waterfront. Built and installed by our own shop.
+- [Scarborough](https://toronto-millworks.vercel.app/service-areas/scarborough/): Custom cabinetry, built-in storage and interior renovation in Scarborough and the Bluffs. Measured on site, milled in our own shop and installed by the same team.
+- [Vaughan](https://toronto-millworks.vercel.app/service-areas/vaughan/): Custom kitchens, wall panelling and built-in cabinetry in Vaughan, Woodbridge, Maple, Kleinburg and Thornhill. Measured on site and milled in our own Toronto shop.
+- [Mississauga](https://toronto-millworks.vercel.app/service-areas/mississauga/): Custom millwork and cabinetry in Mississauga for homes and commercial spaces, including restaurants, offices and retail.
+
+## Guides
+
+- [How custom millwork is made](https://toronto-millworks.vercel.app/guides/how-custom-millwork-is-made/): Site measure, shop drawings, milling, dry fitting, install and finishing.
+
+## Contact
+
+- Email: hello@torontomillworks.ca
+- Location: Toronto, Ontario, Canada
+- Service area: Toronto, North York, Etobicoke, Scarborough, East York, Vaughan, Richmond Hill, Markham, Mississauga, Oakville

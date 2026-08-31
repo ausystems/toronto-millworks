@@ -1,0 +1,23 @@
+# robots.txt for Toronto Millworks
+User-agent: *
+Allow: /
+Disallow: /search/
+Disallow: /404.html
+
+# AI crawlers are welcome. Structured summaries live in /llms.txt
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://toronto-millworks.vercel.app/sitemap.xml
