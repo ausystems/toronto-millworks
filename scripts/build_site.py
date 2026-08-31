@@ -948,7 +948,12 @@ def host_configs():
     vercel = {
         "cleanUrls": True,
         "trailingSlash": True,
-        "redirects": [{"source": "/home", "destination": "/", "permanent": True}],
+        # trailingSlash normalises the path before redirects are matched, so the
+        # source has to carry the slash or it never fires
+        "redirects": [
+            {"source": "/home", "destination": "/", "permanent": True},
+            {"source": "/home/", "destination": "/", "permanent": True},
+        ],
         "headers": [
             {"source": "/(.*)", "headers": [
                 {"key": "X-Content-Type-Options", "value": "nosniff"},
