@@ -1,5 +1,12 @@
 # Toronto Millworks
 
+**Live:** https://toronto-millworks.vercel.app
+**Repo:** https://github.com/ausystems/toronto-millworks
+
+Pushing to `main` auto-deploys to Vercel. No build step runs on Vercel: the
+generated HTML is committed, so what is in the repo is exactly what ships.
+Run `python3 scripts/build_site.py` locally before committing content changes.
+
 Static site, 21 pages. Generated from `src/partials/` and
 `scripts/site_content.py`, so every head, nav, footer and JSON-LD graph stays
 consistent.
