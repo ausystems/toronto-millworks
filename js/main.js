@@ -376,3 +376,62 @@
     }).catch(function () { /* clipboard blocked, the mailto link still works */ });
   });
 })();
+
+/* ── FAQ accordions ───────────────────────────────────────────
+   <details> already toggles and is keyboard accessible on its own, so this
+   only takes over to ease the height. If it never runs, the accordions still
+   work, just without the animation. */
+(function () {
+  "use strict";
+  var rows = document.querySelectorAll(".faq__row");
+  if (!rows.length) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (!Element.prototype.animate) return;
+
+  var DUR = 420;
+  var EASE = "cubic-bezier(.22,.61,.36,1)";
+
+  Array.prototype.forEach.call(rows, function (row) {
+    var summary = row.querySelector(".faq__q");
+    var panel = row.querySelector(".faq__panel");
+    if (!summary || !panel) return;
+
+    var anim = null;
+    var closing = false;
+
+    function run(from, to, dur, done) {
+      if (anim) anim.cancel();
+      anim = panel.animate(
+        [{ height: from + "px", opacity: from ? 1 : 0 },
+         { height: to + "px", opacity: to ? 1 : 0 }],
+        { duration: dur, easing: EASE }
+      );
+      anim.onfinish = function () { anim = null; if (done) done(); };
+      anim.oncancel = function () { anim = null; };
+    }
+
+    function open() {
+      /* read the live height before cancelling, so reversing mid-close
+         continues from where it actually is instead of snapping */
+      var from = anim ? panel.getBoundingClientRect().height : 0;
+      closing = false;
+      row.open = true;
+      run(from, panel.scrollHeight, DUR);
+    }
+
+    function close() {
+      var from = panel.getBoundingClientRect().height;
+      closing = true;
+      run(from, 0, Math.round(DUR * 0.85), function () {
+        row.open = false;
+        closing = false;
+      });
+    }
+
+    summary.addEventListener("click", function (e) {
+      e.preventDefault();
+      if (row.open && !closing) close();
+      else open();
+    });
+  });
+})();

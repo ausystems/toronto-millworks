@@ -500,18 +500,65 @@ body{
 .lrow__a svg{ width:44%; height:44%; }
 .lrow a:hover .lrow__a{ background:var(--brass); border-color:var(--brass); color:#fff; transform:rotate(45deg); }
 
-/* faq */
+/* faq accordions */
 .faq{ padding:clamp(34px,4.4vw,66px) 0; border-top:1px solid var(--line-soft); }
 .faq .pill{ margin-bottom:clamp(14px,1.7vw,22px); }
 .faq__list{ margin-top:clamp(24px,3vw,44px); border-top:1px solid var(--line); }
-.faq__row{
-  display:grid; grid-template-columns:minmax(0,38%) minmax(0,62%);
+
+.faq__row{ border-bottom:1px solid var(--line); }
+
+/* summary already carries button semantics, so it only needs the chrome */
+.faq__q{
+  position:relative;
+  display:flex; align-items:flex-start; justify-content:space-between;
   gap:clamp(16px,2.4vw,40px);
-  padding:clamp(20px,2.3vw,30px) 0;
-  border-bottom:1px solid var(--line);
+  padding:clamp(19px,2.15vw,28px) clamp(6px,1vw,14px);
+  cursor:pointer;
+  list-style:none;
+  transition:background-color .4s var(--ease);
+  -webkit-tap-highlight-color:transparent;
 }
-.faq__q{ font-size:clamp(1rem,1.4vw,1.32rem); font-weight:400; line-height:1.28; letter-spacing:-.024em; }
-.faq__a{ font-size:clamp(13.5px,1.04vw,16px); line-height:1.68; color:var(--ink-70); text-wrap:pretty; }
+.faq__q::-webkit-details-marker{ display:none; }
+.faq__q::marker{ content:""; }
+@media (hover:hover){ .faq__q:hover{ background:var(--paper-2); } }
+.faq__q:focus-visible{ outline:2px solid var(--brass); outline-offset:-3px; border-radius:4px; }
+
+.faq__q-t{
+  margin:0;
+  font-size:clamp(1rem,1.4vw,1.32rem);
+  font-weight:400; line-height:1.32; letter-spacing:-.024em;
+  color:var(--ink);
+  max-width:46ch;
+  transition:color .3s var(--ease);
+}
+
+/* a hairline plus that becomes a minus, rather than a chevron */
+.faq__ico{
+  position:relative; flex:none;
+  width:clamp(15px,1.35vw,19px); height:clamp(15px,1.35vw,19px);
+  margin-top:.32em;
+}
+.faq__ico::before,
+.faq__ico::after{
+  content:""; position:absolute; left:0; top:50%;
+  width:100%; height:1px; background:var(--ink);
+  transition:transform .45s var(--ease), background-color .3s var(--ease);
+}
+.faq__ico::after{ transform:rotate(90deg); }
+.faq__row[open] .faq__ico::after{ transform:rotate(0deg); }
+.faq__row[open] .faq__ico::before,
+.faq__row[open] .faq__ico::after{ background:var(--brass); }
+.faq__row[open] .faq__q-t{ color:var(--ink); }
+
+/* JS animates this box; overflow keeps the reveal clean mid-flight */
+.faq__panel{ overflow:hidden; }
+.faq__a{
+  margin:0;
+  padding:0 clamp(6px,1vw,14px) clamp(22px,2.4vw,32px);
+  padding-right:clamp(40px,6vw,90px);
+  font-size:clamp(13.5px,1.04vw,16px); line-height:1.68;
+  color:var(--ink-70); text-wrap:pretty; max-width:74ch;
+}
 
 /* cta band */
 .band{ padding:clamp(44px,5.4vw,84px) 0; border-top:1px solid var(--line-soft); }
@@ -891,7 +938,6 @@ body{
   .cx__grid{ grid-template-columns:1fr; gap:clamp(30px,5vw,44px); }
   .cx__steps{ grid-template-columns:1fr; gap:clamp(22px,4vw,32px); }
   .cx__title{ max-width:none; }
-  .faq__row{ grid-template-columns:1fr; gap:clamp(10px,1.8vw,16px); }
   .contact__grid{ grid-template-columns:1fr; gap:clamp(16px,3vw,24px); }
   .lrow a{ grid-template-columns:clamp(34px,6vw,48px) minmax(0,1fr) auto; row-gap:8px; }
   .lrow__d{ grid-column:2 / -1; }
@@ -919,4 +965,5 @@ body{
   .reel__track{ height:auto; }
   .reel__pin{ position:static; height:auto; padding:clamp(40px,5vw,72px) 0; }
   .reel__media{ height:min(66vh, 62vw); }
+  .faq__ico::before, .faq__ico::after{ transition:none; }
 }

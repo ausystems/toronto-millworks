@@ -346,13 +346,20 @@ def crumbs_html(page):
 
 
 def faq_html(items):
+    """Native <details> so the answers are in the DOM, toggle without JS and
+    carry summary's button semantics for free. JS only adds the easing."""
     rows = []
     for q, a in items:
         rows.append(
-            f'    <div class="faq__row">\n'
-            f'      <h3 class="faq__q">{E(q)}</h3>\n'
-            f'      <p class="faq__a">{E(a)}</p>\n'
-            f'    </div>')
+            '    <details class="faq__row">\n'
+            '      <summary class="faq__q">\n'
+            f'        <h3 class="faq__q-t">{E(q)}</h3>\n'
+            '        <span class="faq__ico" aria-hidden="true"></span>\n'
+            '      </summary>\n'
+            '      <div class="faq__panel">\n'
+            f'        <p class="faq__a">{E(a)}</p>\n'
+            '      </div>\n'
+            '    </details>')
     return ('<section class="faq" aria-labelledby="faq-h">\n'
             '  <div class="shell">\n'
             '    <span class="pill pill--line"><i class="dot" aria-hidden="true"></i>Questions</span>\n'
@@ -738,7 +745,6 @@ def build_pages():
                  "what it costs, how long it takes, materials, matching existing "
                  "trim and which areas we serve."),
         "keywords": "millwork FAQ, custom cabinetry cost Toronto, millwork questions",
-        "page_type": "FAQPage",
         "body": (page_head_block(fp) + "\n" + faq_html(FAQ) + "\n" + cta_html(fp)),
         "faq": FAQ,
         "changefreq": "monthly", "priority": "0.7",
