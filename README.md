@@ -33,6 +33,27 @@ so `object-fit` never has anything to throw away. That is also why CLS is 0.
 
 14 plates: eight from the residential master, six from the fit-out sequence.
 
+## Sequence stabilisation
+
+The supplied frames were not shot from one fixed camera. Frames 1 to 59 are
+locked, then from frame 60 the camera sits 13.7px right, 11.4px down and 1.9%
+wider, and stays there. Scrubbing showed it as a jump.
+
+`scripts/stabilise_frames.py` solves a similarity transform per frame against
+frame 1, using phase correlation on edge maps because the lighting changes
+completely across the sequence and raw pixel difference is meaningless here. It
+then detects that the camera steps rather than wanders, gives every frame in a
+run one shared transform so no per-frame jitter is invented, and closes the
+remaining sub-pixel seam with a feedback pass. Finally it crops to the rectangle
+every frame still covers, which is the 1.5% zoom that hides the correction.
+
+Result, measured: horizontal drift 14.59px to 0.23px, vertical 11.09px to
+0.17px, with no frame more than half a pixel off.
+
+    python3 scripts/stabilise_frames.py <src_png_dir> <out_dir>
+    python3 scripts/build_reel.py <out_dir> assets/millwork-fit-out-sequence
+    python3 scripts/build_library.py
+
 ## Motion
 
 GSAP with ScrollTrigger, self hosted in `assets/js`. It runs one shared scroll
