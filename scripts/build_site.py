@@ -387,21 +387,6 @@ def cta_html(page):
         '</section>')
 
 
-def page_head_block(page):
-    label = page.get("label", "")
-    chip = (f'<span class="pill pill--line"><i class="dot" aria-hidden="true"></i>{E(label)}</span>'
-            if label else "")
-    return (
-        '<header class="phead">\n'
-        f'  <div class="shell">\n'
-        f'    {crumbs_html(page)}\n'
-        f'    {chip}\n'
-        f'    <h1 class="phead__title">{E(page["h1"])}</h1>\n'
-        f'    <p class="phead__lede">{E(page["lede"])}</p>\n'
-        '  </div>\n'
-        '</header>')
-
-
 def render(page):
     body = page.get("body", "")
     out = [
@@ -413,6 +398,8 @@ def render(page):
         body,
         '</main>',
         footer_for(page),
+        f'<script src="{rel_prefix(page["path"])}assets/js/gsap.min.js" defer></script>',
+        f'<script src="{rel_prefix(page["path"])}assets/js/ScrollTrigger.min.js" defer></script>',
         f'<script src="{rel_prefix(page["path"])}js/main.js" defer></script>',
         '</body>',
         '</html>',
@@ -440,52 +427,131 @@ def write(path, text):
 
 # ══════════════════════════════════════════════════════════════════════════════
 #  BODY BUILDERS
+#  Neo-Swiss composition: a strict grid, oversized type, generous air, and
+#  imagery that is art directed per breakpoint rather than cropped by luck.
 # ══════════════════════════════════════════════════════════════════════════════
-def prose(sections):
-    out = []
-    for title, items in sections:
-        if isinstance(items, list) and len(items) and isinstance(items[0], str) and \
-           any(len(i) > 160 for i in items):
-            inner = "".join(f'<p class="prose__p">{E(i)}</p>' for i in items)
-        else:
-            inner = ('<ul class="ticks">'
-                     + "".join(f'<li>{E(i)}</li>' for i in items) + '</ul>')
-        out.append(
-            '  <div class="prose__block">\n'
-            f'    <h2 class="prose__h">{E(title)}</h2>\n'
-            f'    <div class="prose__body">{inner}</div>\n'
-            '  </div>')
-    return '<section class="prose">\n  <div class="shell prose__grid">\n' \
-           + "\n".join(out) + '\n  </div>\n</section>'
+import glob
+from build_library import PLATES as LIB
+
+_WIDTHS = {}
 
 
-def media_block(page, src_base, alt, ratio="16 / 9"):
+def lib_widths(name, kind):
+    key = (name, kind)
+    if key not in _WIDTHS:
+        found = glob.glob(os.path.join(ROOT, "assets/img/lib", f"{name}-{kind}-*.webp"))
+        _WIDTHS[key] = sorted(int(re.search(r"-(\d+)\.webp$", f).group(1)) for f in found)
+    return _WIDTHS[key]
+
+
+def fig(page, name, cls="", wide="100vw", tall="100vw", eager=False):
+    """A picture with a genuinely different composition per breakpoint. The
+    phone gets a portrait crop built around the same focal point, so nothing is
+    ever squeezed or beheaded."""
     p = rel_prefix(page["path"])
-    widths = [800, 1200, 1600, 2400, 3200] if "cabinetry" in src_base else [1280, 1920, 2560, 3840]
-    srcset = ", ".join(f'{p}assets/img/{src_base}-{w}.webp {w}w' for w in widths)
-    return (f'<figure class="pmedia" style="--r:{ratio}">\n'
-            f'  <img src="{p}assets/img/{src_base}-{widths[1]}.webp" srcset="{srcset}" '
-            f'sizes="(max-width: 860px) 100vw, 90vw" loading="lazy" decoding="async" '
-            f'alt="{E(alt)}">\n</figure>')
+    alt = LIB[name][4]
+    w, t = lib_widths(name, "wide"), lib_widths(name, "tall")
+    if not w or not t:
+        raise SystemExit(f"missing library plate: {name}")
+    ss_w = ", ".join(f"{p}assets/img/lib/{name}-wide-{x}.webp {x}w" for x in w)
+    ss_t = ", ".join(f"{p}assets/img/lib/{name}-tall-{x}.webp {x}w" for x in t)
+    load = 'loading="eager" fetchpriority="high"' if eager else 'loading="lazy"'
+    klass = ("fig " + cls).strip()
+    return (f'<figure class="{klass}">\n'
+            f'  <picture>\n'
+            f'    <source media="(min-width: 760px)" srcset="{ss_w}" sizes="{wide}">\n'
+            f'    <img src="{p}assets/img/lib/{name}-tall-{t[0]}.webp" srcset="{ss_t}" '
+            f'sizes="{tall}" width="{t[-1]}" height="{round(t[-1]*5/4)}" '
+            f'{load} decoding="async" alt="{E(alt)}">\n'
+            f'  </picture>\n'
+            f'</figure>')
 
 
-def links_grid(page, items, heading):
-    p = rel_prefix(page["path"])
-    rows = []
-    for i, (name, path, blurb) in enumerate(items, start=1):
-        rows.append(
-            f'    <li class="lrow"><a href="{p}{path.strip("/")}/">\n'
-            f'      <span class="lrow__n">{i:02d}</span>\n'
-            f'      <span class="lrow__t">{E(name)}</span>\n'
-            f'      <span class="lrow__d">{E(blurb)}</span>\n'
-            f'      <i class="lrow__a" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none">'
-            f'<path d="M4 10L10 4M10 4H4.9M10 4v5.1" stroke="currentColor" stroke-width="1.5" '
-            f'stroke-linecap="round" stroke-linejoin="round"/></svg></i>\n'
-            f'    </a></li>')
-    return ('<section class="lgrid">\n  <div class="shell">\n'
-            f'    <h2 class="sec-title">{E(heading)}</h2>\n'
-            '    <ol class="lrows">\n' + "\n".join(rows) + '\n    </ol>\n'
+def phead(page, plate=None):
+    """Oversized editorial header. The breadcrumb sits quietly above it."""
+    chip = (f'<span class="pill pill--line"><i class="dot" aria-hidden="true"></i>'
+            f'{E(page["label"])}</span>' if page.get("label") else "")
+    out = ['<header class="ph">',
+           '  <div class="shell">',
+           f'    {crumbs_html(page)}',
+           f'    {chip}',
+           f'    <h1 class="ph__t">{E(page["h1"])}</h1>',
+           '    <div class="ph__l">',
+           f'      <p>{E(page["lede"])}</p>',
+           '    </div>',
+           '  </div>',
+           '</header>']
+    if plate:
+        out.append(fig(page, plate, "fig--bleed", wide="100vw", tall="100vw", eager=True))
+    return "\n".join(out)
+
+
+def say(text, small=False):
+    """One large statement, standing alone. No rule, no number, no ornament."""
+    return ('<section class="say">\n  <div class="shell">\n'
+            f'    <p class="say__t{" say__t--s" if small else ""}">{E(text)}</p>\n'
             '  </div>\n</section>')
+
+
+def cols(blocks):
+    """Swiss two column body: label left, prose right, aligned to one baseline."""
+    out = []
+    for title, items in blocks:
+        long = any(len(i) > 150 for i in items)
+        inner = ("".join(f'<p>{E(i)}</p>' for i in items) if long
+                 else '<ul>' + "".join(f'<li>{E(i)}</li>' for i in items) + '</ul>')
+        out.append('    <div class="cols__row">\n'
+                   f'      <h2 class="cols__h">{E(title)}</h2>\n'
+                   f'      <div class="cols__b">{inner}</div>\n'
+                   '    </div>')
+    return ('<section class="cols">\n  <div class="shell">\n'
+            + "\n".join(out) + '\n  </div>\n</section>')
+
+
+def figpair(page, a, b):
+    """Two plates at deliberately unequal weight, the way a spread is set."""
+    return ('<section class="pair">\n  <div class="shell pair__g">\n'
+            + fig(page, a, "pair__a", wide="52vw", tall="100vw") + "\n"
+            + fig(page, b, "pair__b", wide="38vw", tall="100vw") + "\n"
+            '  </div>\n</section>')
+
+
+def figsay(page, plate, heading, body, flip=False):
+    """A plate held against a short statement. Alternates side to side."""
+    return (f'<section class="fs{" fs--flip" if flip else ""}">\n'
+            '  <div class="shell fs__g">\n'
+            + fig(page, plate, "fs__f", wide="50vw", tall="100vw") + "\n"
+            '    <div class="fs__t">\n'
+            f'      <h2 class="fs__h">{E(heading)}</h2>\n'
+            f'      <p class="fs__p">{E(body)}</p>\n'
+            '    </div>\n  </div>\n</section>')
+
+
+def cards(page, items, heading):
+    """Link grid. Each card carries a plate, and no card carries a number."""
+    p = rel_prefix(page["path"])
+    out = []
+    for name, path, blurb, plate in items:
+        out.append(
+            f'      <li class="cards__i"><a href="{p}{path.strip("/")}/">\n'
+            + fig(page, plate, "cards__f", wide="30vw", tall="46vw") + "\n"
+            f'        <h3 class="cards__t">{E(name)}</h3>\n'
+            f'        <p class="cards__d">{E(blurb)}</p>\n'
+            '      </a></li>')
+    return ('<section class="cards">\n  <div class="shell">\n'
+            f'    <h2 class="cards__h">{E(heading)}</h2>\n'
+            '    <ul class="cards__g">\n' + "\n".join(out) + '\n    </ul>\n'
+            '  </div>\n</section>')
+
+
+def strip(page, plates, heading, caption=None):
+    """A run of plates read left to right, for a sequence with a narrative."""
+    inner = "\n".join(fig(page, n, "strip__f", wide="34vw", tall="80vw") for n in plates)
+    cap = f'    <p class="strip__c">{E(caption)}</p>\n' if caption else ""
+    return ('<section class="strip">\n  <div class="shell">\n'
+            f'    <h2 class="strip__h">{E(heading)}</h2>\n'
+            f'{cap}'
+            '  </div>\n  <div class="strip__r">\n' + inner + '\n  </div>\n</section>')
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -494,7 +560,20 @@ def links_grid(page, items, heading):
 def build_pages():
     pages = []
 
-    # ── home ────────────────────────────────────────────────────────────────
+    # which plate carries which page. Nothing repeats as a hero.
+    SVC_PLATE = {
+        "custom-kitchens":         ("counter", "base", "doors"),
+        "cabinetry-and-built-ins": ("panel-corner", "doors", "sconce"),
+        "architectural-millwork":  ("cornice", "coffer", "base"),
+        "commercial-fit-outs":     ("finished", "feature", "carcass"),
+        "interior-renovation":     ("room", "archway", "panel-corner"),
+    }
+    AREA_PLATE = ["room", "doors", "archway", "panel-corner", "coffer", "sconce"]
+
+    svc_cards = [(sv["nav"], "services/" + sv["slug"], sv["desc"].split(".")[0] + ".",
+                  SVC_PLATE[sv["slug"]][0]) for sv in SERVICES]
+
+    # home keeps its own composition
     pages.append({
         "path": "/",
         "title": "Custom Millwork Toronto | Cabinetry, Kitchens & Joinery",
@@ -511,61 +590,58 @@ def build_pages():
         "changefreq": "weekly", "priority": "1.0",
     })
 
-    # ── services hub ────────────────────────────────────────────────────────
-    svc_items = [(s["nav"], "services/" + s["slug"], s["desc"].split(".")[0] + ".")
-                 for s in SERVICES]
+    # services hub
+    sp = {"path": "/services/", "label": "Services",
+          "h1": "Everything we make, made to measure.",
+          "lede": ("Five things we build, all templated from your walls and milled "
+                   "in our own shop before anything reaches your room."),
+          "crumbs": [("Services", "services")]}
     pages.append({
-        "path": "/services/",
-        "label": "Services",
-        "h1": "Millwork and Cabinetry Services in Toronto",
+        **sp,
         "title": "Millwork Services Toronto | Cabinetry, Kitchens & Fit-Outs",
         "desc": ("Custom millwork services in Toronto: kitchens, built-in "
                  "cabinetry, architectural panelling, commercial fit-outs and "
                  "millwork-led interior renovation."),
         "keywords": "millwork services Toronto, custom cabinetry services, joinery Toronto",
-        "lede": ("Five things we make, all measured on site and milled in our own "
-                 "shop before anyone brings a screwdriver to your walls."),
-        "crumbs": [("Services", "services")],
         "page_type": "CollectionPage",
-        "body": (page_head_block({"path": "/services/", "label": "Services",
-                                  "h1": "Millwork and Cabinetry Services in Toronto",
-                                  "lede": "Five things we make, all measured on site and milled in our own shop before anyone brings a screwdriver to your walls.",
-                                  "crumbs": [("Services", "services")]})
-                 + "\n" + links_grid({"path": "/services/"}, svc_items, "What we make")
-                 + "\n" + media_block({"path": "/services/"},
-                                      "toronto-custom-millwork-coffered-ceiling",
-                                      "Gilded cornice and coffered ceiling millwork in a Toronto home")
-                 + "\n" + faq_html(FAQ[:4]) + "\n" + cta_html({"path": "/services/"})),
+        "body": (phead(sp, "room") + "\n"
+                 + say("A kitchen and a bar are the same problem. A room that is "
+                       "not square, and a piece that has to look like it grew there.")
+                 + "\n" + cards(sp, svc_cards, "What we make")
+                 + "\n" + figpair(sp, "cornice", "sconce")
+                 + "\n" + faq_html(FAQ[:4]) + "\n" + cta_html(sp)),
         "faq": FAQ[:4],
         "changefreq": "monthly", "priority": "0.9",
     })
 
-    # ── service pages ───────────────────────────────────────────────────────
-    for s in SERVICES:
-        path = "/services/" + s["slug"] + "/"
-        ph = {"path": path, "label": s["nav"], "h1": s["h1"], "lede": s["lede"],
-              "crumbs": [("Services", "services"), (s["nav"], "services/" + s["slug"])]}
-        others = [(o["nav"], "services/" + o["slug"], o["desc"].split(".")[0] + ".")
-                  for o in SERVICES if o["slug"] != s["slug"]]
+    # service pages
+    for sv in SERVICES:
+        path = "/services/" + sv["slug"] + "/"
+        hero, second, third = SVC_PLATE[sv["slug"]]
+        h = {"path": path, "label": sv["nav"], "h1": sv["h1"], "lede": sv["lede"],
+             "crumbs": [("Services", "services"), (sv["nav"], "services/" + sv["slug"])]}
+        others = [(o["nav"], "services/" + o["slug"], o["desc"].split(".")[0] + ".",
+                   SVC_PLATE[o["slug"]][0]) for o in SERVICES if o["slug"] != sv["slug"]]
+        sec_title, sec_items = sv["sections"][0]
+        rest = sv["sections"][1:]
         pages.append({
-            "path": path, "label": s["nav"], "h1": s["h1"], "lede": s["lede"],
-            "title": s["title"], "desc": s["desc"], "keywords": s["keywords"],
-            "crumbs": ph["crumbs"], "service": s, "faq": s["faq"],
-            "body": (page_head_block(ph) + "\n" + prose(s["sections"]) + "\n"
-                     + media_block(ph, "toronto-custom-cabinetry-wall-panelling",
-                                   f"{s['nav']} by Toronto Millworks, panelled interior detail",
-                                   "4 / 3")
-                     + "\n" + faq_html(s["faq"])
-                     + "\n" + links_grid(ph, others, "Other services")
-                     + "\n" + cta_html(ph)),
+            **h, "title": sv["title"], "desc": sv["desc"], "keywords": sv["keywords"],
+            "service": sv, "faq": sv["faq"],
+            "body": (phead(h, hero) + "\n"
+                     + cols([(sec_title, sec_items)]) + "\n"
+                     + figpair(h, second, third) + "\n"
+                     + (cols(rest) + "\n" if rest else "")
+                     + faq_html(sv["faq"]) + "\n"
+                     + cards(h, others, "Other services") + "\n"
+                     + cta_html(h)),
             "changefreq": "monthly", "priority": "0.8",
         })
 
-    # ── projects ────────────────────────────────────────────────────────────
+    # projects
     pp = {"path": "/projects/", "label": "Projects",
-          "h1": "Millwork Projects in Toronto",
-          "lede": ("A commercial fit-out taken from bare brick shell to finished "
-                   "bar, and the residential joinery that runs alongside it."),
+          "h1": "A shell, and then a room.",
+          "lede": ("One commercial fit-out recorded from bare brick to opening "
+                   "night, and the residential joinery running alongside it."),
           "crumbs": [("Projects", "projects")]}
     pages.append({
         **pp,
@@ -575,36 +651,35 @@ def build_pages():
                  "cabinetry and coffered ceilings."),
         "keywords": "millwork projects Toronto, restaurant fit out Toronto, cabinetry portfolio",
         "page_type": "CollectionPage",
-        "body": (page_head_block(pp) + "\n"
-                 + prose([
-                     ("Commercial fit-out, bare shell to opening", [
-                         "The sequence on our home page is a single room recorded across "
-                         "the whole build. It starts as a bare brick and concrete shell "
-                         "with no services, and ends as a working bar with a reclaimed "
-                         "timber counter, a black feature wall and the lighting live.",
-                         "The counter front is laid up from reclaimed boards of varying "
-                         "tone, set in a running bond so no two courses line up. The bar "
-                         "top is a solid slab, the back counter is a separate carcass, and "
-                         "both were dry fitted in the shop before anything went to site.",
-                     ]),
-                     ("Residential millwork", [
-                         "The panelled interiors shown across the site are the residential "
-                         "side of the same shop: raised panel walls, a cased archway, "
-                         "coffered ceilings with a gilded cornice and cove lighting, and "
-                         "trim run to a profile matched from the original house.",
-                     ]),
-                 ])
-                 + "\n" + media_block(pp, "toronto-custom-millwork-coffered-ceiling",
-                                      "Coffered ceiling with gilded cornice and cove lighting, Toronto residential millwork")
-                 + "\n" + links_grid(pp, svc_items, "The services behind this work")
+        "body": (phead(pp, "finished") + "\n"
+                 + say("It arrives as brick, concrete and a ceiling full of "
+                       "services. It leaves as somewhere you would sit down.")
+                 + "\n"
+                 + strip(pp, ["shell", "lit", "feature", "carcass", "finished"],
+                         "The fit-out, in order",
+                         "Bare shell, lighting live, the feature wall in, the bar "
+                         "carcass against the brick, and the finished room.")
+                 + "\n"
+                 + figsay(pp, "counter", "The counter front",
+                          "Reclaimed boards of varying tone, laid up in a running "
+                          "bond so no two courses line up. The top is a solid slab. "
+                          "Both were dry fitted on the bench before anything went "
+                          "to site.")
+                 + "\n"
+                 + figsay(pp, "cornice", "The residential side",
+                          "The same shop runs raised panel walls, cased openings "
+                          "and coffered ceilings with a gilded cornice, milled to "
+                          "a profile taken from the original house.", flip=True)
+                 + "\n" + figpair(pp, "archway", "base")
+                 + "\n" + cards(pp, svc_cards, "The services behind this work")
                  + "\n" + cta_html(pp)),
         "changefreq": "monthly", "priority": "0.8",
     })
 
-    # ── about ───────────────────────────────────────────────────────────────
-    ap = {"path": "/about/", "label": "About", "h1": "About Toronto Millworks",
-          "lede": ("A millwork shop in Toronto that measures, draws, mills and "
-                   "installs its own work."),
+    # about
+    ap = {"path": "/about/", "label": "About", "h1": "One shop, start to finish.",
+          "lede": ("We measure, draw, mill, install and finish our own work, so "
+                   "no dimension goes missing in a handover."),
           "crumbs": [("About", "about")]}
     pages.append({
         **ap,
@@ -614,15 +689,11 @@ def build_pages():
                  "and finish our own work."),
         "keywords": "Toronto millwork shop, about Toronto Millworks, custom joinery company",
         "page_type": "AboutPage",
-        "body": (page_head_block(ap) + "\n"
-                 + prose([
-                     ("One shop, start to finish", [
-                         "Most joinery on a job site passes through several hands: one "
-                         "company draws it, another builds it, a third hangs it and a "
-                         "fourth paints it. Every handover is a chance for a dimension to "
-                         "drift. We keep all four in the same shop, which is why the "
-                         "reveals stay even and the doors line up.",
-                     ]),
+        "body": (phead(ap, "sconce") + "\n"
+                 + say("Most joinery passes through four companies before it is "
+                       "hung. Every handover is a chance for a dimension to drift.")
+                 + "\n"
+                 + cols([
                      ("How we work", [
                          "We measure the room on site, not from a floor plan.",
                          "We draw elevations and you approve them before anything is cut.",
@@ -636,30 +707,30 @@ def build_pages():
                          "Millwork-led interior renovation.",
                      ]),
                  ])
-                 + "\n" + media_block(ap, "toronto-custom-cabinetry-wall-panelling",
-                                      "Raised wall panelling and a cased archway built by Toronto Millworks",
-                                      "4 / 3")
+                 + "\n" + figpair(ap, "archway", "base")
+                 + "\n"
+                 + figsay(ap, "room", "Why it stays even",
+                          "Walls in older Toronto houses are rarely plumb and "
+                          "corners are rarely square. Scribing on site is what "
+                          "closes the gap between a drawing and a hundred year "
+                          "old wall.")
                  + "\n" + faq_html(FAQ[3:7]) + "\n" + cta_html(ap)),
         "faq": FAQ[3:7],
         "changefreq": "monthly", "priority": "0.7",
     })
 
-    # ── contact ─────────────────────────────────────────────────────────────
+    # contact keeps its own composition
     cp = {"path": "/contact/", "label": "Contact", "h1": "Tell us about the room.",
           "lede": ("Send drawings, a photo or just the dimensions. We come back "
                    "with a measured quote rather than a guess."),
           "crumbs": [("Contact", "contact")]}
-
-    block_rows = [
-        ("Scope", "Residential and commercial"),
-        ("Service area", "Toronto and the GTA"),
-        ("Drawings", "Measured on site"),
-        ("Build", "In our own shop"),
-    ]
+    block_rows = [("Scope", "Residential and commercial"),
+                  ("Service area", "Toronto and the GTA"),
+                  ("Drawings", "Measured on site"),
+                  ("Build", "In our own shop")]
     rows_html = "\n".join(
-        f'        <div class="cx__row"><dt>{E(k)}</dt><dd>{E(v)}</dd></div>'
+        '        <div class="cx__row"><dt>' + E(k) + '</dt><dd>' + E(v) + '</dd></div>'
         for k, v in block_rows)
-
     steps = [
         ("Send what you have",
          "Rough dimensions or a floor plan, photos of the space as it is now, "
@@ -672,13 +743,10 @@ def build_pages():
          "room instead of a per foot rate."),
     ]
     steps_html = "\n".join(
-        f'      <li class="cx__step">\n'
-        f'        <span class="cx__step-n">{i:02d}</span>\n'
-        f'        <h2 class="cx__step-h">{E(t)}</h2>\n'
-        f'        <p class="cx__step-p">{E(d)}</p>\n'
-        f'      </li>'
-        for i, (t, d) in enumerate(steps, start=1))
-
+        '      <li class="cx__step">\n'
+        '        <h2 class="cx__step-h">' + E(t) + '</h2>\n'
+        '        <p class="cx__step-p">' + E(d) + '</p>\n'
+        '      </li>' for t, d in steps)
     pages.append({
         **cp,
         "title": "Contact | Custom Millwork Quote in Toronto | Toronto Millworks",
@@ -688,55 +756,36 @@ def build_pages():
         "keywords": ("contact Toronto Millworks, millwork quote Toronto, custom "
                      "cabinetry quote, joinery estimate Toronto"),
         "page_type": "ContactPage",
-        "body": (
-            '<section class="cx">\n'
-            '  <div class="shell">\n'
-            f'    {crumbs_html(cp)}\n'
-            '\n'
-            '    <div class="cx__grid">\n'
-            '      <div class="cx__lead">\n'
-            '        <span class="pill pill--line"><i class="dot" aria-hidden="true"></i>Contact</span>\n'
-            f'        <h1 class="cx__title">{E(cp["h1"])}</h1>\n'
-            f'        <p class="cx__lede">{E(cp["lede"])}</p>\n'
-            '\n'
-            '        <div class="cx__mail">\n'
-            '          <span class="cx__mail-k">Write to us</span>\n'
-            f'          <a class="cx__mail-a" href="mailto:{SITE["email"]}">{SITE["email"]}</a>\n'
-            f'          <button class="cx__copy" type="button" data-copy="{SITE["email"]}" '
-            'aria-label="Copy the email address">\n'
-            '            <span class="cx__copy-t">Copy</span>\n'
-            '          </button>\n'
-            '        </div>\n'
-            '      </div>\n'
-            '\n'
-            '      <aside class="cx__block" aria-label="At a glance">\n'
-            '        <span class="cx__block-h">Toronto Millworks</span>\n'
-            '        <dl class="cx__rows">\n'
-            f'{rows_html}\n'
-            '        </dl>\n'
-            '        <address class="cx__addr">\n'
-            f'          {SITE["locality"]}, {SITE["region_name"]}<br>Canada\n'
-            '        </address>\n'
-            '      </aside>\n'
-            '    </div>\n'
-            '  </div>\n'
-            '\n'
-            '  <div class="shell">\n'
-            '    <ol class="cx__steps">\n'
-            f'{steps_html}\n'
-            '    </ol>\n'
-            '  </div>\n'
-            '</section>'
-            + "\n" + faq_html(FAQ[:5])),
+        "body": ('<section class="cx">\n  <div class="shell">\n'
+                 + "    " + crumbs_html(cp) + "\n\n    <div class=\"cx__grid\">\n"
+                 '      <div class="cx__lead">\n'
+                 '        <span class="pill pill--line"><i class="dot" aria-hidden="true"></i>Contact</span>\n'
+                 '        <h1 class="cx__title">' + E(cp["h1"]) + '</h1>\n'
+                 '        <p class="cx__lede">' + E(cp["lede"]) + '</p>\n\n'
+                 '        <div class="cx__mail">\n'
+                 '          <span class="cx__mail-k">Write to us</span>\n'
+                 '          <a class="cx__mail-a" href="mailto:' + SITE["email"] + '">' + SITE["email"] + '</a>\n'
+                 '          <button class="cx__copy" type="button" data-copy="' + SITE["email"] + '" '
+                 'aria-label="Copy the email address">\n'
+                 '            <span class="cx__copy-t">Copy</span>\n'
+                 '          </button>\n        </div>\n      </div>\n\n'
+                 '      <aside class="cx__block" aria-label="At a glance">\n'
+                 '        <span class="cx__block-h">Toronto Millworks</span>\n'
+                 '        <dl class="cx__rows">\n' + rows_html + '\n        </dl>\n'
+                 '        <address class="cx__addr">\n'
+                 '          ' + SITE["locality"] + ', ' + SITE["region_name"] + '<br>Canada\n'
+                 '        </address>\n      </aside>\n    </div>\n  </div>\n\n'
+                 '  <div class="shell">\n    <ol class="cx__steps">\n'
+                 + steps_html + '\n    </ol>\n  </div>\n</section>'
+                 + "\n" + faq_html(FAQ[:5])),
         "faq": FAQ[:5],
         "changefreq": "monthly", "priority": "0.9",
     })
 
-    # ── FAQ ─────────────────────────────────────────────────────────────────
-    fp = {"path": "/faq/", "label": "FAQ",
-          "h1": "Custom Millwork FAQ",
-          "lede": ("The questions we are asked most about cost, timing, materials "
-                   "and how a millwork project actually runs."),
+    # faq
+    fp = {"path": "/faq/", "label": "FAQ", "h1": "Questions, answered plainly.",
+          "lede": ("What custom millwork costs, how long it takes, what it is "
+                   "made from, and how a project actually runs."),
           "crumbs": [("FAQ", "faq")]}
     pages.append({
         **fp,
@@ -745,60 +794,69 @@ def build_pages():
                  "what it costs, how long it takes, materials, matching existing "
                  "trim and which areas we serve."),
         "keywords": "millwork FAQ, custom cabinetry cost Toronto, millwork questions",
-        "body": (page_head_block(fp) + "\n" + faq_html(FAQ) + "\n" + cta_html(fp)),
+        "body": (phead(fp, "doors") + "\n" + faq_html(FAQ) + "\n"
+                 + figpair(fp, "coffer", "counter") + "\n"
+                 + cards(fp, svc_cards, "Where to next") + "\n" + cta_html(fp)),
         "faq": FAQ,
         "changefreq": "monthly", "priority": "0.7",
     })
 
-    # ── service areas ───────────────────────────────────────────────────────
-    area_items = [(a["name"], "service-areas/" + a["slug"], a["lede"]) for a in AREA_PAGES]
-    sp = {"path": "/service-areas/", "label": "Service areas",
-          "h1": "Millwork Service Areas Across the GTA",
-          "lede": ("We measure, build and install across Toronto and the "
-                   "surrounding Greater Toronto Area."),
-          "crumbs": [("Service areas", "service-areas")]}
+    # service areas
+    area_cards = [(a["name"], "service-areas/" + a["slug"], a["lede"],
+                   AREA_PLATE[i % len(AREA_PLATE)]) for i, a in enumerate(AREA_PAGES)]
+    sap = {"path": "/service-areas/", "label": "Service areas",
+           "h1": "Toronto, and the ground around it.",
+           "lede": "We measure, build and install across the city and the wider GTA.",
+           "crumbs": [("Service areas", "service-areas")]}
     pages.append({
-        **sp,
+        **sap,
         "title": "Millwork Service Areas | Toronto & GTA | Toronto Millworks",
         "desc": ("Custom millwork and cabinetry across Toronto, North York, "
                  "Etobicoke, Scarborough, Vaughan and Mississauga. Measured on "
                  "site and installed by our own shop."),
         "keywords": "millwork Toronto GTA, cabinetry service area Toronto",
         "page_type": "CollectionPage",
-        "body": (page_head_block(sp) + "\n"
-                 + links_grid(sp, area_items, "Where we work") + "\n" + cta_html(sp)),
+        "body": (phead(sap, "room") + "\n"
+                 + say("Almost no wall in this city is square. That is the whole "
+                       "reason anything worth fitting is templated on site.")
+                 + "\n" + cards(sap, area_cards, "Where we work")
+                 + "\n" + figpair(sap, "doors", "base") + "\n" + cta_html(sap)),
         "changefreq": "monthly", "priority": "0.7",
     })
 
-    for a in AREA_PAGES:
+    for i, a in enumerate(AREA_PAGES):
         path = "/service-areas/" + a["slug"] + "/"
-        h = {"path": path, "label": a["name"],
-             "h1": f"Custom Millwork in {a['name']}", "lede": a["lede"],
-             "crumbs": [("Service areas", "service-areas"), (a["name"], "service-areas/" + a["slug"])]}
+        hero = AREA_PLATE[i % len(AREA_PLATE)]
+        alt2 = AREA_PLATE[(i + 2) % len(AREA_PLATE)]
+        alt3 = AREA_PLATE[(i + 4) % len(AREA_PLATE)]
+        h = {"path": path, "label": a["name"], "h1": "Custom Millwork in " + a["name"],
+             "lede": a["lede"],
+             "crumbs": [("Service areas", "service-areas"),
+                        (a["name"], "service-areas/" + a["slug"])]}
         pages.append({
             **h, "title": a["title"], "desc": a["desc"],
-            "keywords": f"custom millwork {a['name']}, cabinetry {a['name']}, joinery {a['name']}",
-            "body": (page_head_block(h) + "\n"
-                     + prose([
-                         (f"Working in {a['name']}", [a["notes"]]),
-                         ("What we build here", [
-                             "Custom kitchens and kitchen cabinetry.",
-                             "Built-in storage, wardrobes and media walls.",
-                             "Wall panelling, cornice and trim matched to the house.",
-                             "Commercial bars, counters and office joinery.",
-                         ]),
-                     ])
-                     + "\n" + links_grid(h, svc_items, "Services available in " + a["name"])
+            "keywords": "custom millwork " + a["name"] + ", cabinetry " + a["name"] + ", joinery " + a["name"],
+            "body": (phead(h, hero) + "\n"
+                     + figsay(h, alt2, "Working in " + a["name"], a["notes"])
+                     + "\n"
+                     + cols([("What we build here", [
+                         "Custom kitchens and kitchen cabinetry.",
+                         "Built-in storage, wardrobes and media walls.",
+                         "Wall panelling, cornice and trim matched to the house.",
+                         "Commercial bars, counters and office joinery."])])
+                     + "\n" + fig(h, alt3, "fig--bleed")
+                     + "\n" + cards(h, svc_cards, "Services available in " + a["name"])
                      + "\n" + cta_html(h)),
             "changefreq": "monthly", "priority": "0.6",
         })
 
-    # ── guide (Article) ─────────────────────────────────────────────────────
+    # guide
     gp = {"path": "/guides/how-custom-millwork-is-made/", "label": "Guide",
-          "h1": "How Custom Millwork Is Measured, Milled and Installed",
-          "lede": ("What actually happens between the first site visit and the "
-                   "day the joinery is finished in your room."),
-          "crumbs": [("Guides", "guides"), ("How custom millwork is made", "guides/how-custom-millwork-is-made")]}
+          "h1": "How custom millwork is made.",
+          "lede": ("What happens between the first site visit and the day the "
+                   "joinery is finished in your room."),
+          "crumbs": [("Guides", "guides"),
+                     ("How custom millwork is made", "guides/how-custom-millwork-is-made")]}
     pages.append({
         **gp,
         "title": "How Custom Millwork Is Made | Measure, Mill, Install | Guide",
@@ -806,45 +864,33 @@ def build_pages():
                  "site measure and shop drawings through milling, dry fitting, "
                  "installation and on site finishing."),
         "keywords": "how custom millwork is made, millwork process, shop drawings millwork",
-        "is_article": True, "og_type": "article", "page_type": "WebPage",
-        "body": (page_head_block(gp) + "\n"
-                 + prose([
-                     ("1. The site measure", [
-                         "Nothing useful can be drawn from a floor plan alone. Walls in "
-                         "older Toronto houses are rarely plumb, corners are rarely square "
-                         "and floors run away from you. We measure the real opening at "
-                         "several heights, record the out of square and find the services "
-                         "behind the wall before anything is drawn.",
-                     ]),
-                     ("2. Shop drawings", [
-                         "The measurements become elevations: every door, drawer, reveal, "
-                         "shelf and hardware position drawn to scale. This is the stage "
-                         "where changes are cheap. Once you approve the drawings they "
-                         "become the instruction the shop cuts to.",
-                     ]),
-                     ("3. Milling", [
-                         "Sheet goods and solid stock are cut, edged and machined. Profiles "
-                         "that have to match existing trim are run with a ground knife "
-                         "rather than approximated with a stock router bit.",
-                     ]),
-                     ("4. Dry fitting", [
-                         "The assembly is put together on the bench before it leaves. This "
-                         "is the difference between millwork and a flat pack: problems are "
-                         "found in the shop where there are tools, not in your kitchen.",
-                     ]),
-                     ("5. Installation and scribing", [
-                         "On site the carcasses are levelled, fixed and scribed to the "
-                         "walls so the gaps disappear. Scribing is the reason a fitted "
-                         "piece looks built in rather than pushed against a wall.",
-                     ]),
-                     ("6. Finishing", [
-                         "Filling, sanding and final finish happen in place, so the joins "
-                         "made during install disappear into the finished surface.",
-                     ]),
-                 ])
-                 + "\n" + media_block(gp, "toronto-custom-cabinetry-wall-panelling",
-                                      "Finished wall panelling and cased archway showing scribed millwork detail",
-                                      "4 / 3")
+        "is_article": True, "og_type": "article",
+        "body": (phead(gp, "shell") + "\n"
+                 + figsay(gp, "panel-corner", "The site measure",
+                          "Nothing useful can be drawn from a floor plan alone. We "
+                          "measure the real opening at several heights, record the "
+                          "out of square, and find the services behind the wall "
+                          "before anything is drawn.")
+                 + "\n"
+                 + figsay(gp, "coffer", "Shop drawings",
+                          "The measurements become elevations: every door, drawer, "
+                          "reveal, shelf and hardware position drawn to scale. This "
+                          "is the stage where changes are cheap.", flip=True)
+                 + "\n"
+                 + cols([("Milling and dry fitting", [
+                     "Sheet goods and solid stock are cut, edged and machined. "
+                     "Profiles that have to match existing trim are run with a "
+                     "ground knife rather than approximated with a stock bit.",
+                     "The assembly is then put together on the bench before it "
+                     "leaves. Problems get found in the shop, where there are "
+                     "tools, instead of in your kitchen."])])
+                 + "\n" + figpair(gp, "carcass", "counter")
+                 + "\n"
+                 + figsay(gp, "sconce", "Installing and scribing",
+                          "On site the carcasses are levelled, fixed and scribed to "
+                          "the walls so the gaps disappear. Scribing is the reason "
+                          "a fitted piece looks built in rather than pushed against "
+                          "a wall. Filling and finishing happen in place.")
                  + "\n" + faq_html(FAQ[6:]) + "\n" + cta_html(gp)),
         "faq": FAQ[6:],
         "changefreq": "yearly", "priority": "0.6",
@@ -1056,7 +1102,7 @@ def search_page():
          "desc": "Search custom millwork services, service areas and answers.",
          "crumbs": [("Search", "search")], "noindex": True,
          "robots": "noindex, follow"}
-    p["body"] = (page_head_block(p) +
+    p["body"] = (phead(p) +
                  '\n<section class="shell srch">\n'
                  '  <form class="srch__form" role="search" onsubmit="return false">\n'
                  '    <label class="sr-only" for="q">Search this site</label>\n'
@@ -1084,10 +1130,13 @@ def main():
                   "millwork services, service areas across the GTA, or get in "
                   "touch for a measured quote.",
           "crumbs": [], "noindex": True, "robots": "noindex, follow"}
-    svc_items = [(s["nav"], "services/" + s["slug"], s["desc"].split(".")[0] + ".")
-                 for s in SERVICES]
-    nf["body"] = (page_head_block(nf) + "\n"
-                  + links_grid({"path": "/"}, svc_items, "Services")
+    plate = {"custom-kitchens": "counter", "cabinetry-and-built-ins": "panel-corner",
+             "architectural-millwork": "cornice", "commercial-fit-outs": "finished",
+             "interior-renovation": "room"}
+    svc_items = [(sv["nav"], "services/" + sv["slug"], sv["desc"].split(".")[0] + ".",
+                  plate[sv["slug"]]) for sv in SERVICES]
+    nf["body"] = (phead(nf) + "\n"
+                  + cards({"path": "/"}, svc_items, "Services")
                   + "\n" + cta_html({"path": "/"}))
     written.append(write("404.html", render(nf)))
 

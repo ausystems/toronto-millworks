@@ -22,6 +22,28 @@ The homepage body lives in `src/partials/home-main.html`.
 SEO status, the placeholders that still need real values, and the schema that is
 deliberately not live are all in [SEO.md](SEO.md).
 
+## Imagery
+
+`scripts/build_library.py` builds the art-directed library in `assets/img/lib`.
+Each plate is declared as a focal point plus a coverage scale, not a fixed box,
+so the wide and portrait crops are both composed around the same subject. A
+phone gets a real portrait composition rather than a wide plate squeezed into a
+tall hole, and the CSS box aspect matches the served crop at every breakpoint,
+so `object-fit` never has anything to throw away. That is also why CLS is 0.
+
+14 plates: eight from the residential master, six from the fit-out sequence.
+
+## Motion
+
+GSAP with ScrollTrigger, self hosted in `assets/js`. It runs one shared scroll
+listener, refreshes on font load and resize, and eases reveals and a slow drift
+inside each frame. Figures being parallaxed get `.fig--px`, which adds the
+headroom the drift needs, so the no-JS layout stays exact. Everything falls back
+to fully visible if GSAP is absent or `prefers-reduced-motion` is set.
+
+Three.js is deliberately not used. Nothing on these pages is a 3D problem, and
+the homepage sequence already carries the heavy visual moment on a 2D canvas.
+
 ## Pages
 
 ```

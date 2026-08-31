@@ -435,3 +435,70 @@
     });
   });
 })();
+
+/* ── scroll choreography ──────────────────────────────────────
+   GSAP earns its place here: ScrollTrigger gives one shared scroll
+   listener, correct refresh on resize and font load, and easing that
+   CSS transitions cannot match. Falls back to showing everything if
+   GSAP is absent or motion is reduced. */
+(function () {
+  "use strict";
+
+  var TARGETS = ".ph__t, .ph__l, .ph .pill, .crumbs, .say__t, .cols__row, " +
+                ".fs__t, .cards__h, .cards__i, .strip__h, .strip__c, " +
+                ".band__inner > *, .faq .pill, .faq #faq-h, .faq__row";
+
+  var els = document.querySelectorAll(TARGETS);
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (!window.gsap || !window.ScrollTrigger || reduced) {
+    Array.prototype.forEach.call(els, function (el) { el.classList.add("rv-on"); });
+    return;
+  }
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  Array.prototype.forEach.call(els, function (el) { el.classList.add("rv"); });
+
+  /* group siblings so a row arrives as one gesture rather than a queue */
+  var groups = new Map();
+  Array.prototype.forEach.call(els, function (el) {
+    var key = el.parentElement || document.body;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(el);
+  });
+
+  groups.forEach(function (items) {
+    gsap.to(items, {
+      opacity: 1, y: 0, duration: 0.9, ease: "power3.out",
+      stagger: items.length > 1 ? 0.07 : 0,
+      scrollTrigger: { trigger: items[0], start: "top 88%", once: true }
+    });
+    gsap.set(items, { y: 22 });
+  });
+
+  /* a slow drift inside each frame. The image is oversized by the same
+     amount it travels, so the crop never runs out of picture. */
+  document.querySelectorAll(".fig:not(.fig--bleed) img").forEach(function (img) {
+    img.closest(".fig").classList.add("fig--px");
+    gsap.fromTo(img, { yPercent: -4.5 }, {
+      yPercent: 4.5, ease: "none",
+      scrollTrigger: { trigger: img.closest(".fig"), start: "top bottom",
+                       end: "bottom top", scrub: true }
+    });
+  });
+
+  document.querySelectorAll(".fig--bleed img").forEach(function (img) {
+    gsap.fromTo(img, { scale: 1.08, yPercent: -3 }, {
+      scale: 1, yPercent: 3, ease: "none",
+      scrollTrigger: { trigger: img.closest(".fig"), start: "top bottom",
+                       end: "bottom top", scrub: true }
+    });
+  });
+
+  /* fonts and lazy images change layout after first paint */
+  window.addEventListener("load", function () { ScrollTrigger.refresh(); });
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () { ScrollTrigger.refresh(); });
+  }
+})();
