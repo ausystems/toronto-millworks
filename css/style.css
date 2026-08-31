@@ -544,6 +544,141 @@ body{
 .srch__out p{ margin:.5em 0 0; font-size:clamp(13px,1vw,14.5px); line-height:1.6; color:var(--ink-70); }
 
 /* ══════════════════════════════════════════════════════════════
+   CONTACT
+   Built around a shop drawing title block, which is what a millwork
+   job actually starts from.
+   ══════════════════════════════════════════════════════════════ */
+.cx{ padding:clamp(28px,3.6vw,52px) 0 clamp(48px,6vw,96px); }
+
+.cx__grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,clamp(272px,33%,408px));
+  gap:clamp(36px,6vw,104px);
+  align-items:start;
+  margin-top:clamp(22px,2.8vw,40px);
+}
+
+.cx__lead{ min-width:0; }
+.cx__title{
+  margin:clamp(18px,2.2vw,30px) 0 0;
+  font-size:clamp(2.3rem,5.9vw,5.1rem);
+  font-weight:400; line-height:1.015; letter-spacing:-.042em;
+  max-width:13ch; text-wrap:balance;
+}
+.cx__lede{
+  margin:clamp(16px,1.9vw,26px) 0 0;
+  font-size:clamp(1.02rem,1.6vw,1.4rem);
+  line-height:1.52; letter-spacing:-.016em;
+  color:var(--ink-70); max-width:44ch; text-wrap:pretty;
+}
+
+/* the address, given the weight it deserves on a contact page */
+.cx__mail{
+  display:flex; flex-wrap:wrap; align-items:baseline;
+  column-gap:clamp(14px,1.8vw,26px); row-gap:8px;
+  margin-top:clamp(34px,4.6vw,72px);
+  padding-top:clamp(15px,1.7vw,23px);
+  border-top:1px solid var(--line);
+}
+.cx__mail-k{
+  font-size:clamp(9.5px,.72vw,10.5px); letter-spacing:.16em;
+  text-transform:uppercase; color:var(--ink-45);
+  flex:0 0 100%;
+}
+.cx__mail-a{
+  position:relative;
+  font-size:clamp(1.12rem,2.5vw,2.3rem);
+  letter-spacing:-.032em; line-height:1.15;
+  color:var(--ink); word-break:break-word;
+}
+.cx__mail-a::after{
+  content:""; position:absolute; left:0; right:0; bottom:-.1em; height:1px;
+  background:var(--brass); transform:scaleX(0); transform-origin:left;
+  transition:transform .55s var(--ease);
+}
+@media (hover:hover){ .cx__mail-a:hover::after{ transform:scaleX(1); } }
+
+.cx__copy{
+  align-self:center;
+  font-size:clamp(9.5px,.72vw,10.5px); letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ink-45);
+  border-bottom:1px solid var(--line); padding-bottom:3px;
+  transition:color .3s var(--ease), border-color .3s var(--ease);
+}
+.cx__copy:hover{ color:var(--ink); border-bottom-color:var(--ink); }
+.cx__copy.is-done{ color:var(--brass); border-bottom-color:var(--brass); }
+
+/* title block */
+.cx__block{
+  position:relative;
+  padding:clamp(18px,2vw,26px);
+  border:1px solid var(--line);
+  border-radius:3px;
+  background:var(--paper-2);
+}
+/* registration marks, the way a drawing sheet is cropped */
+.cx__block::before,
+.cx__block::after{
+  content:""; position:absolute; width:10px; height:10px;
+  border:1px solid var(--brass); opacity:.5;
+}
+.cx__block::before{ top:-1px; left:-1px; border-right:0; border-bottom:0; }
+.cx__block::after{ right:-1px; bottom:-1px; border-left:0; border-top:0; }
+
+.cx__block-h{
+  display:block;
+  font-size:clamp(9.5px,.72vw,10.5px); letter-spacing:.16em;
+  text-transform:uppercase; color:var(--ink-45);
+}
+.cx__rows{ margin-top:clamp(12px,1.4vw,18px); }
+.cx__row{
+  display:grid; grid-template-columns:auto 1fr;
+  gap:clamp(12px,1.6vw,22px); align-items:baseline;
+  padding:clamp(10px,1.05vw,14px) 0;
+  border-top:1px solid var(--line);
+}
+.cx__row dt{
+  font-size:clamp(9.5px,.72vw,10.5px); letter-spacing:.13em;
+  text-transform:uppercase; color:var(--ink-45); white-space:nowrap;
+}
+.cx__row dd{
+  margin:0; text-align:right;
+  font-size:clamp(12.5px,.98vw,14.5px); letter-spacing:-.012em; color:var(--ink);
+}
+.cx__addr{
+  display:block; margin-top:clamp(14px,1.6vw,22px);
+  padding-top:clamp(12px,1.3vw,17px);
+  border-top:1px solid var(--line);
+  font-style:normal; line-height:1.55;
+  font-size:clamp(12.5px,.98vw,14.5px); color:var(--ink-70);
+}
+
+/* the three steps */
+.cx__steps{
+  display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:clamp(24px,3.4vw,58px);
+  margin-top:clamp(52px,6.8vw,116px);
+  padding-top:clamp(22px,2.6vw,38px);
+  border-top:1px solid var(--line);
+}
+.cx__step{ min-width:0; }
+.cx__step-n{
+  display:block;
+  font-size:clamp(10.5px,.84vw,12px); letter-spacing:.08em;
+  color:var(--brass); font-variant-numeric:tabular-nums;
+}
+.cx__step-h{
+  margin:clamp(10px,1.1vw,15px) 0 0;
+  font-size:clamp(1.02rem,1.52vw,1.44rem);
+  font-weight:400; line-height:1.22; letter-spacing:-.026em;
+}
+.cx__step-p{
+  margin:clamp(8px,.9vw,13px) 0 0;
+  font-size:clamp(13px,1.02vw,15.5px); line-height:1.66;
+  color:var(--ink-70); text-wrap:pretty;
+}
+
+/* ══════════════════════════════════════════════════════════════
    FOOTER
    Deep brass ground, white type. The gradient is kept dark enough that
    plain white clears 5.4:1 at the lightest point and 7.2:1 at the darkest,
@@ -753,6 +888,9 @@ body{
   .craft__body{ padding-inline:var(--shell-pad); max-width:none; }
 
   .prose__block{ grid-template-columns:1fr; gap:clamp(12px,2vw,18px); }
+  .cx__grid{ grid-template-columns:1fr; gap:clamp(30px,5vw,44px); }
+  .cx__steps{ grid-template-columns:1fr; gap:clamp(22px,4vw,32px); }
+  .cx__title{ max-width:none; }
   .faq__row{ grid-template-columns:1fr; gap:clamp(10px,1.8vw,16px); }
   .contact__grid{ grid-template-columns:1fr; gap:clamp(16px,3vw,24px); }
   .lrow a{ grid-template-columns:clamp(34px,6vw,48px) minmax(0,1fr) auto; row-gap:8px; }

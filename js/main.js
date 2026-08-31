@@ -353,3 +353,26 @@
   if (qs) { input.value = qs; }
   ready.then(function () { if (input.value) run(); });
 })();
+
+/* ── copy the email on the contact page ───────────────────────── */
+(function () {
+  "use strict";
+  var btn = document.querySelector(".cx__copy");
+  if (!btn || !navigator.clipboard) return;
+
+  var label = btn.querySelector(".cx__copy-t");
+  var idle = label ? label.textContent : "Copy";
+  var timer;
+
+  btn.addEventListener("click", function () {
+    navigator.clipboard.writeText(btn.getAttribute("data-copy") || "").then(function () {
+      if (label) label.textContent = "Copied";
+      btn.classList.add("is-done");
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        if (label) label.textContent = idle;
+        btn.classList.remove("is-done");
+      }, 2000);
+    }).catch(function () { /* clipboard blocked, the mailto link still works */ });
+  });
+})();

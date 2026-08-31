@@ -81,6 +81,14 @@ def org_node():
             "Kitchen cabinetry", "Wall panelling", "Commercial fit-outs",
             "Interior renovation",
         ],
+        "contactPoint": [{
+            "@type": "ContactPoint",
+            "contactType": "sales",
+            "email": SITE["email"],
+            "areaServed": SITE["country"],
+            "availableLanguage": ["English"],
+            "url": url("contact"),
+        }],
         "makesOffer": [
             {"@type": "Offer", "itemOffered": {
                 "@type": "Service", "@id": url("services/" + s["slug"]) + "#service",
@@ -290,6 +298,23 @@ def nav_for(page):
     for token, dest in (("#about", "about/"), ("#services", "services/"),
                         ("#projects", "projects/"), ("#contact", "contact/")):
         n = n.replace(f'href="{token}"', f'href="{p}{dest}"')
+
+    # mark the section the visitor is in, for both crawlers and screen readers
+    own = page["path"].strip("/")
+    section = ""
+    if own in ("", "404.html"):
+        section = p or "/"
+    elif own.startswith("services"):
+        section = f"{p}services/"
+    elif own.startswith("projects"):
+        section = f"{p}projects/"
+    elif own.startswith("about"):
+        section = f"{p}about/"
+    elif own.startswith("contact"):
+        section = f"{p}contact/"
+    if section:
+        n = n.replace(f'<a href="{section}">',
+                      f'<a href="{section}" class="is-active" aria-current="page">', 1)
     return n
 
 
@@ -613,43 +638,89 @@ def build_pages():
     })
 
     # ── contact ─────────────────────────────────────────────────────────────
-    cp = {"path": "/contact/", "label": "Contact", "h1": "Contact Toronto Millworks",
-          "lede": ("Send drawings, a photo or just the room dimensions. We come "
-                   "back with a measured quote."),
+    cp = {"path": "/contact/", "label": "Contact", "h1": "Tell us about the room.",
+          "lede": ("Send drawings, a photo or just the dimensions. We come back "
+                   "with a measured quote rather than a guess."),
           "crumbs": [("Contact", "contact")]}
-    areas_links = ", ".join(a["name"] for a in AREA_PAGES)
+
+    block_rows = [
+        ("Scope", "Residential and commercial"),
+        ("Service area", "Toronto and the GTA"),
+        ("Drawings", "Measured on site"),
+        ("Build", "In our own shop"),
+    ]
+    rows_html = "\n".join(
+        f'        <div class="cx__row"><dt>{E(k)}</dt><dd>{E(v)}</dd></div>'
+        for k, v in block_rows)
+
+    steps = [
+        ("Send what you have",
+         "Rough dimensions or a floor plan, photos of the space as it is now, "
+         "and any reference for the finish or profile you want."),
+        ("We measure and draw",
+         "We come out and template from the real walls, then draw elevations "
+         "showing every door, reveal and hardware position."),
+        ("You get a measured quote",
+         "Priced from the approved drawings, so the number reflects your actual "
+         "room instead of a per foot rate."),
+    ]
+    steps_html = "\n".join(
+        f'      <li class="cx__step">\n'
+        f'        <span class="cx__step-n">{i:02d}</span>\n'
+        f'        <h2 class="cx__step-h">{E(t)}</h2>\n'
+        f'        <p class="cx__step-p">{E(d)}</p>\n'
+        f'      </li>'
+        for i, (t, d) in enumerate(steps, start=1))
+
     pages.append({
         **cp,
         "title": "Contact | Custom Millwork Quote in Toronto | Toronto Millworks",
         "desc": ("Contact Toronto Millworks for a custom millwork or cabinetry "
                  "quote in Toronto and the GTA. Send drawings, a photo or the "
-                 "room dimensions."),
-        "keywords": "millwork quote Toronto, contact millwork company Toronto",
+                 "room dimensions for a measured price."),
+        "keywords": ("contact Toronto Millworks, millwork quote Toronto, custom "
+                     "cabinetry quote, joinery estimate Toronto"),
         "page_type": "ContactPage",
-        "body": (page_head_block(cp) + "\n"
-                 + '<section class="contact">\n  <div class="shell contact__grid">\n'
-                   '    <div class="contact__card">\n'
-                   '      <span class="foot__label">Email</span>\n'
-                   f'      <p><a href="mailto:{SITE["email"]}">{SITE["email"]}</a></p>\n'
-                   '    </div>\n'
-                   '    <div class="contact__card">\n'
-                   '      <span class="foot__label">Shop</span>\n'
-                   f'      <p>{SITE["locality"]}, {SITE["region_name"]}<br>Canada</p>\n'
-                   '    </div>\n'
-                   '    <div class="contact__card">\n'
-                   '      <span class="foot__label">Service area</span>\n'
-                   f'      <p>{E(areas_links)}</p>\n'
-                   '    </div>\n'
-                   '  </div>\n</section>'
-                 + "\n" + prose([
-                     ("What to send", [
-                         "Rough dimensions of the room, or a floor plan if you have one.",
-                         "Photos of the space as it is now, including the awkward corners.",
-                         "Any reference images for the finish or profile you want.",
-                         "Your timing, and whether other trades are already booked.",
-                     ]),
-                 ])
-                 + "\n" + faq_html(FAQ[:5])),
+        "body": (
+            '<section class="cx">\n'
+            '  <div class="shell">\n'
+            f'    {crumbs_html(cp)}\n'
+            '\n'
+            '    <div class="cx__grid">\n'
+            '      <div class="cx__lead">\n'
+            '        <span class="pill pill--line"><i class="dot" aria-hidden="true"></i>Contact</span>\n'
+            f'        <h1 class="cx__title">{E(cp["h1"])}</h1>\n'
+            f'        <p class="cx__lede">{E(cp["lede"])}</p>\n'
+            '\n'
+            '        <div class="cx__mail">\n'
+            '          <span class="cx__mail-k">Write to us</span>\n'
+            f'          <a class="cx__mail-a" href="mailto:{SITE["email"]}">{SITE["email"]}</a>\n'
+            f'          <button class="cx__copy" type="button" data-copy="{SITE["email"]}" '
+            'aria-label="Copy the email address">\n'
+            '            <span class="cx__copy-t">Copy</span>\n'
+            '          </button>\n'
+            '        </div>\n'
+            '      </div>\n'
+            '\n'
+            '      <aside class="cx__block" aria-label="At a glance">\n'
+            '        <span class="cx__block-h">Toronto Millworks</span>\n'
+            '        <dl class="cx__rows">\n'
+            f'{rows_html}\n'
+            '        </dl>\n'
+            '        <address class="cx__addr">\n'
+            f'          {SITE["locality"]}, {SITE["region_name"]}<br>Canada\n'
+            '        </address>\n'
+            '      </aside>\n'
+            '    </div>\n'
+            '  </div>\n'
+            '\n'
+            '  <div class="shell">\n'
+            '    <ol class="cx__steps">\n'
+            f'{steps_html}\n'
+            '    </ol>\n'
+            '  </div>\n'
+            '</section>'
+            + "\n" + faq_html(FAQ[:5])),
         "faq": FAQ[:5],
         "changefreq": "monthly", "priority": "0.9",
     })
