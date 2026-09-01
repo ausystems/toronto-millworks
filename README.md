@@ -35,26 +35,31 @@ so `object-fit` never has anything to throw away. That is also why CLS is 0.
 
 ## Sequence stabilisation
 
-The supplied frames were not shot from one fixed camera. Frames 1 to 59 are
-locked, then from frame 60 the camera sits 13.7px right, 11.4px down and 1.9%
-wider, and stays there. Scrubbing showed it as a jump.
+The sequence ships **unmodified from the supplied frames**. It was briefly
+stabilised and that was a mistake, reverted here.
 
-`scripts/stabilise_frames.py` solves a similarity transform per frame against
-frame 1, using phase correlation on edge maps because the lighting changes
-completely across the sequence and raw pixel difference is meaningless here. It
-then detects that the camera steps rather than wanders, gives every frame in a
-run one shared transform so no per-frame jitter is invented, and closes the
-remaining sub-pixel seam with a feedback pass. Finally it crops to the rectangle
-every frame still covers, which is the 1.5% zoom that hides the correction.
+What happened: measurements that matched each frame back to frame 1 reported a
+large camera jump. They were wrong. Across this sequence the lighting goes from
+off to fully lit and the room fills with furniture, so matching a late frame
+against frame 1 finds the wrong local optimum. A non-robust fit then let a few
+patches sitting on genuinely changed content drag the whole estimate.
 
-Result, measured: horizontal drift 14.59px to 0.23px, vertical 11.09px to
-0.17px, with no frame more than half a pixel off.
+Measured correctly, by tracking landmarks between neighbouring frames with
+outlier rejection, the source drifts by 0.3px and 0.02% zoom across all 102
+frames. It was already still. The correction was solving a phantom, and worse,
+imposing discrete camera positions on it introduced a real 1.98% jump at frame
+59 to 60 that was never in the footage.
 
-    python3 scripts/stabilise_frames.py <src_png_dir> <out_dir>
-    python3 scripts/build_reel.py <out_dir> assets/millwork-fit-out-sequence
-    python3 scripts/build_library.py
+`scripts/stabilise_frames.py` is kept for future sequences that do need it. It
+tracks landmarks between consecutive frames, fits robustly, chains the result
+and crops to the common area. Verify before trusting it:
 
-## Motion
+    python3 scripts/stabilise_frames.py <src> <out>
+
+If it reports drift under about 0.5px, the source is already stable and
+correcting it will only cost a crop and a resample.
+
+## Motion## Motion
 
 GSAP with ScrollTrigger, self hosted in `assets/js`. It runs one shared scroll
 listener, refreshes on font load and resize, and eases reveals and a slow drift

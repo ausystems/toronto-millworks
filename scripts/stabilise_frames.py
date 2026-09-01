@@ -1,204 +1,170 @@
 #!/usr/bin/env python3
 """
-Stabilise the fit-out sequence so every frame is shot from the same place.
+Stabilise a frame sequence so the camera never appears to move.
 
-For each frame it solves a similarity transform (uniform scale + translation)
-against frame 1, by brute forcing scale and using phase correlation on edge
-maps for translation at each candidate. Edge maps because the lighting changes
-completely across the sequence; the correlation peak height picks the scale.
+Method, and why each part is there:
 
-It then inverts that transform, computes the rectangle that stays valid across
-every frame, and crops all frames to it. That crop is the small zoom in needed
-to hide the drift.
+  Landmarks, not whole frame correlation. A grid of small patches is tracked by
+  normalised cross correlation with sub-pixel refinement.
 
-    python3 stabilise.py <src_png_dir> <out_dir>
+  Consecutive frames, not frame 1. Across this sequence the lighting goes from
+  off to fully lit and the room fills with furniture, so matching a late frame
+  against frame 1 finds the wrong local optimum and reports motion that is not
+  there. Neighbouring frames share almost all their content, so the fit is
+  trustworthy. Per frame transforms are then chained to get each frame's
+  position relative to the first.
+
+  Robust fitting. While the wall is being painted and fittings appear, some
+  patches land on content that genuinely changed and report tens of pixels of
+  bogus motion. Residuals beyond a few median absolute deviations are dropped
+  and the fit repeated, so those patches cannot drag the solution.
+
+  No segmentation. An earlier version grouped frames into discrete camera
+  positions and gave each group one transform. The drift is gradual, so that
+  imposed a hard step at the group boundary and made the worst visible jump
+  worse than it was in the source. Every frame now gets its own transform.
+
+    python3 scripts/stabilise_frames.py <src_png_dir> <out_dir>
 """
 import os, sys
 import numpy as np
 from PIL import Image
-from scipy import ndimage
-from numpy.fft import fft2, ifft2
 
 SRC, OUT = sys.argv[1], sys.argv[2]
 os.makedirs(OUT, exist_ok=True)
-frames = sorted(f for f in os.listdir(SRC) if f.endswith(".png"))
+frames = sorted(f for f in os.listdir(SRC) if f.lower().endswith(".png"))
 
-WORK = 640          # analysis resolution
-SCALES = np.arange(0.975, 1.0301, 0.0015)
-
-
-def edge_map(img, size=WORK):
-    a = np.asarray(img.convert("L").resize((size, round(size * img.height / img.width)),
-                                           Image.LANCZOS), np.float32)
-    g = np.hypot(ndimage.sobel(a, 0), ndimage.sobel(a, 1))
-    return g / (g.std() + 1e-6)
+PATCH = 96
+SEARCH = 30
+MIN_NCC = 0.45
+MIN_STD = 12.0          # a flat patch carries no positional information
 
 
-def corr(a, b):
-    """Phase correlation. Returns (dx, dy, peak) where shifting a by (dx,dy)
-    lines it up with b."""
-    wy = np.hanning(a.shape[0])[:, None]
-    wx = np.hanning(a.shape[1])[None, :]
-    A = fft2(a * wy * wx)
-    B = fft2(b * wy * wx)
-    R = A * np.conj(B)
-    R /= (np.abs(R) + 1e-9)
-    r = np.real(ifft2(R))
-    pk = np.unravel_index(np.argmax(r), r.shape)
-    H, W = r.shape
+def gray(p):
+    return np.asarray(Image.open(os.path.join(SRC, p)).convert("L"), np.float32)
 
-    def sub(axis, i):
-        n = H if axis == 0 else W
+
+def track(img, tmpl, cx, cy):
+    th, tw = tmpl.shape
+    y0, x0 = max(0, cy - SEARCH), max(0, cx - SEARCH)
+    win = img[y0:y0 + th + 2 * SEARCH, x0:x0 + tw + 2 * SEARCH]
+    if win.shape[0] < th or win.shape[1] < tw:
+        return None
+    t = tmpl - tmpl.mean()
+    tn = np.sqrt((t * t).sum()) + 1e-9
+    H, W = win.shape[0] - th + 1, win.shape[1] - tw + 1
+    sc = np.empty((H, W), np.float32)
+    for yy in range(H):
+        for xx in range(W):
+            w = win[yy:yy + th, xx:xx + tw]
+            w = w - w.mean()
+            sc[yy, xx] = float((w * t).sum() / ((np.sqrt((w * w).sum()) + 1e-9) * tn))
+    py, px = np.unravel_index(np.argmax(sc), sc.shape)
+    if sc[py, px] < MIN_NCC:
+        return None
+
+    def sub(i, axis):
+        n = sc.shape[axis]
+        if i <= 0 or i >= n - 1:
+            return float(i)
         if axis == 0:
-            m1, p1 = r[(i - 1) % n, pk[1]], r[(i + 1) % n, pk[1]]
+            m1, c, p1 = sc[i - 1, px], sc[i, px], sc[i + 1, px]
         else:
-            m1, p1 = r[pk[0], (i - 1) % n], r[pk[0], (i + 1) % n]
-        c = r[pk]
-        d = (m1 - p1) / (2 * (m1 - 2 * c + p1) + 1e-9)
-        v = i + d
-        return v - n if v > n / 2 else v
+            m1, c, p1 = sc[py, i - 1], sc[py, i], sc[py, i + 1]
+        return i + (m1 - p1) / (2 * (m1 - 2 * c + p1) + 1e-9)
 
-    return sub(1, pk[1]), sub(0, pk[0]), float(r[pk])
+    return x0 + sub(px, 1), y0 + sub(py, 0)
 
 
-# ── solve ────────────────────────────────────────────────────────────────────
-ref_img = Image.open(os.path.join(SRC, frames[0])).convert("RGB")
-W0, H0 = ref_img.size
-ref = edge_map(ref_img)
-rh, rw = ref.shape
+def robust_similarity(P, Q):
+    """Uniform scale + translation taking P onto Q, rejecting outliers."""
+    keep = np.ones(len(P), bool)
+    s, t = 1.0, np.zeros(2)
+    for _ in range(4):
+        A, B = P[keep], Q[keep]
+        if len(A) < 3:
+            break
+        Am, Bm = A.mean(0), B.mean(0)
+        U, V = A - Am, B - Bm
+        s = float((U * V).sum() / ((U * U).sum() + 1e-12))
+        t = Bm - s * Am
+        res = np.linalg.norm(s * P + t - Q, axis=1)
+        med = np.median(res)
+        mad = np.median(np.abs(res - med)) + 1e-6
+        new = res < med + 3.0 * mad
+        if new.sum() < 3 or (new == keep).all():
+            keep = new if new.sum() >= 3 else keep
+            break
+        keep = new
+    return s, t, int(keep.sum())
 
-print(f"{len(frames)} frames, {W0}x{H0}, solving similarity transform per frame")
-sol = []
-for i, f in enumerate(frames):
-    im = Image.open(os.path.join(SRC, f)).convert("RGB")
 
-    def score(s):
-        """Correlation peak for a candidate scale, plus its translation."""
-        sw, sh = round(rw * s), round(rh * s)
-        e = edge_map(im, size=round(WORK * s))
-        e = e[:sh, :sw]
-        canvas = np.zeros_like(ref)
-        oy, ox = (sh - rh) // 2, (sw - rw) // 2
-        if oy >= 0 and ox >= 0:
-            canvas = e[oy:oy + rh, ox:ox + rw]
-        else:
-            py, px = max(0, -oy), max(0, -ox)
-            canvas[py:py + e.shape[0], px:px + e.shape[1]] = e[:rh - py, :rw - px]
-        dx, dy, pk = corr(canvas, ref)
-        return (s, dx, dy, pk)
+W0, H0 = Image.open(os.path.join(SRC, frames[0])).size
+GRID = [(x, y) for y in range(40, H0 - PATCH - 40, 110)
+        for x in range(40, W0 - PATCH - 40, 165)]
+print(f"{len(frames)} frames at {W0}x{H0}, {len(GRID)} candidate landmarks per pair")
 
-    best = max((score(s) for s in SCALES), key=lambda r: r[3])
-    s, dx, dy, pk = best
-    # convert analysis-resolution shift to source pixels
-    k = W0 / rw
-    sol.append((s, dx * k, dy * k, pk))
-    if i % 12 == 0 or i == len(frames) - 1:
-        print(f"  frame {i+1:>3}  scale {s:.4f}  dx {dx*k:+7.2f}  dy {dy*k:+7.2f}  peak {pk:.4f}")
+# ── chain consecutive fits ──────────────────────────────────────────────────
+cum_s, cum_t = [1.0], [np.zeros(2)]
+prev = gray(frames[0])
+for i in range(1, len(frames)):
+    cur = gray(frames[i])
+    P, Q = [], []
+    for (x, y) in GRID:
+        t = prev[y:y + PATCH, x:x + PATCH]
+        if t.std() < MIN_STD:
+            continue
+        r = track(cur, t, x, y)
+        if r:
+            P.append([x + PATCH / 2, y + PATCH / 2])
+            Q.append([r[0] + PATCH / 2, r[1] + PATCH / 2])
+    if len(P) < 4:
+        s, t, n = 1.0, np.zeros(2), 0
+    else:
+        s, t, n = robust_similarity(np.array(P, float), np.array(Q, float))
+    # compose onto the running transform: p -> s*(S*p + T) + t
+    cum_s.append(s * cum_s[-1])
+    cum_t.append(s * cum_t[-1] + t)
+    if i % 20 == 0:
+        print(f"  paired {i+1}/{len(frames)}  ({n} inliers)  cumulative zoom "
+              f"{(cum_s[-1]-1)*100:+.2f}%  drift {cum_t[-1][0]:+.1f},{cum_t[-1][1]:+.1f}px")
+    prev = cur
 
-S = np.array([r[0] for r in sol])
-DX = np.array([r[1] for r in sol])
-DY = np.array([r[2] for r in sol])
-print(f"\n  raw solve: scale span {np.ptp(S)*100:.2f} %   dx span {np.ptp(DX):.1f} px   dy span {np.ptp(DY):.1f} px")
+S = np.array(cum_s)
+T = np.array(cum_t)
+print(f"  measured drift: zoom {(S.min()-1)*100:+.2f}%..{(S.max()-1)*100:+.2f}%   "
+      f"x {T[:,0].min():+.1f}..{T[:,0].max():+.1f}px   y {T[:,1].min():+.1f}..{T[:,1].max():+.1f}px")
 
-# The camera does not wander, it steps: locked for one run of frames, then a
-# fixed offset for the next. Solving each frame independently therefore adds
-# jitter that was never in the footage. Detect the runs and give every frame in
-# a run the same transform, so within a segment the alignment is exact.
-seg, segs = [0], []
-for i in range(1, len(DX)):
-    if abs(DX[i] - DX[i - 1]) > 3.0 or abs(DY[i] - DY[i - 1]) > 3.0:
-        segs.append(seg); seg = []
-    seg.append(i)
-segs.append(seg)
-segs = [g for g in segs if g]
-print(f"  {len(segs)} camera position(s) detected:")
-for g in segs:
-    ms, mdx, mdy = np.median(S[g]), np.median(DX[g]), np.median(DY[g])
-    print(f"    frames {g[0]+1:>3}-{g[-1]+1:<3}  scale {ms:.4f}  dx {mdx:+6.2f}  dy {mdy:+6.2f}")
-    for i in g:
-        sol[i] = (ms, mdx, mdy, sol[i][3])
-S = np.array([r[0] for r in sol]); DX = np.array([r[1] for r in sol]); DY = np.array([r[2] for r in sol])
-
-# ── closed loop refinement ───────────────────────────────────────────────────
-# The segment medians leave a sub-pixel step at the seam between camera
-# positions. Warp a representative frame from each segment the way the renderer
-# will, measure what is still off against the warped reference, and fold that
-# back in. Signs are resolved empirically rather than reasoned about.
-def warp_edges(idx, s_, dx_, dy_):
-    im = Image.open(os.path.join(SRC, frames[idx])).convert("RGB")
-    cx_, cy_ = W0 / 2, H0 / 2
-    x0 = cx_ + (0 - cx_) / s_ + dx_
-    x1 = cx_ + (W0 - cx_) / s_ + dx_
-    y0 = cy_ + (0 - cy_) / s_ + dy_
-    y1 = cy_ + (H0 - cy_) / s_ + dy_
-    return edge_map(im.transform((W0, H0), Image.EXTENT, (x0, y0, x1, y1), Image.BICUBIC))
-
-ref_out = warp_edges(0, *sol[0][:3])
-for it in range(3):
-    moved = 0.0
-    for g in segs:
-        if g[0] == 0:
-            continue                       # segment one defines the reference
-        i = g[len(g) // 2]
-        s_, dx_, dy_, pk_ = sol[i]
-        rdx, rdy, _ = corr(warp_edges(i, s_, dx_, dy_), ref_out)
-        k2 = W0 / rw
-        best = None
-        for sx in (1, -1):
-            for sy in (1, -1):
-                cdx, cdy = dx_ + sx * rdx * k2, dy_ + sy * rdy * k2
-                _, _, pk = corr(warp_edges(i, s_, cdx, cdy), ref_out)
-                nrdx, nrdy, _ = corr(warp_edges(i, s_, cdx, cdy), ref_out)
-                err = abs(nrdx) + abs(nrdy)
-                if best is None or err < best[0]:
-                    best = (err, cdx, cdy)
-        moved = max(moved, abs(best[1] - dx_) + abs(best[2] - dy_))
-        for j in g:
-            sol[j] = (s_, best[1], best[2], pk_)
-    print(f"  refine pass {it+1}: adjusted by {moved:.3f} px")
-    if moved < 0.02:
-        break
-S = np.array([r[0] for r in sol]); DX = np.array([r[1] for r in sol]); DY = np.array([r[2] for r in sol])
-for g in segs:
-    print(f"    frames {g[0]+1:>3}-{g[-1]+1:<3}  final dx {DX[g[0]]:+6.3f}  dy {DY[g[0]]:+6.3f}")
-
-# ── common valid rectangle ───────────────────────────────────────────────────
-# undoing scale s and shift (dx,dy) leaves each frame covering a different
-# rectangle of the reference; keep only what every frame covers.
-L = R_ = T = B = 0.0
-for s, dx, dy, _ in sol:
-    hw, hh = W0 / 2, H0 / 2
-    # after inverse scaling about centre the frame spans +-hw/s
-    l = hw - hw / s - dx
-    r = hw + hw / s - dx
-    t = hh - hh / s - dy
-    b = hh + hh / s - dy
-    L = max(L, l); R_ = max(R_, W0 - r); T = max(T, t); B = max(B, H0 - b)
-pad = 3
-L, R_, T, B = L + pad, R_ + pad, T + pad, B + pad
-cw, ch = W0 - L - R_, H0 - T - B
-# keep the original aspect
+# ── common valid rectangle ──────────────────────────────────────────────────
+L = R_ = TP = BT = 0.0
+for s, t in zip(S, T):
+    L = max(L, -t[0] / s)
+    TP = max(TP, -t[1] / s)
+    R_ = max(R_, W0 - (W0 - t[0]) / s)
+    BT = max(BT, H0 - (H0 - t[1]) / s)
+pad = 4
+cw = W0 - max(0.0, L) - max(0.0, R_) - 2 * pad
+ch = H0 - max(0.0, TP) - max(0.0, BT) - 2 * pad
 target = W0 / H0
 if cw / ch > target:
     cw = ch * target
 else:
     ch = cw / target
-cx, cy = W0 / 2, H0 / 2
+CX, CY = W0 / 2, H0 / 2
 print(f"  common crop {cw:.0f}x{ch:.0f} of {W0}x{H0}  "
-      f"({(1 - cw/W0)*100:.1f}% trimmed, a {W0/cw:.3f}x zoom)")
+      f"({(1 - cw/W0)*100:.1f}% trimmed, {W0/cw:.3f}x zoom)")
 
-# ── render ───────────────────────────────────────────────────────────────────
-for i, (f, (s, dx, dy, _)) in enumerate(zip(frames, sol)):
+# ── render ──────────────────────────────────────────────────────────────────
+for i, f in enumerate(frames):
+    s, t = S[i], T[i]
     im = Image.open(os.path.join(SRC, f)).convert("RGB")
-    # inverse transform: scale about centre by 1/s, then translate by -(dx,dy).
-    # Expressed as the source box that maps onto the wanted crop.
-    x0 = cx + (cx - cw / 2 - cx) / s + dx
-    x1 = cx + (cx + cw / 2 - cx) / s + dx
-    y0 = cy + (cy - ch / 2 - cy) / s + dy
-    y1 = cy + (cy + ch / 2 - cy) / s + dy
-    out = im.transform((W0, H0), Image.EXTENT, (x0, y0, x1, y1), Image.BICUBIC)
-    out.save(os.path.join(OUT, f), "PNG")
-    if i % 20 == 0:
+    x0 = s * (CX - cw / 2) + t[0]
+    x1 = s * (CX + cw / 2) + t[0]
+    y0 = s * (CY - ch / 2) + t[1]
+    y1 = s * (CY + ch / 2) + t[1]
+    im.transform((W0, H0), Image.EXTENT, (x0, y0, x1, y1), Image.BICUBIC) \
+      .save(os.path.join(OUT, f), "PNG")
+    if i % 25 == 0:
         print(f"  rendered {i+1}/{len(frames)}")
 
 print(f"\nstabilised {len(frames)} frames -> {OUT}")
