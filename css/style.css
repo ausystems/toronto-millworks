@@ -308,7 +308,9 @@ body{
    so it dissolves into the page instead of sitting in a box.
    ══════════════════════════════════════════════════════════════ */
 .reel{
-  --reel-media-h: calc(100svh - var(--nav-space));
+  /* fill the viewport, but never grow past the frames' own 16:9, which is
+     what used to crop the sides on taller displays */
+  --reel-media-h: min(calc(100svh - var(--nav-space)), calc(100vw * 9 / 16));
   --reel-feather: clamp(46px, 9vh, 128px);
   --reel-fade: linear-gradient(to bottom,
       transparent 0,
@@ -896,7 +898,9 @@ body{
 
   /* a full-height cover crop of a 16:9 plate throws away most of the width on a
      portrait screen, cap the band so the crop stays sane */
-  .reel{ --reel-media-h: min(calc(100svh - var(--nav-space)), 118vw); }
+  /* the band takes the frames' own 16:9, so the cover fit has nothing to
+     discard and a phone sees the whole frame edge to edge, uncropped */
+  .reel{ --reel-media-h: calc(100vw * 9 / 16); }
 
   .craft{
     grid-template-columns:1fr;
@@ -924,7 +928,6 @@ body{
   .foot__reach{ grid-template-columns:1fr; gap:22px; }
   .foot__index .m{ display:none; }        /* keeps the row on one line at 320px */
   .foot__index a{ grid-template-columns:26px minmax(0,1fr); }
-  .reel{ --reel-media-h: min(calc(100svh - var(--nav-space)), 142vw); }
 }
 
 /* a pinned, scroll-driven sequence is exactly what reduced-motion asks you not

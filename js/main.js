@@ -113,13 +113,15 @@
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = "high";
 
-    var COUNT  = 102;
+    var COUNT  = 118;
     var SMOOTH = 0.15;    /* damped follow, lower is silkier, slower to settle */
 
     /* ── which tier this device should pull ─────────────────
-       Encoded weight is ~12/22/30 MB. Decoded frames are handed to the
+       Encoded weight is ~11/22/30/43 MB. Decoded frames are handed to the
        browser's own image cache (HTMLImageElement, not ImageBitmap) so it
-       can evict under pressure instead of us pinning ~1 GB of pixels. */
+       can evict under pressure instead of us pinning gigabytes of pixels.
+       The 3840 tier is gated hard: it is only worth its weight on a large
+       high density display with the memory to hold it. */
     function pickTier () {
       var c = navigator.connection || {};
       if (c.saveData) return 1280;
@@ -129,6 +131,7 @@
       var need = Math.max(window.innerWidth, 1) * dpr;
       var mem  = navigator.deviceMemory || 4;
 
+      if (need >= 4200 && mem >= 8) return 3840;
       if (need >= 2400 && mem >= 8) return 2560;
       if (need >= 1500) return 1920;
       return 1280;

@@ -17,7 +17,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "assets", "img", "lib")
 
 RESI = os.path.join(ROOT, "assets/img/toronto-custom-millwork-interior-7680.webp")
-SEQ = os.path.join(ROOT, "assets/millwork-fit-out-sequence/2560")
+SEQ = os.path.join(ROOT, "assets/millwork-fit-out-sequence/3840")
 
 # name -> (source, focal x, focal y, coverage, alt)
 # coverage is the fraction of source height the crop spans at 3:2.
@@ -41,15 +41,15 @@ PLATES = {
 
     "shell":      (1,   0.50, 0.55, 0.86,
                    "Bare brick and concrete shell before the fit-out begins"),
-    "lit":        (26,  0.50, 0.55, 0.86,
-                   "The same shell with the lighting energised"),
-    "feature":    (52,  0.50, 0.55, 0.86,
+    "lit":        (24,  0.50, 0.55, 0.86,
+                   "The shell cleaned back and the floor laid"),
+    "feature":    (48,  0.50, 0.55, 0.86,
                    "A black feature wall and filament lighting installed"),
-    "carcass":    (78,  0.46, 0.62, 0.80,
-                   "The reclaimed timber bar carcass going in against the brick"),
-    "finished":   (102, 0.48, 0.60, 0.84,
+    "carcass":    (71,  0.46, 0.64, 0.78,
+                   "The reclaimed timber bar counter installed against the brick"),
+    "finished":   (118, 0.48, 0.60, 0.84,
                    "The finished bar with counter, shelving and equipment in place"),
-    "counter":    (102, 0.44, 0.78, 0.42,
+    "counter":    (118, 0.44, 0.78, 0.42,
                    "Reclaimed timber boards laid up in a running bond on the bar front"),
 }
 

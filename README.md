@@ -33,33 +33,47 @@ so `object-fit` never has anything to throw away. That is also why CLS is 0.
 
 14 plates: eight from the residential master, six from the fit-out sequence.
 
-## Sequence stabilisation
+## The sequence
 
-The sequence ships **unmodified from the supplied frames**. It was briefly
-stabilised and that was a mistake, reverted here.
-
-What happened: measurements that matched each frame back to frame 1 reported a
-large camera jump. They were wrong. Across this sequence the lighting goes from
-off to fully lit and the room fills with furniture, so matching a late frame
-against frame 1 finds the wrong local optimum. A non-robust fit then let a few
-patches sitting on genuinely changed content drag the whole estimate.
-
-Measured correctly, by tracking landmarks between neighbouring frames with
-outlier rejection, the source drifts by 0.3px and 0.02% zoom across all 102
-frames. It was already still. The correction was solving a phantom, and worse,
-imposing discrete camera positions on it introduced a real 1.98% jump at frame
-59 to 60 that was never in the footage.
-
-`scripts/stabilise_frames.py` is kept for future sequences that do need it. It
-tracks landmarks between consecutive frames, fits robustly, chains the result
-and crops to the common area. Verify before trusting it:
+118 frames, supplied at 1280x720, shipped unmodified in framing. Robust
+landmark tracking measures 0.01% zoom and 0.8px of drift across the whole
+sequence, so the camera is already still and correcting it would only cost a
+crop and a resample. Verify any replacement the same way before touching it:
 
     python3 scripts/stabilise_frames.py <src> <out>
 
-If it reports drift under about 0.5px, the source is already stable and
-correcting it will only cost a crop and a resample.
+If it reports under about 0.5px of drift, leave the frames alone.
 
-## Motion## Motion
+## Resolution
+
+Every frame is reconstructed to a 3840px master by `scripts/build_reel.py`,
+using linear light resampling and eight iterative back-projection passes. 3840
+is where detail saturates coming from a 1280px source; past that the pipeline is
+inventing pixels, not recovering them.
+
+8K per frame is not shippable and would not help. The scrub needs every frame
+resident at once, and 118 frames at 7680px is over half a gigabyte of webp. The
+single hero plate is 7680px because it is one image; a sequence cannot be.
+
+Four webp tiers are derived from that master, chosen at runtime from viewport,
+DPR, device memory and connection:
+
+| tier | picked when | weight |
+|---|---|---|
+| 3840px | viewport x DPR >= 4200 and 8GB+ (4K class) | 42.8 MB |
+| 2560px | viewport x DPR >= 2400 and 8GB+ | 30.4 MB |
+| 1920px | viewport x DPR >= 1500 | 22.2 MB |
+| 1280px | everything else, plus Save-Data / 2G | 11.3 MB |
+
+## Framing, and what is cropped
+
+The band takes the frames' own 16:9, capped so it can never grow past it. On
+phones and tablets that means the whole frame is visible edge to edge with zero
+crop in either axis. On a wide short desktop the band fills the width and loses
+a few percent of height, which falls inside the feathered top and bottom, so
+nothing meaningful is lost. Horizontal crop is zero at every size.
+
+## Motion## Motion## Motion
 
 GSAP with ScrollTrigger, self hosted in `assets/js`. It runs one shared scroll
 listener, refreshes on font load and resize, and eases reveals and a slow drift

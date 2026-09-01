@@ -23,9 +23,9 @@ from concurrent.futures import ProcessPoolExecutor
 SRC_DIR = sys.argv[1]
 OUT_DIR = sys.argv[2]
 
-TIERS = [(2560, 82), (1920, 82), (1280, 80)]   # (width, webp quality)
-MASTER_W = 2560
-IBP_ITERS = 6
+TIERS = [(3840, 80), (2560, 84), (1920, 84), (1280, 82)]   # (width, webp quality)
+MASTER_W = 3840
+IBP_ITERS = 8
 
 
 def srgb_to_linear(a):
