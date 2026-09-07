@@ -37,7 +37,7 @@
   /* ── scroll reveal ───────────────────────────────────────── */
   if (!reduced && "IntersectionObserver" in window) {
     var targets = document.querySelectorAll(
-      ".about__label, .about__text, .craft__media, .craft__body > *"
+      ".about__label, .craft__media, .craft__body > *"
     );
 
     Array.prototype.forEach.call(targets, function (el) { el.classList.add("rv"); });
@@ -380,6 +380,90 @@
   });
 })();
 
+/* ── the About statement writes itself in as you scroll ────────
+   The sentence ships as one clean paragraph. It is split into words and
+   characters here, at runtime, so the markup a crawler or a reader without
+   JS sees is untouched. The split copy is then hidden from assistive tech
+   and the original sentence put back beside it, so a screen reader still
+   hears one sentence rather than two hundred and ninety letters.
+
+   Reveal runs on scrub, finishing as the section's middle reaches the middle
+   of the screen, which is about halfway through reading it. */
+(function () {
+  "use strict";
+
+  var p = document.querySelector(".about__text");
+  if (!p) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (!window.gsap || !window.ScrollTrigger) return;   /* text stays visible */
+
+  var sentence = p.textContent.replace(/\s+/g, " ").trim();
+  var chars = [];
+
+  (function split(node) {
+    Array.prototype.slice.call(node.childNodes).forEach(function (n) {
+      if (n.nodeType === 1) { split(n); return; }
+      if (n.nodeType !== 3) return;
+
+      var frag = document.createDocumentFragment();
+      n.nodeValue.split(/(\s+)/).forEach(function (tok) {
+        if (!tok) return;
+        if (/^\s+$/.test(tok)) {              /* keep one real break opportunity */
+          frag.appendChild(document.createTextNode(" "));
+          return;
+        }
+        var word = document.createElement("span");
+        word.className = "sw";
+        for (var i = 0; i < tok.length; i++) {
+          var c = document.createElement("span");
+          c.className = "sc";
+          c.textContent = tok.charAt(i);
+          word.appendChild(c);
+          chars.push(c);
+        }
+        frag.appendChild(word);
+      });
+      node.replaceChild(frag, n);
+    });
+  })(p);
+
+  if (!chars.length) return;
+
+  var split = document.createElement("span");
+  split.className = "about__split";
+  split.setAttribute("aria-hidden", "true");
+  while (p.firstChild) split.appendChild(p.firstChild);
+
+  var sr = document.createElement("span");
+  sr.className = "sr-only";
+  sr.textContent = sentence;
+
+  p.appendChild(sr);
+  p.appendChild(split);
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* under scrub only the ratio of duration to stagger matters: each character
+     fades over eight neighbours' worth of scroll, which is short enough to
+     read as letter by letter and long enough not to look like a stepper */
+  gsap.fromTo(chars, { opacity: 0.13 }, {
+    opacity: 1,
+    ease: "none",
+    duration: 0.4,
+    stagger: { each: 0.05, from: "start" },
+    scrollTrigger: {
+      trigger: p.closest(".about") || p,
+      start: "top 84%",
+      end: "center 58%",
+      scrub: 0.4
+    }
+  });
+
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () { ScrollTrigger.refresh(); });
+  }
+})();
+
 /* ── FAQ accordions ───────────────────────────────────────────
    <details> already toggles and is keyboard accessible on its own, so this
    only takes over to ease the height. If it never runs, the accordions still
@@ -449,7 +533,8 @@
 
   var TARGETS = ".ph__t, .ph__l, .ph .pill, .crumbs, .say__t, .cols__row, " +
                 ".fs__t, .cards__h, .cards__i, .strip__h, .strip__c, " +
-                ".band__inner > *, .faq .pill, .faq #faq-h, .faq__row";
+                ".band__inner > *, .faq__aside > *, .faq__row, " +
+                ".map__aside > *, .map__frame";
 
   var els = document.querySelectorAll(TARGETS);
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;

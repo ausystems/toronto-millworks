@@ -24,16 +24,19 @@ SITE = {
     "origin": ORIGIN,
     "lang": "en-CA",
     "email": "hello@torontomillworks.ca",        # PLACEHOLDER
-    "locality": "Toronto",
+    # the shop's real address. Toronto is the market, not the postal city, so
+    # areaServed below is what carries the Toronto targeting, and this stays
+    # accurate, which is what Google actually verifies against.
+    "locality": "Mississauga",
     "region": "ON",
     "region_name": "Ontario",
     "country": "CA",
-    "lat": 43.6532,
-    "lon": -79.3832,
+    "lat": 43.7015416,
+    "lon": -79.6576688,
     "tagline": "Custom millwork, cabinetry and interior renovation in Toronto.",
     "founded": "",                               # PLACEHOLDER: add founding year
-    "street": "",                                # PLACEHOLDER: add street address
-    "postal": "",                                # PLACEHOLDER: add postal code
+    "street": "2585 Drew Rd Unit 7",
+    "postal": "L4T 1G1",
     "phone": "",                                 # PLACEHOLDER: add phone number
     # PLACEHOLDER: real profile URLs make these entity connections work.
     # Leave empty and the generator omits sameAs rather than emitting dead links.

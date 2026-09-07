@@ -14,6 +14,7 @@ import os
 import re
 import shutil
 import sys
+import urllib.parse as _Q
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from site_content import SITE, SERVICES, AREA_PAGES, AREAS, FAQ, BUILD_DATE  # noqa: E402
@@ -69,12 +70,15 @@ def org_node():
                  "url": f"{O}/assets/img/favicon.svg", "caption": SITE["name"]},
         "address": {
             "@type": "PostalAddress",
+            **({"streetAddress": SITE["street"]} if SITE["street"] else {}),
             "addressLocality": SITE["locality"],
             "addressRegion": SITE["region"],
+            **({"postalCode": SITE["postal"]} if SITE["postal"] else {}),
             "addressCountry": SITE["country"],
         },
         "geo": {"@type": "GeoCoordinates",
                 "latitude": SITE["lat"], "longitude": SITE["lon"]},
+        "hasMap": MAP_LINK,
         "areaServed": [{"@type": "City", "name": a} for a in AREAS],
         "knowsAbout": [
             "Custom millwork", "Custom cabinetry", "Architectural millwork",
@@ -347,26 +351,83 @@ def crumbs_html(page):
 
 def faq_html(items):
     """Native <details> so the answers are in the DOM, toggle without JS and
-    carry summary's button semantics for free. JS only adds the easing."""
+    carry summary's button semantics for free. JS only adds the easing.
+
+    Laid out as a ruled index against a standing left column, which is the
+    same chip-left / statement-right rhythm the About section uses."""
     rows = []
     for q, a in items:
         rows.append(
-            '    <details class="faq__row">\n'
-            '      <summary class="faq__q">\n'
-            f'        <h3 class="faq__q-t">{E(q)}</h3>\n'
-            '        <span class="faq__ico" aria-hidden="true"></span>\n'
-            '      </summary>\n'
-            '      <div class="faq__panel">\n'
-            f'        <p class="faq__a">{E(a)}</p>\n'
-            '      </div>\n'
-            '    </details>')
+            '      <details class="faq__row">\n'
+            '        <summary class="faq__q">\n'
+            f'          <h3 class="faq__q-t">{E(q)}</h3>\n'
+            '          <span class="faq__ico" aria-hidden="true"></span>\n'
+            '        </summary>\n'
+            '        <div class="faq__panel">\n'
+            f'          <p class="faq__a">{E(a)}</p>\n'
+            '        </div>\n'
+            '      </details>')
     return ('<section class="faq" aria-labelledby="faq-h">\n'
-            '  <div class="shell">\n'
-            '    <span class="pill pill--line"><i class="dot" aria-hidden="true"></i>Questions</span>\n'
-            '    <h2 class="sec-title" id="faq-h">Frequently asked</h2>\n'
+            '  <div class="shell faq__grid">\n'
+            '    <div class="faq__aside">\n'
+            '      <span class="pill pill--line"><i class="dot" aria-hidden="true"></i>Questions</span>\n'
+            '      <h2 class="faq__h" id="faq-h">Frequently<br> asked</h2>\n'
+            '      <p class="faq__note">Straight answers on cost, lead time and how a\n'
+            '        job actually runs. If something here is not covered, ask us and we\n'
+            '        will answer it the same way.</p>\n'
+            '    </div>\n\n'
+            '    <div class="faq__list">\n' + "\n".join(rows) + '\n    </div>\n'
             '  </div>\n'
-            '  <div class="shell faq__list">\n' + "\n".join(rows) + '\n  </div>\n'
-            '</section>')
+            '</section>\n\n' + map_html())
+
+
+# ── where the shop actually is ──────────────────────────────────────────────
+_ADDR_ONE_LINE = ", ".join(x for x in [
+    SITE["street"], SITE["locality"],
+    " ".join(x for x in [SITE["region"], SITE["postal"]] if x),
+] if x)
+
+MAP_QUERY = _Q.quote_plus(_ADDR_ONE_LINE + ", Canada")
+MAP_LINK = f"https://www.google.com/maps/search/?api=1&query={MAP_QUERY}"
+MAP_DIRECTIONS = f"https://www.google.com/maps/dir/?api=1&destination={MAP_QUERY}"
+MAP_EMBED = f"https://maps.google.com/maps?q={MAP_QUERY}&z=15&output=embed"
+
+
+def map_html():
+    """The shop on a map, warmed down to the site's palette with a filter so a
+    third party tile set stops shouting in the middle of a quiet page. The
+    iframe is lazy, so it costs nothing until it is scrolled to, and the frame
+    is an aspect-ratio box, so it reserves its space and never shifts layout."""
+    return (
+        '<section class="map" aria-labelledby="map-h">\n'
+        '  <div class="shell map__grid">\n'
+        '    <div class="map__aside">\n'
+        '      <span class="pill pill--line"><i class="dot" aria-hidden="true"></i>The shop</span>\n'
+        '      <h2 class="map__h" id="map-h">Come and see<br> the bench.</h2>\n'
+        '      <p class="map__note">Drawings, samples and work in progress all live in one\n'
+        '        building. Visits are by appointment so someone is free to walk you through\n'
+        '        what is on the floor.</p>\n'
+        '      <address class="map__addr">\n'
+        f'        <span>{E(SITE["street"])}</span>\n'
+        f'        <span>{E(SITE["locality"])}, {E(SITE["region"])} {E(SITE["postal"])}</span>\n'
+        '        <span>Canada</span>\n'
+        '      </address>\n'
+        f'      <a class="btn btn--brass map__go" href="{MAP_DIRECTIONS}"\n'
+        '         target="_blank" rel="noopener">\n'
+        '        <span>Get directions</span>\n'
+        '        <i class="btn__arrow" aria-hidden="true">\n'
+        '          <svg viewBox="0 0 14 14" fill="none"><path d="M4 10L10 4M10 4H4.9M10 4v5.1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>\n'
+        '        </i>\n'
+        '      </a>\n'
+        '    </div>\n\n'
+        '    <div class="map__frame">\n'
+        f'      <iframe class="map__embed" src="{E(MAP_EMBED)}"\n'
+        f'              title="Map showing {E(SITE["name"])} at {E(_ADDR_ONE_LINE)}"\n'
+        '              loading="lazy" referrerpolicy="no-referrer-when-downgrade"\n'
+        '              allowfullscreen></iframe>\n'
+        '    </div>\n'
+        '  </div>\n'
+        '</section>')
 
 
 def cta_html(page):
@@ -773,7 +834,9 @@ def build_pages():
                  '        <span class="cx__block-h">Toronto Millworks</span>\n'
                  '        <dl class="cx__rows">\n' + rows_html + '\n        </dl>\n'
                  '        <address class="cx__addr">\n'
-                 '          ' + SITE["locality"] + ', ' + SITE["region_name"] + '<br>Canada\n'
+                 '          ' + SITE["street"] + '<br>'
+                 + SITE["locality"] + ', ' + SITE["region"] + ' ' + SITE["postal"]
+                 + '<br>Canada\n'
                  '        </address>\n      </aside>\n    </div>\n  </div>\n\n'
                  '  <div class="shell">\n    <ol class="cx__steps">\n'
                  + steps_html + '\n    </ol>\n  </div>\n</section>'

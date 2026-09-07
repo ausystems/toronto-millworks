@@ -216,11 +216,26 @@ body{
    HERO  , 16:9 card, content bottom-aligned, matching reference
    ══════════════════════════════════════════════════════════════ */
 .hero{
+  /* The hero has to land inside the first screen with nothing clipped, so it
+     takes the smaller of its own 16:9 and the height left under the nav.
+
+     --hero-vw is the viewport width the hero *would* need for that capped
+     height, divided by 100. Every type and padding step below is written
+     against it instead of against 1vw, so when the window is too short the
+     whole composition scales down together rather than the corners walking
+     off the bottom edge. On a window that already fits it resolves to exactly
+     1vw and the reference framing is untouched. */
+  --hero-top:  calc(var(--gutter) * .62);
+  --hero-cap:  calc(100svh - var(--nav-space) - var(--hero-top));
+  --hero-vw:   min(1vw, calc((var(--hero-cap) * 16 / 9 + var(--gutter) * 2) / 100));
+  --pad-hero:  clamp(20px, calc(3.75 * var(--hero-vw)), 54px);
+
   position:relative;
-  margin:calc(var(--gutter) * .62) var(--gutter) 0;
+  margin:var(--hero-top) var(--gutter) 0;
   border-radius:var(--radius);
   overflow:hidden;
   aspect-ratio:16/9;
+  max-height:var(--hero-cap);
   isolation:isolate;
   display:flex;
   flex-direction:column;
@@ -254,10 +269,14 @@ body{
   padding:var(--pad-hero) var(--pad-hero) calc(var(--pad-hero) * 1.45);
 }
 
-.hero__left{ display:flex; flex-direction:column; align-items:flex-start; gap:clamp(14px,1.55vw,22px); }
+.hero__left{
+  display:flex; flex-direction:column; align-items:flex-start;
+  gap:clamp(10px, calc(1.55 * var(--hero-vw)), 22px);
+  min-width:0;
+}
 
 .hero__title{
-  font-size:clamp(2.3rem, 5.32vw, 5.3rem);
+  font-size:clamp(1.9rem, calc(5.32 * var(--hero-vw)), 5.3rem);
   font-weight:400;
   line-height:1.055;
   letter-spacing:-.035em;
@@ -267,13 +286,15 @@ body{
 }
 
 .hero__right{
-  display:flex; flex-direction:column; align-items:flex-end; gap:clamp(14px,1.5vw,22px);
+  display:flex; flex-direction:column; align-items:flex-end;
+  gap:clamp(10px, calc(1.5 * var(--hero-vw)), 22px);
   text-align:right;
-  max-width:clamp(300px, 30vw, 430px);
+  max-width:clamp(252px, calc(30 * var(--hero-vw)), 430px);
   padding-bottom:2px;
+  flex:none;
 }
 .hero__lede{
-  font-size:clamp(12.5px,1.02vw,14.6px);
+  font-size:clamp(11.6px, calc(1.02 * var(--hero-vw)), 14.6px);
   line-height:1.62;
   letter-spacing:-.002em;
   color:rgba(255,255,255,.82);
@@ -294,13 +315,31 @@ body{
 }
 .about__label{ padding-top:.35em; }
 .about__text{
-  font-size:clamp(1.18rem, 2.28vw, 2.06rem);
+  font-size:clamp(1.3rem, 2.72vw, 2.5rem);
   font-weight:400;
-  line-height:1.46;
-  letter-spacing:-.024em;
+  line-height:1.42;
+  letter-spacing:-.026em;
   color:var(--ink);
   text-wrap:pretty;
 }
+
+/* the opening phrase carries the statement, so it reads a size up */
+.about__lead{
+  font-size:1.2em;
+  font-weight:500;
+  letter-spacing:-.034em;
+}
+
+/* ── the statement writes itself in ──────────────────────────
+   main.js splits the sentence into words and characters at runtime and
+   scrubs their opacity against scroll. Words stay inline-block so a word
+   never breaks mid-air across a line; characters stay plain inline so the
+   line box, wrapping and letter-spacing are exactly what they were before
+   the split. Without JS none of these classes exist and the paragraph is
+   simply the sentence. */
+.about__split{ display:inline; }
+.about__text .sw{ display:inline-block; }
+.about__text .sc{ display:inline; }
 
 /* ══════════════════════════════════════════════════════════════
    REEL, scroll-scrubbed fit-out sequence
@@ -868,6 +907,164 @@ body{
 /* ══════════════════════════════════════════════════════════════
    RESPONSIVE
    ══════════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════
+   FAQ , a ruled index standing against a fixed left column
+   Native <details>, so it opens without JS. Everything here is chrome:
+   hairline rules, one brass wipe, a plus that becomes a minus. No boxes,
+   no shadows, no numbering.
+   ══════════════════════════════════════════════════════════════ */
+.faq{ padding:clamp(58px,7.4vw,124px) 0 clamp(34px,4.2vw,72px); }
+
+.faq__grid{
+  display:grid;
+  grid-template-columns:minmax(0,31%) minmax(0,69%);
+  gap:clamp(26px,3.6vw,68px);
+  align-items:start;
+}
+
+/* the column stands still while the answers move past it */
+.faq__aside{
+  position:sticky; top:calc(var(--nav-space) + clamp(10px,1.6vw,28px));
+  display:flex; flex-direction:column; align-items:flex-start;
+  gap:clamp(13px,1.5vw,20px);
+}
+.faq__h{
+  font-size:clamp(1.95rem,3.8vw,3.4rem);
+  font-weight:400; line-height:1.02; letter-spacing:-.042em;
+}
+.faq__note{
+  font-size:clamp(13.5px,1.02vw,15.5px);
+  line-height:1.68; color:var(--ink-45);
+  max-width:32ch; text-wrap:pretty;
+}
+
+.faq__list{ border-top:1px solid var(--line); }
+.faq__row{ position:relative; border-bottom:1px solid var(--line); }
+
+/* the row's own rule, in brass, wiped in from the left. It is the only
+   ornament the list gets, and it doubles as the open state */
+.faq__row::after{
+  content:""; position:absolute; left:0; right:0; bottom:-1px; height:1px;
+  background:var(--brass); transform:scaleX(0); transform-origin:left;
+  transition:transform .6s var(--ease);
+}
+.faq__row[open]::after{ transform:scaleX(1); }
+
+.faq__q{
+  display:flex; align-items:flex-start; justify-content:space-between;
+  gap:clamp(18px,3vw,52px);
+  padding:clamp(19px,2.05vw,30px) 0;
+  cursor:pointer;
+  list-style:none;
+  -webkit-tap-highlight-color:transparent;
+}
+.faq__q::-webkit-details-marker{ display:none; }
+.faq__q::marker{ content:""; }
+.faq__q:focus-visible{ outline:2px solid var(--brass); outline-offset:4px; border-radius:6px; }
+
+.faq__q-t{
+  margin:0;
+  font-size:clamp(1.02rem,1.42vw,1.4rem);
+  font-weight:400; line-height:1.34; letter-spacing:-.026em;
+  color:var(--ink); max-width:42ch; text-wrap:pretty;
+  transition:transform .6s var(--ease);
+}
+
+@media (hover:hover){
+  .faq__row:hover::after{ transform:scaleX(1); }
+  .faq__row:hover .faq__q-t{ transform:translateX(clamp(3px,.42vw,7px)); }
+}
+
+/* a hairline plus that becomes a minus, rather than a chevron */
+.faq__ico{
+  position:relative; flex:none;
+  width:clamp(14px,1.25vw,18px); height:clamp(14px,1.25vw,18px);
+  margin-top:.44em;
+}
+.faq__ico::before,
+.faq__ico::after{
+  content:""; position:absolute; left:0; top:50%;
+  width:100%; height:1px; background:var(--ink-45);
+  transition:transform .5s var(--ease), background-color .35s var(--ease);
+}
+.faq__ico::after{ transform:rotate(90deg); }
+.faq__row[open] .faq__ico::after{ transform:rotate(0deg); }
+.faq__row[open] .faq__ico::before,
+.faq__row[open] .faq__ico::after{ background:var(--brass); }
+
+/* JS animates this box, overflow keeps the reveal clean mid flight */
+.faq__panel{ overflow:hidden; }
+.faq__a{
+  margin:0;
+  padding:0 clamp(30px,5vw,80px) clamp(23px,2.5vw,36px) 0;
+  font-size:clamp(14px,1.06vw,16.5px);
+  line-height:1.72; color:var(--ink-70);
+  max-width:64ch; text-wrap:pretty;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MAP , where the shop actually is
+   ══════════════════════════════════════════════════════════════ */
+.map{ padding:clamp(30px,3.8vw,64px) 0 clamp(58px,7vw,118px); }
+
+.map__grid{
+  display:grid;
+  grid-template-columns:minmax(0,31%) minmax(0,69%);
+  gap:clamp(26px,3.6vw,68px);
+  align-items:start;
+}
+.map__aside{
+  display:flex; flex-direction:column; align-items:flex-start;
+  gap:clamp(13px,1.5vw,20px);
+}
+.map__h{
+  font-size:clamp(1.95rem,3.8vw,3.4rem);
+  font-weight:400; line-height:1.02; letter-spacing:-.042em;
+}
+.map__note{
+  font-size:clamp(13.5px,1.02vw,15.5px);
+  line-height:1.68; color:var(--ink-45);
+  max-width:32ch; text-wrap:pretty;
+}
+.map__addr{
+  display:flex; flex-direction:column; gap:1px;
+  font-style:normal;
+  font-size:clamp(14px,1.08vw,16.5px);
+  line-height:1.62; letter-spacing:-.014em; color:var(--ink-70);
+}
+.map__addr span:first-child{ color:var(--ink); font-weight:500; }
+.map__go{ margin-top:clamp(4px,.7vw,10px); }
+
+.map__frame{
+  position:relative;
+  aspect-ratio:16/10;
+  border-radius:var(--radius);
+  overflow:hidden;
+  background:var(--paper-2);
+  box-shadow:0 1px 2px rgba(23,20,15,.05), 0 26px 64px -38px rgba(23,20,15,.45);
+}
+/* a hairline inside the radius, drawn over the tiles but out of the way of
+   the pointer so the map still pans */
+.map__frame::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  border-radius:inherit; box-shadow:inset 0 0 0 1px var(--line-soft);
+}
+.map__embed{
+  position:absolute; inset:0;
+  width:100%; height:100%; border:0; display:block;
+}
+/* a third party tile set arrives in its own palette and shouts in the middle
+   of a quiet page. Warm it into this one, and hand the real colours back the
+   moment somebody actually reaches for it. */
+.map__embed{
+  filter:grayscale(1) sepia(.2) saturate(1.25) contrast(1.02) brightness(1.03);
+  transition:filter .7s var(--ease);
+}
+.map__frame:focus-within .map__embed{ filter:none; }
+@media (hover:hover){
+  .map__frame:hover .map__embed{ filter:none; }
+}
+
 @media (max-width:860px){
   .nav__burger{ display:grid; }
 
@@ -888,13 +1085,25 @@ body{
 
   .nav__cta{ display:flex; justify-content:center; margin:8px 0 0; }
 
-  .hero{ aspect-ratio:auto; min-height:min(84svh, 640px); }
+  .hero{ aspect-ratio:auto; max-height:none; min-height:min(84svh, 640px); }
+  .hero__right{ flex:0 1 auto; }
   .hero__body{ flex-direction:column; align-items:flex-start; justify-content:flex-end; gap:clamp(20px,4vw,30px); }
   .hero__right{ align-items:flex-start; text-align:left; max-width:46ch; }
   .hero__media img{ object-position:center 46%; }
 
   .about__inner{ grid-template-columns:1fr; gap:clamp(18px,3vw,26px); }
   .about__label{ padding-top:0; }
+
+  /* both indexes stack, and the standing column stops standing */
+  .faq__grid, .map__grid{ grid-template-columns:1fr; gap:clamp(22px,4vw,34px); }
+  .faq__aside{ position:static; }
+  .faq__h, .map__h{ font-size:clamp(1.85rem,7.4vw,2.6rem); }
+  .faq__h br, .map__h br{ display:none; }
+  .faq__note, .map__note{ max-width:44ch; }
+  .faq__q-t{ max-width:none; }
+  .faq__a{ padding-right:clamp(18px,6vw,44px); }
+  /* a 16:10 letterbox is not a map once the column stacks */
+  .map__frame{ aspect-ratio:4/3; }
 
   /* a full-height cover crop of a 16:9 plate throws away most of the width on a
      portrait screen, cap the band so the crop stays sane */
@@ -925,6 +1134,7 @@ body{
 
 @media (max-width:560px){
   .hero{ min-height:min(88svh, 620px); }
+  .map__frame{ aspect-ratio:1/1; }
   .foot__reach{ grid-template-columns:1fr; gap:22px; }
   .foot__index .m{ display:none; }        /* keeps the row on one line at 320px */
   .foot__index a{ grid-template-columns:26px minmax(0,1fr); }
@@ -937,4 +1147,5 @@ body{
   .reel__pin{ position:static; height:auto; padding:clamp(40px,5vw,72px) 0; }
   .reel__media{ height:min(66vh, 62vw); }
   .faq__ico::before, .faq__ico::after{ transition:none; }
+  .faq__row::after, .faq__q-t, .map__embed{ transition:none; }
 }
