@@ -107,41 +107,81 @@ body{
 }
 
 /* ── buttons ──────────────────────────────────────────────── */
+/* The badge rests in the left slot and travels to the right one on hover
+   while the fill goes to black. The label carries the same distance the
+   other way, so the hover state is an exact mirror of the rest state and
+   the button never changes width. Nothing here is scripted, and the two
+   slots are the button's own padding, so the travel is always right. */
 .btn{
-  --h: clamp(40px, 3.55vw, 51px);
+  --h:     clamp(40px, 3.55vw, 51px);
+  --badge: calc(var(--h) - 12px);
+  --edge:  .38em;
+  --gap:   .7em;
+  --slide: cubic-bezier(.65, 0, .35, 1);
+
   position:relative;
-  display:inline-flex; align-items:center; gap:.7em;
+  display:inline-flex; align-items:center;
   height:var(--h);
-  padding-inline:1.15em .38em;
+  padding-inline:calc(var(--edge) + var(--badge) + var(--gap)) var(--edge);
   border-radius:999px;
   font-size:clamp(12.5px,1vw,14.5px);
   font-weight:500;
   letter-spacing:-.005em;
   white-space:nowrap;
-  transition:transform .45s var(--ease), background-color .3s var(--ease),
-             box-shadow .45s var(--ease), color .3s var(--ease);
+  transition:transform .5s var(--ease), background-color .55s var(--ease),
+             box-shadow .55s var(--ease), color .45s var(--ease);
 }
-.btn:hover{ transform:translateY(-2px); }
+.btn > span{
+  display:block;
+  transition:transform .62s var(--slide);
+}
 .btn:active{ transform:translateY(0); }
 
 .btn__arrow{
-  display:grid; place-items:center; flex:none;
-  width:calc(var(--h) - 12px); height:calc(var(--h) - 12px);
+  position:absolute; top:50%; left:var(--edge);
+  transform:translateY(-50%);
+  display:grid; place-items:center;
+  width:var(--badge); height:var(--badge);
   border-radius:50%;
-  transition:transform .5s var(--ease);
+  /* it rides over the label for the fastest tenth of a second of the travel,
+     so give it enough lift to read as passing over rather than through */
+  box-shadow:0 2px 10px -3px rgba(0,0,0,.45);
+  transition:left .62s var(--slide),
+             background-color .34s var(--ease), color .34s var(--ease);
 }
 .btn__arrow svg{ width:52%; height:52%; }
-.btn:hover .btn__arrow{ transform:rotate(45deg); }
+
+@media (hover:hover){
+  .btn:hover{ transform:translateY(-2px); }
+  .btn:hover .btn__arrow{
+    left:calc(100% - var(--badge) - var(--edge));
+    /* the colours land as the badge arrives rather than the moment you
+       enter, so the change reads as arrival and not as a flicker */
+    transition-delay:0s, .22s, .22s;
+  }
+  .btn:hover > span{ transform:translateX(calc(-1 * (var(--badge) + var(--gap)))); }
+}
 
 .btn--brass{ background:var(--brass); color:#fff; box-shadow:0 6px 18px -10px rgba(192,138,60,.9); }
-.btn--brass:hover{ background:var(--brass-dk); box-shadow:0 12px 26px -12px rgba(192,138,60,.95); }
 .btn--brass .btn__arrow{ background:#fff; color:var(--brass); }
 
 .btn--paper{ background:var(--paper); color:var(--ink); box-shadow:0 6px 20px -12px rgba(0,0,0,.5); }
-.btn--paper:hover{ box-shadow:0 14px 30px -14px rgba(0,0,0,.55); }
 .btn--paper .btn__arrow{ background:var(--brass); color:#fff; }
 
-.btn--lg{ --h: clamp(46px, 3.9vw, 56px); font-size:clamp(14px,1.1vw,16px); padding-inline:1.35em .44em; }
+@media (hover:hover){
+  .btn--brass:hover, .btn--paper:hover{
+    background:var(--ink); color:#fff;
+    box-shadow:0 14px 32px -16px rgba(23,20,15,.65);
+  }
+  .btn--brass:hover .btn__arrow,
+  .btn--paper:hover .btn__arrow{ background:#fff; color:var(--ink); }
+}
+
+.btn--lg{
+  --h: clamp(46px, 3.9vw, 56px);
+  --edge:.44em;
+  font-size:clamp(14px,1.1vw,16px);
+}
 
 /* ══════════════════════════════════════════════════════════════
    NAV
@@ -234,8 +274,7 @@ body{
   margin:var(--hero-top) var(--gutter) 0;
   border-radius:var(--radius);
   overflow:hidden;
-  aspect-ratio:16/9;
-  max-height:var(--hero-cap);
+  height:var(--hero-cap);
   isolation:isolate;
   display:flex;
   flex-direction:column;
@@ -586,10 +625,15 @@ body{
 
 /* ── cta band ────────────────────────────────────────────── */
 .band{ padding:clamp(44px,5.6vw,96px) 0; }
-.band__inner{ display:flex; flex-direction:column; align-items:flex-start; gap:clamp(14px,1.7vw,22px); }
-.band__title{ font-size:clamp(1.75rem,3.6vw,3.2rem); font-weight:400; line-height:1.06; letter-spacing:-.036em; text-wrap:balance; max-width:18ch; }
-.band__text{ font-size:clamp(13.5px,1.04vw,15.5px); line-height:1.62; color:var(--ink-70); max-width:46ch; }
-.band .btn{ margin-top:clamp(6px,.8vw,12px); }
+.band__inner{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,clamp(280px, 33%, 440px));
+  align-items:end;
+  gap:clamp(22px,3vw,64px);
+}
+.band__title{ font-size:clamp(1.75rem,3.6vw,3.2rem); font-weight:400; line-height:1.06; letter-spacing:-.036em; text-wrap:balance; max-width:15ch; }
+.band__side{ display:flex; flex-direction:column; align-items:flex-start; gap:clamp(15px,1.8vw,24px); }
+.band__text{ font-size:clamp(13.5px,1.04vw,15.5px); line-height:1.62; color:var(--ink-70); text-wrap:pretty; }
 
 /* ── search ──────────────────────────────────────────────── */
 .srch{ padding-bottom:clamp(40px,5vw,80px); }
@@ -1085,7 +1129,7 @@ body{
 
   .nav__cta{ display:flex; justify-content:center; margin:8px 0 0; }
 
-  .hero{ aspect-ratio:auto; max-height:none; min-height:min(84svh, 640px); }
+  .hero{ height:auto; min-height:var(--hero-cap); }
   .hero__right{ flex:0 1 auto; }
   .hero__body{ flex-direction:column; align-items:flex-start; justify-content:flex-end; gap:clamp(20px,4vw,30px); }
   .hero__right{ align-items:flex-start; text-align:left; max-width:46ch; }
@@ -1093,6 +1137,9 @@ body{
 
   .about__inner{ grid-template-columns:1fr; gap:clamp(18px,3vw,26px); }
   .about__label{ padding-top:0; }
+
+  .band__inner{ grid-template-columns:1fr; gap:clamp(16px,3vw,24px); align-items:start; }
+  .band__title{ max-width:18ch; }
 
   /* both indexes stack, and the standing column stops standing */
   .faq__grid, .map__grid{ grid-template-columns:1fr; gap:clamp(22px,4vw,34px); }
@@ -1133,7 +1180,7 @@ body{
 }
 
 @media (max-width:560px){
-  .hero{ min-height:min(88svh, 620px); }
+  .hero{ min-height:var(--hero-cap); }
   .map__frame{ aspect-ratio:1/1; }
   .foot__reach{ grid-template-columns:1fr; gap:22px; }
   .foot__index .m{ display:none; }        /* keeps the row on one line at 320px */
@@ -1148,4 +1195,5 @@ body{
   .reel__media{ height:min(66vh, 62vw); }
   .faq__ico::before, .faq__ico::after{ transition:none; }
   .faq__row::after, .faq__q-t, .map__embed{ transition:none; }
+  .btn, .btn > span, .btn__arrow{ transition:none; }
 }

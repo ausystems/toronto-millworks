@@ -533,7 +533,7 @@
 
   var TARGETS = ".ph__t, .ph__l, .ph .pill, .crumbs, .say__t, .cols__row, " +
                 ".fs__t, .cards__h, .cards__i, .strip__h, .strip__c, " +
-                ".band__inner > *, .faq__aside > *, .faq__row, " +
+                ".band__title, .band__side, .faq__aside > *, .faq__row, " +
                 ".map__aside > *, .map__frame";
 
   var els = document.querySelectorAll(TARGETS);

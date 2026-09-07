@@ -436,6 +436,7 @@ def cta_html(page):
         '<section class="band">\n'
         '  <div class="shell band__inner">\n'
         '    <h2 class="band__title">Tell us about the room.</h2>\n'
+        '    <div class="band__side">\n'
         '    <p class="band__text">Send drawings, a photo or just the dimensions. '
         'We come back with a measured quote.</p>\n'
         f'    <a class="btn btn--brass btn--lg" href="{p}contact/">'
@@ -444,6 +445,7 @@ def cta_html(page):
         '<svg viewBox="0 0 14 14" fill="none"><path d="M4 10L10 4M10 4H4.9M10 4v5.1" '
         'stroke="currentColor" stroke-width="1.6" stroke-linecap="round" '
         'stroke-linejoin="round"/></svg></i></a>\n'
+        '    </div>\n'
         '  </div>\n'
         '</section>')
 
