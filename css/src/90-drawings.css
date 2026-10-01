@@ -56,18 +56,19 @@
 /* when a sheet is drawn small, secondary labels step aside */
 .dw[data-small] .dw-minor{ display:none; }
 
-/* draw-on, armed by script so a reader without it sees the finished sheet */
+/* draw-on, armed by script so a reader without it sees the finished sheet.
+   Quick by design: the whole sheet is down in about half a second */
 .dw.is-armed .dw-g [pathLength]{ stroke-dasharray:1 1; stroke-dashoffset:1; }
 .dw.is-armed .dw-g > :not([pathLength]){ opacity:0; }
 .dw.is-armed .dw-tb{ opacity:0; }
 .dw.is-drawn .dw-g [pathLength]{
   stroke-dashoffset:0;
-  transition:stroke-dashoffset 1.25s cubic-bezier(.45,.05,.2,1) calc(var(--i, 0) * 34ms);
+  transition:stroke-dashoffset .32s cubic-bezier(.3,.1,.2,1) calc(var(--i, 0) * 4ms);
 }
 .dw.is-drawn .dw-g > :not([pathLength]){
-  opacity:1; transition:opacity .9s var(--ease) calc(var(--i, 0) * 34ms + .4s);
+  opacity:1; transition:opacity .22s var(--ease) calc(var(--i, 0) * 4ms + .12s);
 }
-.dw.is-drawn .dw-tb{ opacity:1; transition:opacity .8s var(--ease) 1.6s; }
+.dw.is-drawn .dw-tb{ opacity:1; transition:opacity .22s var(--ease) .3s; }
 @media (prefers-reduced-motion:reduce){
   .dw.is-armed .dw-g [pathLength]{ stroke-dashoffset:0; }
   .dw.is-armed .dw-g > *, .dw.is-armed .dw-tb{ opacity:1; }

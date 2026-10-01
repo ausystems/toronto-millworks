@@ -738,7 +738,7 @@ address{ font-style:normal; }
 }
 .prc__sheet{
   grid-area:1/1; display:grid; place-items:center; min-height:0;
-  opacity:0; transition:opacity .7s var(--ease);
+  opacity:0; transition:opacity .2s var(--ease);
 }
 .prc__sheet .dw{ width:auto; max-width:100%; height:100%; max-height:100%; }
 .prc__sheet.is-on{ opacity:1; }
@@ -807,7 +807,7 @@ address{ font-style:normal; }
   background:var(--paper-2); border:1px solid var(--line-soft); padding:clamp(14px,1.6vw,24px);
 }
 @media (min-width:900px){ .idx__peek{ display:grid; } }
-.idx__pk{ grid-area:1/1; opacity:0; transition:opacity .5s var(--ease); display:grid; place-items:center; }
+.idx__pk{ grid-area:1/1; opacity:0; transition:opacity .18s var(--ease); display:grid; place-items:center; }
 .idx__pk .dw{ max-height:100%; }
 .idx__pk.is-on{ opacity:1; }
 .idx--small .idx__t{ font-size:clamp(1.2rem,1.9vw,1.75rem); }
@@ -1676,18 +1676,19 @@ address{ font-style:normal; }
 /* when a sheet is drawn small, secondary labels step aside */
 .dw[data-small] .dw-minor{ display:none; }
 
-/* draw-on, armed by script so a reader without it sees the finished sheet */
+/* draw-on, armed by script so a reader without it sees the finished sheet.
+   Quick by design: the whole sheet is down in about half a second */
 .dw.is-armed .dw-g [pathLength]{ stroke-dasharray:1 1; stroke-dashoffset:1; }
 .dw.is-armed .dw-g > :not([pathLength]){ opacity:0; }
 .dw.is-armed .dw-tb{ opacity:0; }
 .dw.is-drawn .dw-g [pathLength]{
   stroke-dashoffset:0;
-  transition:stroke-dashoffset 1.25s cubic-bezier(.45,.05,.2,1) calc(var(--i, 0) * 34ms);
+  transition:stroke-dashoffset .32s cubic-bezier(.3,.1,.2,1) calc(var(--i, 0) * 4ms);
 }
 .dw.is-drawn .dw-g > :not([pathLength]){
-  opacity:1; transition:opacity .9s var(--ease) calc(var(--i, 0) * 34ms + .4s);
+  opacity:1; transition:opacity .22s var(--ease) calc(var(--i, 0) * 4ms + .12s);
 }
-.dw.is-drawn .dw-tb{ opacity:1; transition:opacity .8s var(--ease) 1.6s; }
+.dw.is-drawn .dw-tb{ opacity:1; transition:opacity .22s var(--ease) .3s; }
 @media (prefers-reduced-motion:reduce){
   .dw.is-armed .dw-g [pathLength]{ stroke-dashoffset:0; }
   .dw.is-armed .dw-g > *, .dw.is-armed .dw-tb{ opacity:1; }
