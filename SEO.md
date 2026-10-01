@@ -12,7 +12,7 @@ Every item on the brief, where it lives, and how it is verified. Items marked
 | 5 | Keyword-optimised copy | Done | Primary terms in titles, H1s and opening copy; service and town pairs in anchors |
 | 6 | Search intent | Done | Services and towns are transactional with a quote path; guides are informational |
 | 7 | Clean URLs | Done | Lowercase, hyphenated, trailing slash; `.html` and missing slashes redirect |
-| 8 | Canonical tags | Done | Self-referencing and absolute on every page (audit) |
+| 8 | Canonical tags | Done | Self-referencing and absolute on every page; the 404 declares none because it answers at any address (audit, smoke test) |
 | 9 | Schema markup | Done | Organization + LocalBusiness + HomeAndConstructionBusiness, WebSite, WebPage types, BreadcrumbList, Service (GeoCircle area), FAQPage, Article, ItemList; all parse (audit) |
 | 10 | XML sitemap | Done | 72 URLs with lastmod and image entries for the images each page uses (audit) |
 | 11 | robots.txt | Done | Everything crawlable, AI crawlers welcomed, sitemap declared (audit) |
@@ -27,7 +27,7 @@ Every item on the brief, where it lives, and how it is verified. Items marked
 | 20 | Core Web Vitals | Done | Self-hosted fonts with preload, hero preload, intrinsic image sizes, blur-up placeholders, deferred scripts, Three.js on demand |
 | 21 | Mobile first | Done | Phone layouts designed separately; full-height menu, quote dock, thumbnailed indexes |
 | 22 | Page speed | Done | Pages 4 to 27 KB gzipped, CSS 21 KB, site script 12 KB, long-lived caching on assets |
-| 23 | Crawlability and indexability | Done | All content in HTML before script, every link a real `<a href>`, broken links fail the audit |
+| 23 | Crawlability and indexability | Done | All content in HTML before script, every link a real `<a href>`, broken links fail the audit; `scripts/smoke.mjs` crawls the live site after each deploy |
 | 24 | Duplicate content | Done | Canonicals, one host, unique titles and descriptions, unique copy and map per location (audit) |
 | 25 | Local SEO signals | Done | Full NAP in footer, schema, contact page and map; geo meta; GeoCircle service area; 50 location pages |
 | 26 | llms.txt | Done | `/llms.txt` and `/llms-full.txt` with every service, guide and town (audit) |
