@@ -581,7 +581,7 @@ def _selfcheck():
     assert len(set(ledes)) == len(ledes) and len(set(bodies)) == len(bodies), "copy repeats"
     for p in LOCATIONS:
         assert p["region"] in REGION_ORDER, p["region"]
-        assert "—" not in p["lede"] + p["body"], p["slug"]
+        assert "\u2014" not in p["lede"] + p["body"], p["slug"]
 
 
 _selfcheck()

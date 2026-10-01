@@ -11,6 +11,76 @@
       "source": "/home/",
       "destination": "/",
       "permanent": true
+    },
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/services.html",
+      "destination": "/services/",
+      "permanent": true
+    },
+    {
+      "source": "/about.html",
+      "destination": "/about/",
+      "permanent": true
+    },
+    {
+      "source": "/contact.html",
+      "destination": "/contact/",
+      "permanent": true
+    },
+    {
+      "source": "/projects.html",
+      "destination": "/projects/",
+      "permanent": true
+    },
+    {
+      "source": "/faq.html",
+      "destination": "/faq/",
+      "permanent": true
+    },
+    {
+      "source": "/areas",
+      "destination": "/service-areas/",
+      "permanent": true
+    },
+    {
+      "source": "/areas/",
+      "destination": "/service-areas/",
+      "permanent": true
+    },
+    {
+      "source": "/locations",
+      "destination": "/service-areas/",
+      "permanent": true
+    },
+    {
+      "source": "/locations/",
+      "destination": "/service-areas/",
+      "permanent": true
+    },
+    {
+      "source": "/quote",
+      "destination": "/contact/",
+      "permanent": true
+    },
+    {
+      "source": "/quote/",
+      "destination": "/contact/",
+      "permanent": true
+    },
+    {
+      "source": "/privacy",
+      "destination": "/privacy-policy/",
+      "permanent": true
+    },
+    {
+      "source": "/privacy/",
+      "destination": "/privacy-policy/",
+      "permanent": true
     }
   ],
   "headers": [
@@ -18,25 +88,68 @@
       "source": "/(.*)",
       "headers": [
         {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains"
+        },
+        {
           "key": "X-Content-Type-Options",
           "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
         },
         {
           "key": "Referrer-Policy",
           "value": "strict-origin-when-cross-origin"
         },
         {
-          "key": "X-Frame-Options",
-          "value": "SAMEORIGIN"
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()"
+        },
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'sha256-Du+OJKJSbdUgz5nrHeWWINvez6XKDDU/tyj/5c2uvwo='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; frame-src https://www.google.com https://maps.google.com; frame-ancestors 'none'; form-action 'self' mailto:; base-uri 'self'; object-src 'none'; manifest-src 'self'; worker-src 'self' blob:; upgrade-insecure-requests"
         }
       ]
     },
     {
-      "source": "/assets/(.*)",
+      "source": "/assets/fonts/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(css|js)/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(img|millwork-fit-out-sequence|og|brand|js)/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
           "value": "public, max-age=2592000, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/(search|404)/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, follow"
         }
       ]
     }

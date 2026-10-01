@@ -429,7 +429,7 @@ def faq_page():
          "lede": ("What custom millwork costs, how long it takes, what it is made from, and how a "
                   "project actually runs.")}
     body = (C.page_header(p, actions=C.btn("/contact/#quote", "Ask about your project", lg=True))
-            + C.faq(groups=FAQ_GROUPS, h2="Every question<br> we get asked")
+            + C.faq(groups=FAQ_GROUPS, h2="Every question<br> we get asked", more=False)
             + C.index_list(guide_items([g["slug"] for g in GUIDES]), "Go deeper", "gd-h", "Guides",
                            None, cls="idx--small idx--guides")
             + C.quote_starter())
@@ -485,6 +485,11 @@ AREA_PLATES = ["room", "doors", "archway", "panel-corner", "coffer", "sconce", "
                "plinth", "cornice", "base", "frieze", "panel-detail"]
 AREA_PLATES_COM = ["espresso", "pendants", "shelving", "counter", "finished", "lounge", "pipes",
                    "feature"]
+
+
+def _a(word):
+    """The indefinite article a town name takes when it is used as an adjective."""
+    return "an" if word[:1].lower() in "aeiou" else "a"
 
 
 def _area_faq(pl):
@@ -559,12 +564,12 @@ def area(pl, i):
                                 ("Work", "Residential and commercial")], tone="ph--place")
             + '<section class="loc" id="local" aria-labelledby="loc-h"><div class="shell loc__g">'
             + C.figure(plate, wide="46vw", cls="loc__f")
-            + f'<div class="loc__t">{C.sec_head(f"{pl["name"]}, as it is built", "loc-h", "Local")}'
-            f'<p class="loc__p">{E(pl["body"])}</p><h3 class="loc__h3">Neighbourhoods we work in</h3>'
+            + '<div class="loc__t">' + C.sec_head(pl["name"] + ", as it is built", "loc-h", "Local")
+            + f'<p class="loc__p">{E(pl["body"])}</p><h3 class="loc__h3">Neighbourhoods we work in</h3>'
             f'<ul class="loc__hoods">{hood}</ul></div></div></section>'
             + C.index_list(svc_items, f"What we build in {pl['name']}", "svc-h", "Services",
                            None, cls="idx--small")
-            + C.figsay(plate2, f"How a {pl['name']} project runs", "how-h", process_note, flip=True,
+            + C.figsay(plate2, f"How {_a(pl['name'])} {pl['name']} project runs", "how-h", process_note, flip=True,
                        extra=C.lnk("/guides/how-custom-millwork-is-made/", "How custom millwork is made"))
             + C.faq(_area_faq(pl), h2=f"Questions from<br> {E(pl['name'])}", map_after=True)
             + C.nearby(nearest(pl["slug"], 6), "Nearby areas we serve", "near-h")

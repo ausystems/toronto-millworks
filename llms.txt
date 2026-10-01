@@ -1,39 +1,54 @@
 # Toronto Millworks
 
-> Custom millwork, cabinetry and interior renovation in Toronto. We measure on site, draw it, mill it in our own shop, then install and finish it. Residential and commercial work across Toronto and the Greater Toronto Area.
+> Custom millwork, cabinetry and interior renovation for Toronto and the GTA. We measure on site, draw every piece, build it in our own shop at 2585 Drew Rd Unit 7, Mississauga, ON L4T 1G1, then install and finish it. Residential and commercial work within about 120 km of the shop.
 
 ## Core pages
 
-- [Home](https://toronto-millworks.vercel.app/): Custom millwork, cabinetry and interior renovation in Toronto.
-- [Services](https://toronto-millworks.vercel.app/services/): The five things we make.
-- [Projects](https://toronto-millworks.vercel.app/projects/): A commercial bar fit-out and residential joinery.
-- [About](https://toronto-millworks.vercel.app/about/): One shop that measures, draws, mills and installs.
-- [Contact](https://toronto-millworks.vercel.app/contact/): Get a measured quote.
-- [FAQ](https://toronto-millworks.vercel.app/faq/): Cost, timing, materials and process.
+- [Home](https://toronto-millworks.vercel.app/): Custom millwork, cabinetry and interior renovation for Toronto and the GTA.
+- [Services](https://toronto-millworks.vercel.app/services/): The seven things we make.
+- [Projects](https://toronto-millworks.vercel.app/projects/): A commercial bar fit-out, shell to finished room, and residential panelling.
+- [About](https://toronto-millworks.vercel.app/about/): One shop that measures, draws, builds and installs.
+- [Contact](https://toronto-millworks.vercel.app/contact/): Request a measured quote.
+- [FAQ](https://toronto-millworks.vercel.app/faq/): Cost, timing, process, materials and service area.
+- [Service areas](https://toronto-millworks.vercel.app/service-areas/): Every town within 120 km of the shop.
+- [Guides](https://toronto-millworks.vercel.app/guides/): Cost, materials, finishes and planning.
 
 ## Services
 
-- [Custom Kitchens](https://toronto-millworks.vercel.app/services/custom-kitchens/): Custom kitchen cabinetry in Toronto, milled and installed by our own shop. Islands, pantries and appliance surrounds built to your measured drawings.
-- [Cabinetry & Built-Ins](https://toronto-millworks.vercel.app/services/cabinetry-and-built-ins/): Custom built-in cabinetry in Toronto. Wall units, wardrobes, libraries, media walls and storage designed around the room and installed by our own team.
-- [Architectural Millwork](https://toronto-millworks.vercel.app/services/architectural-millwork/): Architectural millwork in Toronto. Wall panelling, coffered ceilings, crown moulding, wainscoting, stair details and custom trim profiles milled to match.
-- [Commercial Fit-Outs](https://toronto-millworks.vercel.app/services/commercial-fit-outs/): Commercial millwork in Toronto for restaurants, bars, cafes, offices and retail. Built to spec in our shop and installed on schedule with minimal downtime.
-- [Interior Renovation](https://toronto-millworks.vercel.app/services/interior-renovation/): Millwork-led interior renovation in Toronto. One team handling the joinery, surfaces and finishing so the cabinetry and the room are built to the same standard.
-
-## Service areas
-
-- [Toronto](https://toronto-millworks.vercel.app/service-areas/toronto/): Custom millwork and cabinetry across Toronto, from downtown condos to Forest Hill and the Annex. Measured, milled and installed by our own shop.
-- [North York](https://toronto-millworks.vercel.app/service-areas/north-york/): Custom cabinetry and architectural millwork in North York, including Willowdale, Bayview Village and York Mills. Kitchens, built-ins, panelling and interior renovation.
-- [Etobicoke](https://toronto-millworks.vercel.app/service-areas/etobicoke/): Custom kitchens, cabinetry and architectural millwork in Etobicoke, from Mimico and The Kingsway to the Humber Bay waterfront. Built and installed by our own shop.
-- [Scarborough](https://toronto-millworks.vercel.app/service-areas/scarborough/): Custom cabinetry, built-in storage and interior renovation in Scarborough and the Bluffs. Measured on site, milled in our own shop and installed by the same team.
-- [Vaughan](https://toronto-millworks.vercel.app/service-areas/vaughan/): Custom kitchens, wall panelling and built-in cabinetry in Vaughan, Woodbridge, Maple, Kleinburg and Thornhill. Measured on site and milled in our own Toronto shop.
-- [Mississauga](https://toronto-millworks.vercel.app/service-areas/mississauga/): Custom millwork and cabinetry in Mississauga for homes and commercial spaces, including restaurants, offices and retail.
+- [Custom Kitchens](https://toronto-millworks.vercel.app/services/custom-kitchens/): Custom kitchen cabinets for Toronto and GTA homes, measured on site, drawn to scale, built in our Mississauga shop and installed by one team.
+- [Cabinetry & Built-Ins](https://toronto-millworks.vercel.app/services/cabinetry-and-built-ins/): Custom built-in cabinetry for Toronto and GTA homes: media walls, libraries, wardrobes, mudrooms and vanities, designed around the room.
+- [Architectural Millwork](https://toronto-millworks.vercel.app/services/architectural-millwork/): Architectural millwork for Toronto and the GTA: wall panelling, coffered ceilings, crown moulding, casings and stairs, with profiles milled to match.
+- [Restaurant & Bar Millwork](https://toronto-millworks.vercel.app/services/restaurant-and-bar-millwork/): Custom bars, back bars, service counters and banquettes for restaurants, bars and cafes across the GTA, shop drawn and installed to your schedule.
+- [Office Millwork](https://toronto-millworks.vercel.app/services/office-millwork/): Custom office millwork across Toronto and the GTA: reception desks, boardroom credenzas, staff kitchens and storage walls, built in our shop.
+- [Commercial Fit-Outs](https://toronto-millworks.vercel.app/services/commercial-fit-outs/): Commercial millwork packages for contractors, designers and owners across the GTA: shop drawings, fabrication and install for retail and hospitality.
+- [Interior Renovation](https://toronto-millworks.vercel.app/services/interior-renovation/): Millwork-led interior renovation for Toronto and GTA homes: kitchens, bathrooms, basements and whole rooms, with the joinery built in our shop.
 
 ## Guides
 
-- [How custom millwork is made](https://toronto-millworks.vercel.app/guides/how-custom-millwork-is-made/): Site measure, shop drawings, milling, dry fitting, install and finishing.
+- [How custom millwork is made](https://toronto-millworks.vercel.app/guides/how-custom-millwork-is-made/): A step by step guide to how custom millwork is made: the site measure, shop drawings, milling, finishing, dry fitting and installation.
+- [What affects the cost of custom cabinetry](https://toronto-millworks.vercel.app/guides/custom-cabinetry-cost/): The factors that decide what custom cabinetry costs: size, materials, finish, door style, interiors, hardware and site conditions, and how to plan for them.
+- [Paint-grade vs stain-grade millwork](https://toronto-millworks.vercel.app/guides/paint-grade-vs-stain-grade-millwork/): Paint-grade and stain-grade millwork compared: the materials each uses, how they are built and finished, how they age, and where each one belongs.
+- [Choosing wood for custom cabinetry](https://toronto-millworks.vercel.app/guides/choosing-wood-for-cabinetry/): A practical guide to wood for custom cabinetry: white oak, walnut, maple, cherry, ash and poplar, plus plywood, MDF and veneer, and where each belongs.
+- [Custom vs semi-custom vs stock cabinets](https://toronto-millworks.vercel.app/guides/custom-vs-semi-custom-vs-stock-cabinets/): Custom, semi-custom and stock cabinets compared on fit, materials, choice, lead time and cost, with an honest look at when each is the right call.
+- [Planning millwork for a restaurant or bar](https://toronto-millworks.vercel.app/guides/planning-restaurant-bar-millwork/): How to plan restaurant and bar millwork: when to involve the millworker, equipment schedules, shop drawings, durable finishes and the install window.
+
+## Service areas
+
+- Toronto: [Toronto](https://toronto-millworks.vercel.app/service-areas/toronto/), [North York](https://toronto-millworks.vercel.app/service-areas/north-york/), [Etobicoke](https://toronto-millworks.vercel.app/service-areas/etobicoke/), [Scarborough](https://toronto-millworks.vercel.app/service-areas/scarborough/), [East York](https://toronto-millworks.vercel.app/service-areas/east-york/)
+- Peel: [Mississauga](https://toronto-millworks.vercel.app/service-areas/mississauga/), [Brampton](https://toronto-millworks.vercel.app/service-areas/brampton/), [Caledon](https://toronto-millworks.vercel.app/service-areas/caledon/)
+- Halton: [Oakville](https://toronto-millworks.vercel.app/service-areas/oakville/), [Burlington](https://toronto-millworks.vercel.app/service-areas/burlington/), [Milton](https://toronto-millworks.vercel.app/service-areas/milton/), [Halton Hills](https://toronto-millworks.vercel.app/service-areas/halton-hills/)
+- Hamilton: [Hamilton](https://toronto-millworks.vercel.app/service-areas/hamilton/), [Ancaster](https://toronto-millworks.vercel.app/service-areas/ancaster/), [Dundas](https://toronto-millworks.vercel.app/service-areas/dundas/), [Stoney Creek](https://toronto-millworks.vercel.app/service-areas/stoney-creek/)
+- Niagara: [Grimsby](https://toronto-millworks.vercel.app/service-areas/grimsby/), [Lincoln](https://toronto-millworks.vercel.app/service-areas/lincoln/), [St. Catharines](https://toronto-millworks.vercel.app/service-areas/st-catharines/), [Niagara-on-the-Lake](https://toronto-millworks.vercel.app/service-areas/niagara-on-the-lake/), [Niagara Falls](https://toronto-millworks.vercel.app/service-areas/niagara-falls/), [Welland](https://toronto-millworks.vercel.app/service-areas/welland/)
+- York Region: [Vaughan](https://toronto-millworks.vercel.app/service-areas/vaughan/), [Richmond Hill](https://toronto-millworks.vercel.app/service-areas/richmond-hill/), [Markham](https://toronto-millworks.vercel.app/service-areas/markham/), [Aurora](https://toronto-millworks.vercel.app/service-areas/aurora/), [Newmarket](https://toronto-millworks.vercel.app/service-areas/newmarket/), [King](https://toronto-millworks.vercel.app/service-areas/king/), [Whitchurch-Stouffville](https://toronto-millworks.vercel.app/service-areas/whitchurch-stouffville/), [East Gwillimbury](https://toronto-millworks.vercel.app/service-areas/east-gwillimbury/), [Georgina](https://toronto-millworks.vercel.app/service-areas/georgina/)
+- Durham: [Pickering](https://toronto-millworks.vercel.app/service-areas/pickering/), [Ajax](https://toronto-millworks.vercel.app/service-areas/ajax/), [Whitby](https://toronto-millworks.vercel.app/service-areas/whitby/), [Oshawa](https://toronto-millworks.vercel.app/service-areas/oshawa/), [Clarington](https://toronto-millworks.vercel.app/service-areas/clarington/), [Uxbridge](https://toronto-millworks.vercel.app/service-areas/uxbridge/)
+- Simcoe: [Bradford West Gwillimbury](https://toronto-millworks.vercel.app/service-areas/bradford-west-gwillimbury/), [Innisfil](https://toronto-millworks.vercel.app/service-areas/innisfil/), [Barrie](https://toronto-millworks.vercel.app/service-areas/barrie/), [New Tecumseth](https://toronto-millworks.vercel.app/service-areas/new-tecumseth/), [Collingwood](https://toronto-millworks.vercel.app/service-areas/collingwood/), [Orillia](https://toronto-millworks.vercel.app/service-areas/orillia/)
+- Dufferin: [Orangeville](https://toronto-millworks.vercel.app/service-areas/orangeville/)
+- Wellington: [Guelph](https://toronto-millworks.vercel.app/service-areas/guelph/), [Centre Wellington](https://toronto-millworks.vercel.app/service-areas/centre-wellington/)
+- Waterloo Region: [Kitchener](https://toronto-millworks.vercel.app/service-areas/kitchener/), [Waterloo](https://toronto-millworks.vercel.app/service-areas/waterloo/), [Cambridge](https://toronto-millworks.vercel.app/service-areas/cambridge/)
+- Brant: [Brantford](https://toronto-millworks.vercel.app/service-areas/brantford/)
 
 ## Contact
 
+- Shop: 2585 Drew Rd Unit 7, Mississauga, ON L4T 1G1, Canada
 - Email: hello@torontomillworks.ca
-- Location: Mississauga, Ontario, Canada
-- Service area: Toronto, North York, Etobicoke, Scarborough, East York, Vaughan, Richmond Hill, Markham, Mississauga, Oakville
+- Visits by appointment.

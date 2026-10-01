@@ -3,136 +3,1219 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://toronto-millworks.vercel.app/</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
       <image:loc>https://toronto-millworks.vercel.app/assets/img/toronto-custom-millwork-coffered-ceiling-1920.webp</image:loc>
-      <image:title>Coffered ceiling with gilded cornice and raised wall panelling, custom millwork in Toronto</image:title>
-      <image:caption>Coffered ceiling with gilded cornice and raised wall panelling, custom millwork in Toronto</image:caption>
+      <image:title>Coffered ceiling with gilded cornice and raised wall panelling</image:title>
+      <image:caption>Coffered ceiling with gilded cornice and raised wall panelling</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://toronto-millworks.vercel.app/assets/img/toronto-custom-cabinetry-wall-panelling-1600.webp</image:loc>
-      <image:title>Panelled walls and a cased archway built by Toronto Millworks</image:title>
-      <image:caption>Panelled walls and a cased archway built by Toronto Millworks</image:caption>
+      <image:title>Panelled walls, a cased archway and a wall sconce</image:title>
+      <image:caption>Panelled walls, a cased archway and a wall sconce</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/frieze-wide-2400.webp</image:loc>
+      <image:title>Gilded ornamental frieze running along a lit tray ceiling</image:title>
+      <image:caption>Gilded ornamental frieze running along a lit tray ceiling</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/espresso-tall-1000.webp</image:loc>
+      <image:title>An espresso machine and grinders on a timber clad service counter</image:title>
+      <image:caption>An espresso machine and grinders on a timber clad service counter</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/transom-tall-1500.webp</image:loc>
+      <image:title>A glazed door with a transom light, framed by casing and panelling</image:title>
+      <image:caption>A glazed door with a transom light, framed by casing and panelling</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/pendants-wide-1600.webp</image:loc>
+      <image:title>Brass pendant lights hung from exposed conduit over a bar</image:title>
+      <image:caption>Brass pendant lights hung from exposed conduit over a bar</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/plinth-wide-2400.webp</image:loc>
+      <image:title>Raised panel moulding meeting the baseboard and a timber floor</image:title>
+      <image:caption>Raised panel moulding meeting the baseboard and a timber floor</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/shelving-tall-1000.webp</image:loc>
+      <image:title>Floating timber shelves on a black back bar wall</image:title>
+      <image:caption>Floating timber shelves on a black back bar wall</image:caption>
     </image:image>
   </url>
   <url>
     <loc>https://toronto-millworks.vercel.app/services/</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/room-wide-2400.webp</image:loc>
+      <image:title>Panelled room with coffered ceiling, gilded cornice and tall windows</image:title>
+      <image:caption>Panelled room with coffered ceiling, gilded cornice and tall windows</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/finished-wide-2400.webp</image:loc>
+      <image:title>The finished bar with counter, shelving and equipment in place</image:title>
+      <image:caption>The finished bar with counter, shelving and equipment in place</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/coffer-wide-2400.webp</image:loc>
+      <image:title>Coffered ceiling, crown moulding and recessed lighting</image:title>
+      <image:caption>Coffered ceiling, crown moulding and recessed lighting</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/counter-tall-1000.webp</image:loc>
+      <image:title>Reclaimed timber boards laid up in a running bond on the bar front</image:title>
+      <image:caption>Reclaimed timber boards laid up in a running bond on the bar front</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/panel-detail-tall-1500.webp</image:loc>
+      <image:title>Applied mouldings forming a tall raised wall panel</image:title>
+      <image:caption>Applied mouldings forming a tall raised wall panel</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/lounge-wide-2400.webp</image:loc>
+      <image:title>A lounge corner against exposed brick beside the bar</image:title>
+      <image:caption>A lounge corner against exposed brick beside the bar</image:caption>
+    </image:image>
   </url>
   <url>
     <loc>https://toronto-millworks.vercel.app/services/custom-kitchens/</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/base-wide-2400.webp</image:loc>
+      <image:title>Panel base, plinth and skirting meeting a hardwood floor</image:title>
+      <image:caption>Panel base, plinth and skirting meeting a hardwood floor</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/doors-wide-2400.webp</image:loc>
+      <image:title>French doors with divided lights framed by raised wall panelling</image:title>
+      <image:caption>French doors with divided lights framed by raised wall panelling</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/panel-corner-wide-2400.webp</image:loc>
+      <image:title>Raised panel wall meeting a cased window opening</image:title>
+      <image:caption>Raised panel wall meeting a cased window opening</image:caption>
+    </image:image>
   </url>
   <url>
     <loc>https://toronto-millworks.vercel.app/services/cabinetry-and-built-ins/</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/panel-corner-wide-2400.webp</image:loc>
+      <image:title>Raised panel wall meeting a cased window opening</image:title>
+      <image:caption>Raised panel wall meeting a cased window opening</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/sconce-wide-2400.webp</image:loc>
+      <image:title>A wall sconce washing light across raised wall panelling</image:title>
+      <image:caption>A wall sconce washing light across raised wall panelling</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/archway-wide-2400.webp</image:loc>
+      <image:title>A cased archway opening onto a panelled room</image:title>
+      <image:caption>A cased archway opening onto a panelled room</image:caption>
+    </image:image>
   </url>
   <url>
     <loc>https://toronto-millworks.vercel.app/services/architectural-millwork/</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/cornice-wide-2400.webp</image:loc>
+      <image:title>Gilded ornamental cornice and cove lighting on a tray ceiling</image:title>
+      <image:caption>Gilded ornamental cornice and cove lighting on a tray ceiling</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/coffer-wide-2400.webp</image:loc>
+      <image:title>Coffered ceiling, crown moulding and recessed lighting</image:title>
+      <image:caption>Coffered ceiling, crown moulding and recessed lighting</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/base-wide-2400.webp</image:loc>
+      <image:title>Panel base, plinth and skirting meeting a hardwood floor</image:title>
+      <image:caption>Panel base, plinth and skirting meeting a hardwood floor</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/services/restaurant-and-bar-millwork/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/finished-wide-2400.webp</image:loc>
+      <image:title>The finished bar with counter, shelving and equipment in place</image:title>
+      <image:caption>The finished bar with counter, shelving and equipment in place</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/counter-wide-1600.webp</image:loc>
+      <image:title>Reclaimed timber boards laid up in a running bond on the bar front</image:title>
+      <image:caption>Reclaimed timber boards laid up in a running bond on the bar front</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/feature-wide-2400.webp</image:loc>
+      <image:title>A black feature wall and filament lighting installed</image:title>
+      <image:caption>A black feature wall and filament lighting installed</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/services/office-millwork/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/feature-wide-2400.webp</image:loc>
+      <image:title>A black feature wall and filament lighting installed</image:title>
+      <image:caption>A black feature wall and filament lighting installed</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/base-wide-2400.webp</image:loc>
+      <image:title>Panel base, plinth and skirting meeting a hardwood floor</image:title>
+      <image:caption>Panel base, plinth and skirting meeting a hardwood floor</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/doors-wide-2400.webp</image:loc>
+      <image:title>French doors with divided lights framed by raised wall panelling</image:title>
+      <image:caption>French doors with divided lights framed by raised wall panelling</image:caption>
+    </image:image>
   </url>
   <url>
     <loc>https://toronto-millworks.vercel.app/services/commercial-fit-outs/</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/shell-wide-2400.webp</image:loc>
+      <image:title>Bare brick and concrete shell before the fit-out begins</image:title>
+      <image:caption>Bare brick and concrete shell before the fit-out begins</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/carcass-wide-2400.webp</image:loc>
+      <image:title>The reclaimed timber bar counter installed against the brick</image:title>
+      <image:caption>The reclaimed timber bar counter installed against the brick</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/lit-wide-2400.webp</image:loc>
+      <image:title>The shell cleaned back and the floor laid</image:title>
+      <image:caption>The shell cleaned back and the floor laid</image:caption>
+    </image:image>
   </url>
   <url>
     <loc>https://toronto-millworks.vercel.app/services/interior-renovation/</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/room-wide-2400.webp</image:loc>
+      <image:title>Panelled room with coffered ceiling, gilded cornice and tall windows</image:title>
+      <image:caption>Panelled room with coffered ceiling, gilded cornice and tall windows</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/doors-wide-2400.webp</image:loc>
+      <image:title>French doors with divided lights framed by raised wall panelling</image:title>
+      <image:caption>French doors with divided lights framed by raised wall panelling</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/sconce-wide-2400.webp</image:loc>
+      <image:title>A wall sconce washing light across raised wall panelling</image:title>
+      <image:caption>A wall sconce washing light across raised wall panelling</image:caption>
+    </image:image>
   </url>
   <url>
     <loc>https://toronto-millworks.vercel.app/projects/</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://toronto-millworks.vercel.app/assets/img/toronto-custom-millwork-coffered-ceiling-1920.webp</image:loc>
-      <image:title>Coffered ceiling and gilded cornice, Toronto millwork project</image:title>
-      <image:caption>Coffered ceiling and gilded cornice, Toronto millwork project</image:caption>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/shell-wide-2400.webp</image:loc>
+      <image:title>Bare brick and concrete shell before the fit-out begins</image:title>
+      <image:caption>Bare brick and concrete shell before the fit-out begins</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/lit-wide-2400.webp</image:loc>
+      <image:title>The shell cleaned back and the floor laid</image:title>
+      <image:caption>The shell cleaned back and the floor laid</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/feature-wide-2400.webp</image:loc>
+      <image:title>A black feature wall and filament lighting installed</image:title>
+      <image:caption>A black feature wall and filament lighting installed</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/carcass-wide-2400.webp</image:loc>
+      <image:title>The reclaimed timber bar counter installed against the brick</image:title>
+      <image:caption>The reclaimed timber bar counter installed against the brick</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/finished-wide-2400.webp</image:loc>
+      <image:title>The finished bar with counter, shelving and equipment in place</image:title>
+      <image:caption>The finished bar with counter, shelving and equipment in place</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/counter-wide-1600.webp</image:loc>
+      <image:title>Reclaimed timber boards laid up in a running bond on the bar front</image:title>
+      <image:caption>Reclaimed timber boards laid up in a running bond on the bar front</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/cornice-wide-2400.webp</image:loc>
+      <image:title>Gilded ornamental cornice and cove lighting on a tray ceiling</image:title>
+      <image:caption>Gilded ornamental cornice and cove lighting on a tray ceiling</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/frieze-wide-2400.webp</image:loc>
+      <image:title>Gilded ornamental frieze running along a lit tray ceiling</image:title>
+      <image:caption>Gilded ornamental frieze running along a lit tray ceiling</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/transom-tall-1500.webp</image:loc>
+      <image:title>A glazed door with a transom light, framed by casing and panelling</image:title>
+      <image:caption>A glazed door with a transom light, framed by casing and panelling</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/pendants-tall-1000.webp</image:loc>
+      <image:title>Brass pendant lights hung from exposed conduit over a bar</image:title>
+      <image:caption>Brass pendant lights hung from exposed conduit over a bar</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/plinth-wide-2400.webp</image:loc>
+      <image:title>Raised panel moulding meeting the baseboard and a timber floor</image:title>
+      <image:caption>Raised panel moulding meeting the baseboard and a timber floor</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/espresso-wide-2400.webp</image:loc>
+      <image:title>An espresso machine and grinders on a timber clad service counter</image:title>
+      <image:caption>An espresso machine and grinders on a timber clad service counter</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/cove-tall-1500.webp</image:loc>
+      <image:title>Cove lighting glowing in the tray ceiling of the next room, seen through a cased opening</image:title>
+      <image:caption>Cove lighting glowing in the tray ceiling of the next room, seen through a cased opening</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/shelving-tall-1000.webp</image:loc>
+      <image:title>Floating timber shelves on a black back bar wall</image:title>
+      <image:caption>Floating timber shelves on a black back bar wall</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/panel-detail-wide-2400.webp</image:loc>
+      <image:title>Applied mouldings forming a tall raised wall panel</image:title>
+      <image:caption>Applied mouldings forming a tall raised wall panel</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/pipes-wide-2400.webp</image:loc>
+      <image:title>Exposed brick with black iron pipework, kept as part of the finished room</image:title>
+      <image:caption>Exposed brick with black iron pipework, kept as part of the finished room</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/archway-tall-1500.webp</image:loc>
+      <image:title>A cased archway opening onto a panelled room</image:title>
+      <image:caption>A cased archway opening onto a panelled room</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/lounge-tall-1000.webp</image:loc>
+      <image:title>A lounge corner against exposed brick beside the bar</image:title>
+      <image:caption>A lounge corner against exposed brick beside the bar</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/sconce-wide-2400.webp</image:loc>
+      <image:title>A wall sconce washing light across raised wall panelling</image:title>
+      <image:caption>A wall sconce washing light across raised wall panelling</image:caption>
     </image:image>
   </url>
   <url>
     <loc>https://toronto-millworks.vercel.app/about/</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <image:image>
-      <image:loc>https://toronto-millworks.vercel.app/assets/img/toronto-custom-cabinetry-wall-panelling-1600.webp</image:loc>
-      <image:title>Raised wall panelling and cased archway by Toronto Millworks</image:title>
-      <image:caption>Raised wall panelling and cased archway by Toronto Millworks</image:caption>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/sconce-wide-2400.webp</image:loc>
+      <image:title>A wall sconce washing light across raised wall panelling</image:title>
+      <image:caption>A wall sconce washing light across raised wall panelling</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/archway-wide-2400.webp</image:loc>
+      <image:title>A cased archway opening onto a panelled room</image:title>
+      <image:caption>A cased archway opening onto a panelled room</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/base-wide-2400.webp</image:loc>
+      <image:title>Panel base, plinth and skirting meeting a hardwood floor</image:title>
+      <image:caption>Panel base, plinth and skirting meeting a hardwood floor</image:caption>
     </image:image>
   </url>
   <url>
     <loc>https://toronto-millworks.vercel.app/contact/</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://toronto-millworks.vercel.app/faq/</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://toronto-millworks.vercel.app/service-areas/</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/toronto/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/room-wide-2400.webp</image:loc>
+      <image:title>Panelled room with coffered ceiling, gilded cornice and tall windows</image:title>
+      <image:caption>Panelled room with coffered ceiling, gilded cornice and tall windows</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/espresso-wide-2400.webp</image:loc>
+      <image:title>An espresso machine and grinders on a timber clad service counter</image:title>
+      <image:caption>An espresso machine and grinders on a timber clad service counter</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/north-york/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/doors-wide-2400.webp</image:loc>
+      <image:title>French doors with divided lights framed by raised wall panelling</image:title>
+      <image:caption>French doors with divided lights framed by raised wall panelling</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/counter-wide-1600.webp</image:loc>
+      <image:title>Reclaimed timber boards laid up in a running bond on the bar front</image:title>
+      <image:caption>Reclaimed timber boards laid up in a running bond on the bar front</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/etobicoke/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/archway-wide-2400.webp</image:loc>
+      <image:title>A cased archway opening onto a panelled room</image:title>
+      <image:caption>A cased archway opening onto a panelled room</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/pipes-wide-2400.webp</image:loc>
+      <image:title>Exposed brick with black iron pipework, kept as part of the finished room</image:title>
+      <image:caption>Exposed brick with black iron pipework, kept as part of the finished room</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/scarborough/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/panel-corner-wide-2400.webp</image:loc>
+      <image:title>Raised panel wall meeting a cased window opening</image:title>
+      <image:caption>Raised panel wall meeting a cased window opening</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/pendants-wide-1600.webp</image:loc>
+      <image:title>Brass pendant lights hung from exposed conduit over a bar</image:title>
+      <image:caption>Brass pendant lights hung from exposed conduit over a bar</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/east-york/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/coffer-wide-2400.webp</image:loc>
+      <image:title>Coffered ceiling, crown moulding and recessed lighting</image:title>
+      <image:caption>Coffered ceiling, crown moulding and recessed lighting</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/finished-wide-2400.webp</image:loc>
+      <image:title>The finished bar with counter, shelving and equipment in place</image:title>
+      <image:caption>The finished bar with counter, shelving and equipment in place</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/mississauga/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/sconce-wide-2400.webp</image:loc>
+      <image:title>A wall sconce washing light across raised wall panelling</image:title>
+      <image:caption>A wall sconce washing light across raised wall panelling</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/feature-wide-2400.webp</image:loc>
+      <image:title>A black feature wall and filament lighting installed</image:title>
+      <image:caption>A black feature wall and filament lighting installed</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/brampton/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/transom-wide-2400.webp</image:loc>
+      <image:title>A glazed door with a transom light, framed by casing and panelling</image:title>
+      <image:caption>A glazed door with a transom light, framed by casing and panelling</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/shelving-wide-2400.webp</image:loc>
+      <image:title>Floating timber shelves on a black back bar wall</image:title>
+      <image:caption>Floating timber shelves on a black back bar wall</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/caledon/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/plinth-wide-2400.webp</image:loc>
+      <image:title>Raised panel moulding meeting the baseboard and a timber floor</image:title>
+      <image:caption>Raised panel moulding meeting the baseboard and a timber floor</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/lounge-wide-2400.webp</image:loc>
+      <image:title>A lounge corner against exposed brick beside the bar</image:title>
+      <image:caption>A lounge corner against exposed brick beside the bar</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/oakville/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/cornice-wide-2400.webp</image:loc>
+      <image:title>Gilded ornamental cornice and cove lighting on a tray ceiling</image:title>
+      <image:caption>Gilded ornamental cornice and cove lighting on a tray ceiling</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/espresso-wide-2400.webp</image:loc>
+      <image:title>An espresso machine and grinders on a timber clad service counter</image:title>
+      <image:caption>An espresso machine and grinders on a timber clad service counter</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/burlington/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/base-wide-2400.webp</image:loc>
+      <image:title>Panel base, plinth and skirting meeting a hardwood floor</image:title>
+      <image:caption>Panel base, plinth and skirting meeting a hardwood floor</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/counter-wide-1600.webp</image:loc>
+      <image:title>Reclaimed timber boards laid up in a running bond on the bar front</image:title>
+      <image:caption>Reclaimed timber boards laid up in a running bond on the bar front</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/milton/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/frieze-wide-2400.webp</image:loc>
+      <image:title>Gilded ornamental frieze running along a lit tray ceiling</image:title>
+      <image:caption>Gilded ornamental frieze running along a lit tray ceiling</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/pipes-wide-2400.webp</image:loc>
+      <image:title>Exposed brick with black iron pipework, kept as part of the finished room</image:title>
+      <image:caption>Exposed brick with black iron pipework, kept as part of the finished room</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/halton-hills/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/panel-detail-wide-2400.webp</image:loc>
+      <image:title>Applied mouldings forming a tall raised wall panel</image:title>
+      <image:caption>Applied mouldings forming a tall raised wall panel</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/pendants-wide-1600.webp</image:loc>
+      <image:title>Brass pendant lights hung from exposed conduit over a bar</image:title>
+      <image:caption>Brass pendant lights hung from exposed conduit over a bar</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/hamilton/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/room-wide-2400.webp</image:loc>
+      <image:title>Panelled room with coffered ceiling, gilded cornice and tall windows</image:title>
+      <image:caption>Panelled room with coffered ceiling, gilded cornice and tall windows</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/finished-wide-2400.webp</image:loc>
+      <image:title>The finished bar with counter, shelving and equipment in place</image:title>
+      <image:caption>The finished bar with counter, shelving and equipment in place</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/ancaster/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/doors-wide-2400.webp</image:loc>
+      <image:title>French doors with divided lights framed by raised wall panelling</image:title>
+      <image:caption>French doors with divided lights framed by raised wall panelling</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/feature-wide-2400.webp</image:loc>
+      <image:title>A black feature wall and filament lighting installed</image:title>
+      <image:caption>A black feature wall and filament lighting installed</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/dundas/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/archway-wide-2400.webp</image:loc>
+      <image:title>A cased archway opening onto a panelled room</image:title>
+      <image:caption>A cased archway opening onto a panelled room</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/shelving-wide-2400.webp</image:loc>
+      <image:title>Floating timber shelves on a black back bar wall</image:title>
+      <image:caption>Floating timber shelves on a black back bar wall</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/stoney-creek/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/panel-corner-wide-2400.webp</image:loc>
+      <image:title>Raised panel wall meeting a cased window opening</image:title>
+      <image:caption>Raised panel wall meeting a cased window opening</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/lounge-wide-2400.webp</image:loc>
+      <image:title>A lounge corner against exposed brick beside the bar</image:title>
+      <image:caption>A lounge corner against exposed brick beside the bar</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/grimsby/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/coffer-wide-2400.webp</image:loc>
+      <image:title>Coffered ceiling, crown moulding and recessed lighting</image:title>
+      <image:caption>Coffered ceiling, crown moulding and recessed lighting</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/espresso-wide-2400.webp</image:loc>
+      <image:title>An espresso machine and grinders on a timber clad service counter</image:title>
+      <image:caption>An espresso machine and grinders on a timber clad service counter</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/lincoln/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/pendants-wide-1600.webp</image:loc>
+      <image:title>Brass pendant lights hung from exposed conduit over a bar</image:title>
+      <image:caption>Brass pendant lights hung from exposed conduit over a bar</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/panel-corner-wide-2400.webp</image:loc>
+      <image:title>Raised panel wall meeting a cased window opening</image:title>
+      <image:caption>Raised panel wall meeting a cased window opening</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/st-catharines/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/transom-wide-2400.webp</image:loc>
+      <image:title>A glazed door with a transom light, framed by casing and panelling</image:title>
+      <image:caption>A glazed door with a transom light, framed by casing and panelling</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/pipes-wide-2400.webp</image:loc>
+      <image:title>Exposed brick with black iron pipework, kept as part of the finished room</image:title>
+      <image:caption>Exposed brick with black iron pipework, kept as part of the finished room</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/niagara-on-the-lake/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/plinth-wide-2400.webp</image:loc>
+      <image:title>Raised panel moulding meeting the baseboard and a timber floor</image:title>
+      <image:caption>Raised panel moulding meeting the baseboard and a timber floor</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/pendants-wide-1600.webp</image:loc>
+      <image:title>Brass pendant lights hung from exposed conduit over a bar</image:title>
+      <image:caption>Brass pendant lights hung from exposed conduit over a bar</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/niagara-falls/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/finished-wide-2400.webp</image:loc>
+      <image:title>The finished bar with counter, shelving and equipment in place</image:title>
+      <image:caption>The finished bar with counter, shelving and equipment in place</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/room-wide-2400.webp</image:loc>
+      <image:title>Panelled room with coffered ceiling, gilded cornice and tall windows</image:title>
+      <image:caption>Panelled room with coffered ceiling, gilded cornice and tall windows</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/welland/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/base-wide-2400.webp</image:loc>
+      <image:title>Panel base, plinth and skirting meeting a hardwood floor</image:title>
+      <image:caption>Panel base, plinth and skirting meeting a hardwood floor</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/feature-wide-2400.webp</image:loc>
+      <image:title>A black feature wall and filament lighting installed</image:title>
+      <image:caption>A black feature wall and filament lighting installed</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/vaughan/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/frieze-wide-2400.webp</image:loc>
+      <image:title>Gilded ornamental frieze running along a lit tray ceiling</image:title>
+      <image:caption>Gilded ornamental frieze running along a lit tray ceiling</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/shelving-wide-2400.webp</image:loc>
+      <image:title>Floating timber shelves on a black back bar wall</image:title>
+      <image:caption>Floating timber shelves on a black back bar wall</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/richmond-hill/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/panel-detail-wide-2400.webp</image:loc>
+      <image:title>Applied mouldings forming a tall raised wall panel</image:title>
+      <image:caption>Applied mouldings forming a tall raised wall panel</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/lounge-wide-2400.webp</image:loc>
+      <image:title>A lounge corner against exposed brick beside the bar</image:title>
+      <image:caption>A lounge corner against exposed brick beside the bar</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/markham/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/room-wide-2400.webp</image:loc>
+      <image:title>Panelled room with coffered ceiling, gilded cornice and tall windows</image:title>
+      <image:caption>Panelled room with coffered ceiling, gilded cornice and tall windows</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/espresso-wide-2400.webp</image:loc>
+      <image:title>An espresso machine and grinders on a timber clad service counter</image:title>
+      <image:caption>An espresso machine and grinders on a timber clad service counter</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/aurora/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/doors-wide-2400.webp</image:loc>
+      <image:title>French doors with divided lights framed by raised wall panelling</image:title>
+      <image:caption>French doors with divided lights framed by raised wall panelling</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/counter-wide-1600.webp</image:loc>
+      <image:title>Reclaimed timber boards laid up in a running bond on the bar front</image:title>
+      <image:caption>Reclaimed timber boards laid up in a running bond on the bar front</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/newmarket/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/archway-wide-2400.webp</image:loc>
+      <image:title>A cased archway opening onto a panelled room</image:title>
+      <image:caption>A cased archway opening onto a panelled room</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/pipes-wide-2400.webp</image:loc>
+      <image:title>Exposed brick with black iron pipework, kept as part of the finished room</image:title>
+      <image:caption>Exposed brick with black iron pipework, kept as part of the finished room</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/king/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/panel-corner-wide-2400.webp</image:loc>
+      <image:title>Raised panel wall meeting a cased window opening</image:title>
+      <image:caption>Raised panel wall meeting a cased window opening</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/pendants-wide-1600.webp</image:loc>
+      <image:title>Brass pendant lights hung from exposed conduit over a bar</image:title>
+      <image:caption>Brass pendant lights hung from exposed conduit over a bar</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/whitchurch-stouffville/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/coffer-wide-2400.webp</image:loc>
+      <image:title>Coffered ceiling, crown moulding and recessed lighting</image:title>
+      <image:caption>Coffered ceiling, crown moulding and recessed lighting</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/finished-wide-2400.webp</image:loc>
+      <image:title>The finished bar with counter, shelving and equipment in place</image:title>
+      <image:caption>The finished bar with counter, shelving and equipment in place</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/east-gwillimbury/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/sconce-wide-2400.webp</image:loc>
+      <image:title>A wall sconce washing light across raised wall panelling</image:title>
+      <image:caption>A wall sconce washing light across raised wall panelling</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/feature-wide-2400.webp</image:loc>
+      <image:title>A black feature wall and filament lighting installed</image:title>
+      <image:caption>A black feature wall and filament lighting installed</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/georgina/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/transom-wide-2400.webp</image:loc>
+      <image:title>A glazed door with a transom light, framed by casing and panelling</image:title>
+      <image:caption>A glazed door with a transom light, framed by casing and panelling</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/shelving-wide-2400.webp</image:loc>
+      <image:title>Floating timber shelves on a black back bar wall</image:title>
+      <image:caption>Floating timber shelves on a black back bar wall</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/pickering/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/plinth-wide-2400.webp</image:loc>
+      <image:title>Raised panel moulding meeting the baseboard and a timber floor</image:title>
+      <image:caption>Raised panel moulding meeting the baseboard and a timber floor</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/lounge-wide-2400.webp</image:loc>
+      <image:title>A lounge corner against exposed brick beside the bar</image:title>
+      <image:caption>A lounge corner against exposed brick beside the bar</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/ajax/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/cornice-wide-2400.webp</image:loc>
+      <image:title>Gilded ornamental cornice and cove lighting on a tray ceiling</image:title>
+      <image:caption>Gilded ornamental cornice and cove lighting on a tray ceiling</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/espresso-wide-2400.webp</image:loc>
+      <image:title>An espresso machine and grinders on a timber clad service counter</image:title>
+      <image:caption>An espresso machine and grinders on a timber clad service counter</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/whitby/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/base-wide-2400.webp</image:loc>
+      <image:title>Panel base, plinth and skirting meeting a hardwood floor</image:title>
+      <image:caption>Panel base, plinth and skirting meeting a hardwood floor</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/counter-wide-1600.webp</image:loc>
+      <image:title>Reclaimed timber boards laid up in a running bond on the bar front</image:title>
+      <image:caption>Reclaimed timber boards laid up in a running bond on the bar front</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/oshawa/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/frieze-wide-2400.webp</image:loc>
+      <image:title>Gilded ornamental frieze running along a lit tray ceiling</image:title>
+      <image:caption>Gilded ornamental frieze running along a lit tray ceiling</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/pipes-wide-2400.webp</image:loc>
+      <image:title>Exposed brick with black iron pipework, kept as part of the finished room</image:title>
+      <image:caption>Exposed brick with black iron pipework, kept as part of the finished room</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/clarington/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/panel-detail-wide-2400.webp</image:loc>
+      <image:title>Applied mouldings forming a tall raised wall panel</image:title>
+      <image:caption>Applied mouldings forming a tall raised wall panel</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/pendants-wide-1600.webp</image:loc>
+      <image:title>Brass pendant lights hung from exposed conduit over a bar</image:title>
+      <image:caption>Brass pendant lights hung from exposed conduit over a bar</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/uxbridge/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/room-wide-2400.webp</image:loc>
+      <image:title>Panelled room with coffered ceiling, gilded cornice and tall windows</image:title>
+      <image:caption>Panelled room with coffered ceiling, gilded cornice and tall windows</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/finished-wide-2400.webp</image:loc>
+      <image:title>The finished bar with counter, shelving and equipment in place</image:title>
+      <image:caption>The finished bar with counter, shelving and equipment in place</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/bradford-west-gwillimbury/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/doors-wide-2400.webp</image:loc>
+      <image:title>French doors with divided lights framed by raised wall panelling</image:title>
+      <image:caption>French doors with divided lights framed by raised wall panelling</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/feature-wide-2400.webp</image:loc>
+      <image:title>A black feature wall and filament lighting installed</image:title>
+      <image:caption>A black feature wall and filament lighting installed</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/innisfil/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/archway-wide-2400.webp</image:loc>
+      <image:title>A cased archway opening onto a panelled room</image:title>
+      <image:caption>A cased archway opening onto a panelled room</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/shelving-wide-2400.webp</image:loc>
+      <image:title>Floating timber shelves on a black back bar wall</image:title>
+      <image:caption>Floating timber shelves on a black back bar wall</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/barrie/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/panel-corner-wide-2400.webp</image:loc>
+      <image:title>Raised panel wall meeting a cased window opening</image:title>
+      <image:caption>Raised panel wall meeting a cased window opening</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/lounge-wide-2400.webp</image:loc>
+      <image:title>A lounge corner against exposed brick beside the bar</image:title>
+      <image:caption>A lounge corner against exposed brick beside the bar</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/new-tecumseth/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/coffer-wide-2400.webp</image:loc>
+      <image:title>Coffered ceiling, crown moulding and recessed lighting</image:title>
+      <image:caption>Coffered ceiling, crown moulding and recessed lighting</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/espresso-wide-2400.webp</image:loc>
+      <image:title>An espresso machine and grinders on a timber clad service counter</image:title>
+      <image:caption>An espresso machine and grinders on a timber clad service counter</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/collingwood/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/sconce-wide-2400.webp</image:loc>
+      <image:title>A wall sconce washing light across raised wall panelling</image:title>
+      <image:caption>A wall sconce washing light across raised wall panelling</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/counter-wide-1600.webp</image:loc>
+      <image:title>Reclaimed timber boards laid up in a running bond on the bar front</image:title>
+      <image:caption>Reclaimed timber boards laid up in a running bond on the bar front</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/orillia/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/transom-wide-2400.webp</image:loc>
+      <image:title>A glazed door with a transom light, framed by casing and panelling</image:title>
+      <image:caption>A glazed door with a transom light, framed by casing and panelling</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/pipes-wide-2400.webp</image:loc>
+      <image:title>Exposed brick with black iron pipework, kept as part of the finished room</image:title>
+      <image:caption>Exposed brick with black iron pipework, kept as part of the finished room</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/orangeville/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/plinth-wide-2400.webp</image:loc>
+      <image:title>Raised panel moulding meeting the baseboard and a timber floor</image:title>
+      <image:caption>Raised panel moulding meeting the baseboard and a timber floor</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/pendants-wide-1600.webp</image:loc>
+      <image:title>Brass pendant lights hung from exposed conduit over a bar</image:title>
+      <image:caption>Brass pendant lights hung from exposed conduit over a bar</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/guelph/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/cornice-wide-2400.webp</image:loc>
+      <image:title>Gilded ornamental cornice and cove lighting on a tray ceiling</image:title>
+      <image:caption>Gilded ornamental cornice and cove lighting on a tray ceiling</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/finished-wide-2400.webp</image:loc>
+      <image:title>The finished bar with counter, shelving and equipment in place</image:title>
+      <image:caption>The finished bar with counter, shelving and equipment in place</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/centre-wellington/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/base-wide-2400.webp</image:loc>
+      <image:title>Panel base, plinth and skirting meeting a hardwood floor</image:title>
+      <image:caption>Panel base, plinth and skirting meeting a hardwood floor</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/feature-wide-2400.webp</image:loc>
+      <image:title>A black feature wall and filament lighting installed</image:title>
+      <image:caption>A black feature wall and filament lighting installed</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/kitchener/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/pipes-wide-2400.webp</image:loc>
+      <image:title>Exposed brick with black iron pipework, kept as part of the finished room</image:title>
+      <image:caption>Exposed brick with black iron pipework, kept as part of the finished room</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/transom-wide-2400.webp</image:loc>
+      <image:title>A glazed door with a transom light, framed by casing and panelling</image:title>
+      <image:caption>A glazed door with a transom light, framed by casing and panelling</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/waterloo/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/feature-wide-2400.webp</image:loc>
+      <image:title>A black feature wall and filament lighting installed</image:title>
+      <image:caption>A black feature wall and filament lighting installed</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/base-wide-2400.webp</image:loc>
+      <image:title>Panel base, plinth and skirting meeting a hardwood floor</image:title>
+      <image:caption>Panel base, plinth and skirting meeting a hardwood floor</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/cambridge/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/room-wide-2400.webp</image:loc>
+      <image:title>Panelled room with coffered ceiling, gilded cornice and tall windows</image:title>
+      <image:caption>Panelled room with coffered ceiling, gilded cornice and tall windows</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/espresso-wide-2400.webp</image:loc>
+      <image:title>An espresso machine and grinders on a timber clad service counter</image:title>
+      <image:caption>An espresso machine and grinders on a timber clad service counter</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/service-areas/brantford/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/doors-wide-2400.webp</image:loc>
+      <image:title>French doors with divided lights framed by raised wall panelling</image:title>
+      <image:caption>French doors with divided lights framed by raised wall panelling</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://toronto-millworks.vercel.app/assets/img/lib/counter-wide-1600.webp</image:loc>
+      <image:title>Reclaimed timber boards laid up in a running bond on the bar front</image:title>
+      <image:caption>Reclaimed timber boards laid up in a running bond on the bar front</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/guides/</loc>
+    <lastmod>2026-10-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://toronto-millworks.vercel.app/service-areas/toronto/</loc>
-    <lastmod>2026-08-31</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://toronto-millworks.vercel.app/service-areas/north-york/</loc>
-    <lastmod>2026-08-31</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://toronto-millworks.vercel.app/service-areas/etobicoke/</loc>
-    <lastmod>2026-08-31</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://toronto-millworks.vercel.app/service-areas/scarborough/</loc>
-    <lastmod>2026-08-31</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://toronto-millworks.vercel.app/service-areas/vaughan/</loc>
-    <lastmod>2026-08-31</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://toronto-millworks.vercel.app/service-areas/mississauga/</loc>
-    <lastmod>2026-08-31</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://toronto-millworks.vercel.app/guides/how-custom-millwork-is-made/</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/guides/custom-cabinetry-cost/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/guides/paint-grade-vs-stain-grade-millwork/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/guides/choosing-wood-for-cabinetry/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/guides/custom-vs-semi-custom-vs-stock-cabinets/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/guides/planning-restaurant-bar-millwork/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://toronto-millworks.vercel.app/privacy-policy/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
   </url>
 </urlset>

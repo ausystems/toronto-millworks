@@ -91,7 +91,7 @@ MAJOR = {"toronto", "hamilton", "barrie", "kitchener", "guelph", "oshawa", "st-c
          "niagara-falls", "orillia", "collingwood", "brantford", "newmarket", "orangeville"}
 
 
-def hub_map(prefix=""):
+def hub_map(prefix="/"):
     """The whole service radius. Dots link to their pages; the list beside the map
     carries the same links for keyboards and crawlers, so the SVG stays out of the
     tab order."""
@@ -156,7 +156,7 @@ def hub_map(prefix=""):
             + "".join(parts) + "".join(dots) + "".join(labels) + shop + furniture + '</svg>')
 
 
-def place_map(slug, prefix=""):
+def place_map(slug, prefix="/"):
     """One town and the shop, framed so both sit comfortably, with the straight line
     and its length. Unique to each page because the geography is."""
     p = BY_SLUG[slug]

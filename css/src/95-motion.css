@@ -1,14 +1,67 @@
 /* ══════════════════════════════════════════════════════════════
-   REVEAL
+   MOTION
+   One easing family, transforms and opacity only, every effect once.
+   Everything here is armed by script, so a reader without it sees a
+   finished, static page.
    ══════════════════════════════════════════════════════════════ */
-.rv{ opacity:0; transform:translateY(18px); }
-.rv-on{ opacity:1; transform:none; transition:opacity 1s var(--ease), transform 1s var(--ease); }
+
+/* plain reveals; GSAP drives them when it is present */
+.js .rv{ opacity:0; transform:translateY(18px); }
+.js .rv-on{ opacity:1; transform:none; transition:opacity 1s var(--ease), transform 1s var(--ease); }
+
+/* images rise into place behind a shutter, settling from a slight push-in */
+.js .fig.is-clip{ clip-path:inset(100% 0 0 0); transition:clip-path 1.2s cubic-bezier(.72,0,.2,1); }
+.js .fig.is-clip img{ transform:scale(1.1); transition:transform 1.7s cubic-bezier(.2,.7,.15,1), opacity .9s var(--ease); }
+.js .fig.is-clip.is-shown{ clip-path:inset(0 0 0 0); }
+.js .fig.is-clip.is-shown img{ transform:none; }
+
+/* page titles arrive a line at a time from behind their own baseline */
+.ln{ display:block; overflow:hidden; padding-bottom:.1em; margin-bottom:-.1em; }
+.ln > span{ display:block; transform:translateY(104%); }
+.is-lined .ln > span{
+  transform:none;
+  transition:transform 1.15s cubic-bezier(.2,.75,.1,1) calc(var(--l, 0) * 95ms + 60ms);
+}
+
+/* titles wait for their line reveal, with a timed safety net: if script
+   never arrives they appear on their own */
+@media (prefers-reduced-motion:no-preference){
+  .js .ph__t:not(.is-ready), .js .cx__title:not(.is-ready), .js .nf__h:not(.is-ready){
+    opacity:0; animation:titleShow 0s 2.2s forwards;
+  }
+}
+@keyframes titleShow{ to{ opacity:1; } }
+
+/* the shop dot on the service map breathes */
+.mp .mp-shop .mp-halo{ transform-box:fill-box; transform-origin:center; }
+
+/* ── between pages ──────────────────────────────────────────
+   Supporting browsers cross-fade documents. The nav is its own group, so it
+   stays put while the page beneath it changes. */
+@view-transition{ navigation:auto; }
+::view-transition-old(root){ animation:vtOut .3s cubic-bezier(.4,0,1,1) both; }
+::view-transition-new(root){ animation:vtIn .6s var(--ease) both; }
+::view-transition-group(nav){ animation-duration:0s; }
+@keyframes vtOut{ to{ opacity:0; transform:translateY(-6px); } }
+@keyframes vtIn{ from{ opacity:0; transform:translateY(12px); } }
+
 @media (prefers-reduced-motion:reduce){
-  .rv{ opacity:1; transform:none; }
+  .js .rv{ opacity:1; transform:none; }
+  .js .fig.is-clip{ clip-path:none; }
+  .js .fig.is-clip img{ transform:none; }
+  .ln > span{ transform:none; }
   .hero__media img{ animation:none; transform:none; }
+  .mp .mp-shop .mp-halo{ animation:none !important; }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*){ animation:none !important; }
   *,*::before,*::after{ animation-duration:.01ms !important; transition-duration:.01ms !important; }
 }
 
-/* ══════════════════════════════════════════════════════════════
-   RESPONSIVE
-   ══════════════════════════════════════════════════════════════ */
+/* ── print: the page, without the furniture ─────────────────── */
+@media print{
+  .nav-wrap, .dock, .qs, .map, .reel, .foot__mark, .foot__links, .prc__stage, .idx__peek,
+  .nf__stage, .bench__stage{ display:none !important; }
+  body{ color:#000; background:#fff; }
+  .js .rv, .js .fig img, .js .fig.is-clip{ opacity:1 !important; transform:none !important; clip-path:none !important; }
+  .foot{ background:#fff; color:#000; }
+  a[href^="http"]::after{ content:" (" attr(href) ")"; font-size:.8em; }
+}

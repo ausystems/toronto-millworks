@@ -32,7 +32,7 @@
   display:flex; align-items:center; gap:clamp(14px,1.85vw,30px);
   margin-inline:auto;
 }
-.nav__links a{
+.nav__links > li > a{
   display:inline-flex; align-items:center; gap:.34em;
   font-size:clamp(12.5px,1vw,14px);
   font-weight:500;
@@ -40,8 +40,8 @@
   color:var(--ink-70);
   transition:color .25s var(--ease);
 }
-.nav__links a:hover,
-.nav__links a.is-active{ color:var(--ink); }
+.nav__links > li > a:hover,
+.nav__links > li > a.is-active{ color:var(--ink); }
 
 .nav__cta{ flex:none; margin-left:auto; }
 .nav__links + .nav__cta{ margin-left:0; }
@@ -51,12 +51,12 @@
   width:40px; height:40px; margin-left:auto;
   place-items:center; align-content:center; gap:5px;
 }
-.nav__burger span{
+.nav__burger i{
   display:block; width:17px; height:1.6px; border-radius:2px; background:var(--ink);
   transition:transform .4s var(--ease), opacity .3s var(--ease);
 }
-.nav.is-open .nav__burger span:first-child{ transform:translateY(3.3px) rotate(45deg); }
-.nav.is-open .nav__burger span:last-child{ transform:translateY(-3.3px) rotate(-45deg); }
+.nav.is-open .nav__burger i:first-of-type{ transform:translateY(3.3px) rotate(45deg); }
+.nav.is-open .nav__burger i:last-of-type{ transform:translateY(-3.3px) rotate(-45deg); }
 
 
 /* ── services menu ───────────────────────────────────────────

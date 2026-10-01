@@ -1,23 +1,32 @@
 # robots.txt for Toronto Millworks
+# Everything public is crawlable. Search results and the 404 carry their own
+# noindex, which a crawler can only see if it is allowed to fetch them.
 User-agent: *
 Allow: /
-Disallow: /search/
-Disallow: /404.html
 
-# AI crawlers are welcome. Structured summaries live in /llms.txt
+# AI and answer engines are welcome; structured summaries live in /llms.txt
 User-agent: GPTBot
 Allow: /
 
 User-agent: OAI-SearchBot
 Allow: /
 
+User-agent: ChatGPT-User
+Allow: /
+
 User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
 Allow: /
 
 User-agent: PerplexityBot
 Allow: /
 
 User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
 Allow: /
 
 Sitemap: https://toronto-millworks.vercel.app/sitemap.xml

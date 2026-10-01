@@ -1,22 +1,47 @@
+/* ══════════════════════════════════════════════════════════════
+   PHONES AND SMALL TABLETS
+   Designed for the hand, not shrunk from the desk: the menu becomes a
+   full-height sheet with large targets, indexes become thumbnailed rows,
+   and anything that stood beside something now sits above it.
+   ══════════════════════════════════════════════════════════════ */
 @media (max-width:860px){
   .nav__burger{ display:grid; }
 
   .nav__menu{
-    display:none;
-    position:absolute; top:calc(100% + 8px); left:0; right:0;
-    padding:8px;
-    background:var(--paper);
-    border:1px solid var(--line-soft);
-    border-radius:20px;
-    box-shadow:var(--shadow-nav);
+    display:none; position:fixed; z-index:59;
+    top:calc(var(--nav-space) - var(--gutter) + 8px); left:var(--gutter); right:var(--gutter);
+    bottom:calc(var(--gutter) + env(safe-area-inset-bottom, 0px));
+    flex-direction:column; gap:18px; padding:6px 20px 20px;
+    background:var(--paper); border:1px solid var(--line-soft); border-radius:24px;
+    box-shadow:0 24px 60px -30px rgba(23,20,15,.45);
+    overflow-y:auto; overscroll-behavior:contain;
   }
-  .nav__menu.is-shown{ display:block; }
+  .nav__menu.is-shown{ display:flex; animation:menuIn .5s var(--ease) both; }
+  @keyframes menuIn{ from{ opacity:0; transform:translateY(-10px); } }
 
   .nav__links{ flex-direction:column; align-items:stretch; gap:0; margin:0; }
-  .nav__links a{ padding:13px 14px; font-size:15px; }
-  .nav__links li + li{ border-top:1px solid var(--line-soft); }
-
-  .nav__cta{ display:flex; justify-content:center; margin:8px 0 0; }
+  .nav__links > li{ border-bottom:1px solid var(--line-soft); }
+  .nav__links > li > a{
+    display:flex; padding:15px 2px; font-size:clamp(1.55rem,6.6vw,2rem); font-weight:400;
+    letter-spacing:-.034em; color:var(--ink);
+  }
+  .nav__links > li > a.is-active{ color:var(--brass-dk); }
+  .has-sub{ flex-wrap:wrap; justify-content:space-between; }
+  .has-sub > a{ flex:1; }
+  .nav__caret{ width:44px; height:44px; color:var(--ink-70); }
+  .nsub{
+    position:static; flex:1 0 100%; display:none; padding:0 0 12px;
+    opacity:1; visibility:visible; transform:none; transition:none;
+    background:none; border:0; box-shadow:none; border-radius:0;
+  }
+  .has-sub.is-open .nsub{ display:block; }
+  .nsub__in, .nsub__list{ grid-template-columns:1fr; gap:0; }
+  .nsub__a{ padding:.7em .2em; border-radius:10px; }
+  .nsub__t{ font-size:16px; }
+  .nsub__d, .nsub__k{ display:none; }
+  .nsub__aside{ flex-direction:row; flex-wrap:wrap; gap:.4em 1.4em; padding:.8em .2em 0; border-left:0; border-top:1px solid var(--line-soft); }
+  .nav__cta{ display:flex; justify-content:center; margin:auto 0 0; }
+  html.is-locked, html.is-locked body{ overflow:hidden; }
 
   .hero{ height:auto; min-height:var(--hero-cap); }
   .hero__right{ flex:0 1 auto; }
@@ -26,9 +51,6 @@
 
   .about__inner{ grid-template-columns:1fr; gap:clamp(18px,3vw,26px); }
   .about__label{ padding-top:0; }
-
-  .band__inner{ grid-template-columns:1fr; gap:clamp(16px,3vw,24px); align-items:start; }
-  .band__title{ max-width:18ch; }
 
   /* both indexes stack, and the standing column stops standing */
   .faq__grid, .map__grid{ grid-template-columns:1fr; gap:clamp(22px,4vw,34px); }
@@ -41,8 +63,6 @@
   /* a 16:10 letterbox is not a map once the column stacks */
   .map__frame{ aspect-ratio:4/3; }
 
-  /* a full-height cover crop of a 16:9 plate throws away most of the width on a
-     portrait screen, cap the band so the crop stays sane */
   /* the band takes the frames' own 16:9, so the cover fit has nothing to
      discard and a phone sees the whole frame edge to edge, uncropped */
   .reel{ --reel-media-h: calc(100vw * 9 / 16); }
@@ -55,17 +75,18 @@
   .craft__media{ border-radius:0; }
   .craft__body{ padding-inline:var(--shell-pad); max-width:none; }
 
-  .cx__grid{ grid-template-columns:1fr; gap:clamp(30px,5vw,44px); }
-  .cx__steps{ grid-template-columns:1fr; gap:clamp(22px,4vw,32px); }
   .cx__title{ max-width:none; }
-  .contact__grid{ grid-template-columns:1fr; gap:clamp(16px,3vw,24px); }
+  .ph__t br, .sh__t br{ display:none; }
 
   .foot__main{ grid-template-columns:1fr; gap:clamp(36px,6vw,52px); }
   .foot__stats{ grid-template-columns:repeat(2,minmax(0,1fr)); }
   .foot__rule{ flex-direction:column; align-items:flex-start; gap:5px; line-height:1.5; }
   .foot__coord, .foot__note{ white-space:normal; }
+  .foot__links .foot__label{ display:block; margin:0 0 .2em; }
   .foot__wordmark--wide{ display:none; }
   .foot__wordmark--stack{ display:block; }
+  /* the quote dock sits over the bottom of the page; leave it room */
+  body:has(.dock) .foot{ padding-bottom:84px; }
 }
 
 @media (max-width:560px){
@@ -73,7 +94,9 @@
   .map__frame{ aspect-ratio:1/1; }
   .foot__reach{ grid-template-columns:1fr; gap:22px; }
   .foot__index .m{ display:none; }        /* keeps the row on one line at 320px */
-  .foot__index a{ grid-template-columns:26px minmax(0,1fr); }
+  .foot__index a{ grid-template-columns:minmax(0,1fr); }
+  .gal__f--t{ width:88%; }
+  .ph__meta{ gap:14px 26px; }
 }
 
 /* a pinned, scroll-driven sequence is exactly what reduced-motion asks you not
@@ -85,5 +108,6 @@
   .faq__ico::before, .faq__ico::after{ transition:none; }
   .faq__row::after, .faq__q-t, .map__embed{ transition:none; }
   .btn, .btn > span, .btn__arrow{ transition:none; }
+  .bench{ height:auto; }
+  .bench__pin{ position:static; height:auto; padding:clamp(56px,8vw,110px) 0; }
 }
-

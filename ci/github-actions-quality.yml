@@ -1,0 +1,27 @@
+name: quality
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install build dependencies
+        run: pip install pillow
+      - name: Build
+        run: python3 scripts/build_site.py
+      - name: Audit
+        run: python3 scripts/audit.py
+      - name: Committed output matches the sources
+        run: |
+          git diff --stat --exit-code -- '*.html' '*.xml' '*.txt' 'search-index.json' \
+            'site.webmanifest' 'vercel.json' 'css/style.css' '_redirects' 'netlify.toml' '.htaccess'

@@ -241,16 +241,16 @@ def service_items(slugs=None, drawing=True):
     return out
 
 
-GALLERY_SHAPES = ("w", "t", "t", "w", "t", "w", "w", "t")
-
-
 def gallery(names, h2=None, hid=None, eyebrow=None, lede=None, captions=True, cls=""):
+    """An editorial wall in a four-beat rhythm: wide, tall, tall, wide. Each beat
+    has its own column span and offset, so the wall staggers without gaps."""
     figs = []
     for i, n in enumerate(names):
-        shape = GALLERY_SHAPES[i % len(GALLERY_SHAPES)]
-        figs.append(figure(n, wide="(min-width: 900px) 46vw, 100vw",
+        beat = i % 4
+        tall = beat in (1, 2)
+        figs.append(figure(n, wide="(min-width: 900px) 52vw, 100vw",
                            tall="(min-width: 900px) 30vw, 100vw",
-                           cls=f"gal__f gal__f--{shape}", force="tall" if shape == "t" else "wide",
+                           cls=f"gal__f gal__f--p{beat}", force="tall" if tall else "wide",
                            caption=LIB[n][4] if captions else None))
     head = sec_head(h2, hid, eyebrow, lede) if h2 else ""
     lab = f' aria-labelledby="{hid}"' if h2 else ""
@@ -366,7 +366,8 @@ def _faq_rows(items):
         for q, a in items)
 
 
-def faq(items=None, groups=None, h2="Frequently<br> asked", note=None, map_after=True, hid="faq-h"):
+def faq(items=None, groups=None, h2="Frequently<br> asked", note=None, map_after=True, hid="faq-h",
+        more=True):
     """Native <details>, so the answers are in the DOM and open without script."""
     note = note or ("Straight answers on cost, lead time and how a job actually runs. If "
                     "something is not covered here, ask and we will answer it the same way.")
@@ -377,7 +378,7 @@ def faq(items=None, groups=None, h2="Frequently<br> asked", note=None, map_after
         body = f'<div class="faq__list">{_faq_rows(items)}</div>'
     return (f'<section class="faq" aria-labelledby="{hid}"><div class="shell faq__grid">'
             f'<div class="faq__aside">{pill("Questions")}<h2 class="faq__h" id="{hid}">{h2}</h2>'
-            f'<p class="faq__note">{E(note)}</p>{lnk("/faq/", "Every question we get asked")}</div>'
+            f'<p class="faq__note">{E(note)}</p>{lnk("/faq/", "Every question we get asked") if more else ""}</div>'
             f'<div class="faq__body">{body}</div></div></section>'
             + (shop_map() if map_after else ""))
 
@@ -580,7 +581,7 @@ def nav(active=""):
 </ul>
 {btn("/contact/#quote", "Get a Quote").replace('class="btn btn--brass"', 'class="btn btn--brass nav__cta"')}
 </div>
-<button class="nav__burger" type="button" aria-expanded="false" aria-controls="nav-menu"><span class="sr-only">Menu</span><span aria-hidden="true"></span><span aria-hidden="true"></span></button>
+<button class="nav__burger" type="button" aria-expanded="false" aria-controls="nav-menu"><span class="sr-only">Menu</span><i aria-hidden="true"></i><i aria-hidden="true"></i></button>
 </nav>
 </header>'''
 

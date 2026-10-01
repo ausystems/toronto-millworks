@@ -25,7 +25,8 @@ import seo                        # noqa: E402
 from site_content import BUILD_DATE, SITE  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-EM = "—"                     # written as an escape so a dash cleanup cannot clobber the guard
+EM = "\u2014"                     # written as an escape so a dash cleanup cannot clobber the guard
+UNIT = re.compile(r"(\d) (km|mm|minutes)\b")   # a figure stays with its unit
 
 
 def _hash(*paths):
@@ -53,8 +54,7 @@ def render(page, v):
     attrs = f' class="{page.get("body_class", "")}"'
     if page.get("three"):
         attrs += f' data-three="{page["three"]}" data-three-src="/js/scenes.js?v={v["scenes"]}"'
-    doc = "\n".join([
-        seo.head(page, v["css"]),
+    body = "\n".join([
         f"<body{attrs}>",
         '<a class="skip" href="#main">Skip to content</a>',
         C.nav(page.get("active", "")),
@@ -64,7 +64,9 @@ def render(page, v):
         js,
         "</body>",
         "</html>",
-    ]) + "\n"
+    ])
+    body = UNIT.sub("\\1\u00a0\\2", body)
+    doc = seo.head(page, v["css"]) + "\n" + body + "\n"
     if EM in doc:
         bad = [l.strip()[:120] for l in doc.splitlines() if EM in l]
         raise SystemExit(f"em dash in {page['path']}: {bad[:3]}")
@@ -114,14 +116,22 @@ def brand_assets():
 
 
 def og_spec(pages):
-    """What each social card should show; scripts/og_cards.mjs renders them."""
+    """What each social card should show; scripts/og_cards.mjs renders them.
+    Drawings and maps are embedded as SVG so the renderer needs no Python."""
+    import drawings
+    import maps
     spec = []
     for p in pages:
         og = p.get("og") or {}
-        spec.append({"slug": seo.og_slug(p), "kind": og.get("kind", "drawing"),
+        kind = og.get("kind", "drawing")
+        svg = None
+        if kind == "drawing":
+            svg = drawings.drawing(og.get("drawing") or "draw", uid="-og")
+        elif kind == "map":
+            svg = maps.place_map(og["slug"]) if og.get("slug") else maps.hub_map()
+        spec.append({"slug": seo.og_slug(p), "kind": kind,
                      "kicker": og.get("kicker", SITE["name"]), "title": og.get("title", p["h1"]),
-                     "img": og.get("img"), "drawing": og.get("drawing"), "map": og.get("slug"),
-                     "path": p["path"]})
+                     "img": og.get("img"), "svg": svg, "path": p["path"]})
     json.dump(spec, open(os.path.join(ROOT, "scripts", "data", "og_spec.json"), "w"), indent=1)
 
 
