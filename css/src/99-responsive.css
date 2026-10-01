@@ -79,9 +79,6 @@
   .ph__t br, .sh__t br{ display:none; }
 
   .foot__main{ grid-template-columns:1fr; gap:clamp(36px,6vw,52px); }
-  .foot__stats{ grid-template-columns:repeat(2,minmax(0,1fr)); }
-  .foot__rule{ flex-direction:column; align-items:flex-start; gap:5px; line-height:1.5; }
-  .foot__coord, .foot__note{ white-space:normal; }
   .foot__links .foot__label{ display:block; margin:0 0 .2em; }
   .foot__wordmark--wide{ display:none; }
   .foot__wordmark--stack{ display:block; }
@@ -93,10 +90,7 @@
   .hero{ min-height:var(--hero-cap); }
   .map__frame{ aspect-ratio:1/1; }
   .foot__reach{ grid-template-columns:1fr; gap:22px; }
-  .foot__index .m{ display:none; }        /* keeps the row on one line at 320px */
-  .foot__index a{ grid-template-columns:minmax(0,1fr); }
   .gal__f--t{ width:88%; }
-  .ph__meta{ gap:14px 26px; }
 }
 
 /* a pinned, scroll-driven sequence is exactly what reduced-motion asks you not

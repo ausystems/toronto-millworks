@@ -130,7 +130,7 @@ def og_spec(pages):
         elif kind == "map":
             svg = maps.place_map(og["slug"]) if og.get("slug") else maps.hub_map()
         spec.append({"slug": seo.og_slug(p), "kind": kind,
-                     "kicker": og.get("kicker", SITE["name"]), "title": og.get("title", p["h1"]),
+                     "kicker": og.get("kicker", SITE["name"]), "title": UNIT.sub("\\1\u00a0\\2", og.get("title", p["h1"])),
                      "img": og.get("img"), "svg": svg, "path": p["path"]})
     json.dump(spec, open(os.path.join(ROOT, "scripts", "data", "og_spec.json"), "w"), indent=1)
 

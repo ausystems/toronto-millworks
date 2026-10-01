@@ -2,6 +2,8 @@
    MAPS
    Drawn from data in kilometres around the shop. Same --dws trick as the
    shop drawings: labels and strokes hold their pixel size at any width.
+   Only what carries meaning is printed: the radius, the major towns, the
+   route and its length. Everything else is named on hover.
    ══════════════════════════════════════════════════════════════ */
 .mp{ --dws: 2.3; display:block; width:100%; height:auto; overflow:hidden; font-family:inherit; }
 .mp .mp-bg{ fill:var(--paper); }
@@ -10,11 +12,7 @@
   fill:#A99C88; font-size:calc(9px / var(--dws)); font-style:italic;
   letter-spacing:.08em;
 }
-.mp .mp-ring{
-  fill:none; stroke:var(--line); stroke-width:calc(.8px / var(--dws));
-  stroke-dasharray:calc(2px / var(--dws)) calc(4px / var(--dws));
-}
-.mp .mp-ring--edge{ stroke:var(--brass); stroke-dasharray:none; stroke-width:calc(1px / var(--dws)); opacity:.7; }
+.mp .mp-ring{ fill:none; stroke:var(--brass); stroke-width:calc(1px / var(--dws)); opacity:.7; }
 .mp .mp-rl{ fill:var(--ink-45); font-size:calc(8.4px / var(--dws)); letter-spacing:.06em; font-variant-numeric:tabular-nums; }
 .mp .mp-dot{ fill:var(--ink); transition:fill .3s var(--ease); }
 .mp .mp-dot--far{ fill:var(--ink-45); }
@@ -34,9 +32,6 @@
   stroke-dasharray:calc(1px / var(--dws)) calc(5px / var(--dws));
 }
 .mp .mp-km{ fill:var(--brass-dk); font-size:calc(10px / var(--dws)); font-weight:600; letter-spacing:.04em; }
-.mp .mp-n{ fill:var(--ink); }
-.mp .mp-scale{ stroke:var(--ink); stroke-width:calc(1px / var(--dws)); }
-.mp[data-small] .mp-minor{ display:none; }
 
 /* a town under the pointer, or under keyboard focus in the list beside it */
 .mp .mp-town:hover .mp-dot, .mp .mp-town.is-on .mp-dot{ fill:var(--brass); }
@@ -46,4 +41,3 @@
   .mp .mp-shop .mp-halo{ transform-origin:0 0; animation:mpPulse 3.2s var(--ease) infinite; }
 }
 @keyframes mpPulse{ 0%{ transform:scale(.7); opacity:.8; } 100%{ transform:scale(2.4); opacity:0; } }
-.mp .mp-name--far{ fill:var(--ink-45); font-size:calc(8.6px / var(--dws)); }

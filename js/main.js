@@ -572,7 +572,7 @@
   });
 })();
 
-/* ── drawings and maps: constant type size, and the draw-on ───────
+/* ── drawings and maps: constant line weight, and the draw-on ─────
    A sheet scales with its column but its labels and hairlines should not,
    so its current scale is written into --dws for the CSS to divide by. */
 var TM = (function () {
@@ -585,7 +585,6 @@ var TM = (function () {
     var w = svg.getBoundingClientRect().width;
     if (!vb || !vb.width || !w) return;
     svg.style.setProperty("--dws", (w / vb.width).toFixed(4));
-    svg.toggleAttribute("data-small", w < 560);
   }
   if ("ResizeObserver" in window) {
     var ro = new ResizeObserver(function (es) { es.forEach(function (e) { fit(e.target); }); });
@@ -1054,7 +1053,7 @@ var TM = (function () {
    it, or with reduced motion, everything is simply shown. */
 (function () {
   "use strict";
-  var TARGETS = ".sh, .ph__l, .ph__a, .ph__meta, .ph__v, .say__t, .bld__i, .mat__i, .who__i, " +
+  var TARGETS = ".sh, .ph__l, .ph__a, .ph__note, .ph__v, .say__t, .bld__i, .mat__i, .who__i, " +
                 ".wont__list li, .two__c, .near__list li, .arl__list li, .rx__g, .idx__i, " +
                 ".faq__aside > *, .faq__row, .map__aside > *, .map__frame, .qs__head, .qs__side, " +
                 ".cx__step, .loc__t > *, .case__t > *, .drawn__i, .fs__t > *, .art__s, .arx__map, " +

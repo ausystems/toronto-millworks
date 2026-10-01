@@ -98,7 +98,8 @@ function bench (host, { reduced }) {
 
   const ply = new THREE.MeshStandardMaterial({ map: grain("#EADCC2", "#B39672", 7), roughness: 0.62 });
   const oak = new THREE.MeshStandardMaterial({ map: grain("#CBA67A", "#7E5C39", 19), roughness: 0.48 });
-  const brass = new THREE.MeshStandardMaterial({ color: 0xc08a3c, roughness: 0.3, metalness: 1 });
+  /* part metal, not all: with no environment to reflect, full metalness renders black */
+  const brass = new THREE.MeshStandardMaterial({ color: 0xc08a3c, roughness: 0.34, metalness: 0.45 });
   const lines = new THREE.LineBasicMaterial({ color: 0x17140f, transparent: true, opacity: 0.26 });
 
   /* 600 wide, 760 high, 560 deep, in 18 mm stock, in metres */
@@ -123,7 +124,7 @@ function bench (host, { reduced }) {
   part(box(W - 2 * t - 0.002, t, D - 0.04), ply, [0, H * 0.52, 0.01], [0, H * 0.52 + 0.1, 0.74], [0, 0, 0.1], [0.62, 0.86]);
   part(box(W - 0.004, H - 0.004, 0.019), oak, [0, cy, D / 2 + 0.0095], [0.06, cy + 0.03, 1.1], [0, -0.5, 0], [0.72, 0.97]);
   const pull = new THREE.CylinderGeometry(0.0065, 0.0065, 0.15, 24);
-  part(pull, brass, [W / 2 - 0.055, cy + 0.12, D / 2 + 0.036], [W / 2 - 0.055, cy + 0.12, 1.32], [0, 0, 0], [0.84, 1.0]);
+  part(pull, brass, [W / 2 - 0.055, cy + 0.12, D / 2 + 0.026], [W / 2 - 0.055, cy + 0.12, 1.32], [0, 0, 0], [0.84, 1.0]);
 
   const target = new THREE.Vector3(0, 0.36, 0.08);
   const ident = new THREE.Quaternion();

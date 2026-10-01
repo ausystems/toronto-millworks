@@ -20,7 +20,7 @@ import drawings
 import maps
 from build_library import PLATES as LIB
 from guides import GUIDES
-from locations import LOCATIONS, REGION_ORDER, SHOP
+from locations import LOCATIONS, REGION_ORDER
 from seo import ADDR_LINE, MAP_DIRECTIONS, MAP_EMBED
 from site_content import PROCESS, SERVICES, SITE
 
@@ -31,9 +31,6 @@ LQIP = json.load(open(os.path.join(ROOT, "scripts", "data", "lqip.json")))
 ARROW = ('<svg viewBox="0 0 14 14" fill="none" aria-hidden="true" focusable="false">'
          '<path d="M4 10L10 4M10 4H4.9M10 4v5.1" stroke="currentColor" stroke-width="1.6" '
          'stroke-linecap="round" stroke-linejoin="round"/></svg>')
-ARROW_LONG = ('<svg viewBox="0 0 24 12" fill="none" aria-hidden="true" focusable="false">'
-              '<path d="M0 6h22M17 1l5 5-5 5" stroke="currentColor" stroke-width="1.4" '
-              'stroke-linecap="round" stroke-linejoin="round"/></svg>')
 
 def cx(*names):
     """Join class names, skipping empties."""
@@ -149,13 +146,10 @@ def sheet(key, caption=None, cls="", uid=""):
 # ══════════════════════════════════════════════════════════════════════════════
 #  page header
 # ══════════════════════════════════════════════════════════════════════════════
-def page_header(page, visual=None, actions=None, meta=None, tone=""):
+def page_header(page, visual=None, actions=None, note=None, tone=""):
     chip = pill(page["label"]) if page.get("label") else ""
     act = f'<div class="ph__a">{actions}</div>' if actions else ""
-    met = ""
-    if meta:
-        met = '<dl class="ph__meta">' + "".join(
-            f'<div><dt>{E(k)}</dt><dd>{v}</dd></div>' for k, v in meta) + '</dl>'
+    met = f'<p class="ph__note">{E(note)}</p>' if note else ""
     vis = f'<div class="ph__v">{visual}</div>' if visual else ""
     return (f'<header class="{cx("ph", "ph--split" if visual else "", tone)}">'
             + '<div class="shell">' + crumbs(page.get("crumbs")) + '<div class="ph__g"><div class="ph__main">'
@@ -207,7 +201,7 @@ def index_list(items, h2, hid, eyebrow=None, lede=None, cls=""):
     """A Swiss index rather than a card grid. Desktop shows the hovered row's
     drawing in a standing panel; phones get a photo thumbnail in each row.
 
-    items: dicts with href, title, text, tag, drawing, plate"""
+    items: dicts with href, title, text, drawing, plate"""
     rows, peeks = [], []
     for i, it in enumerate(items):
         thumb = ""
@@ -218,7 +212,7 @@ def index_list(items, h2, hid, eyebrow=None, lede=None, cls=""):
                      f'width="{t[0]}" height="{round(t[0] * 5 / 4)}" loading="lazy" decoding="async" alt=""></span>')
         rows.append(
             f'<li class="idx__i" data-peek="{i}"><a class="idx__a" href="{E(it["href"])}">'
-            f'{thumb}<span class="idx__tag">{E(it.get("tag", ""))}</span>'
+            f'{thumb}'
             f'<h3 class="idx__t">{E(it["title"])}</h3><p class="idx__d">{E(it["text"])}</p>'
             f'<i class="idx__go" aria-hidden="true">{ARROW}</i></a></li>')
         if it.get("drawing"):
@@ -236,7 +230,7 @@ def service_items(slugs=None, drawing=True):
     out = []
     for s in (SERVICE_BY_SLUG[x] for x in slugs) if slugs else SERVICES:
         out.append({"href": f"/services/{s['slug']}/", "title": s["nav"], "text": s["blurb"],
-                    "tag": s["kind"], "drawing": s["drawing"] if drawing else None,
+                    "drawing": s["drawing"] if drawing else None,
                     "plate": s["plates"][0]})
     return out
 
@@ -298,17 +292,11 @@ def materials(items, h2, hid, eyebrow="Materials", lede=None):
             + sec_head(h2, hid, eyebrow, lede) + f'<ul class="mat__list">{li}</ul></div></section>')
 
 
-def facts(rows, cls=""):
-    return (f'<dl class="{cx("facts", cls)}">'
-            + "".join(f'<div class="facts__r"><dt>{E(k)}</dt><dd>{v}</dd></div>' for k, v in rows)
-            + '</dl>')
-
-
 def nearby(places, h2, hid, lede=None):
     li = "".join(
         f'<li><a class="near__a" href="/service-areas/{p["slug"]}/"><span class="near__n">'
-        f'Custom millwork in {E(p["name"])}</span><span class="near__k">{p["km"]} km from the shop'
-        f'</span><i aria-hidden="true">{ARROW}</i></a></li>' for p in places)
+        f'Custom millwork in {E(p["name"])}</span><i aria-hidden="true">{ARROW}</i></a></li>'
+        for p in places)
     return (f'<section class="near" aria-labelledby="{hid}"><div class="shell">'
             + sec_head(h2, hid, "Nearby", lede) + f'<ul class="near__list">{li}</ul></div></section>')
 
@@ -317,7 +305,7 @@ def area_links(places, h2, hid, lede=None, label=None, all_link=True):
     """Location links with descriptive anchors, used on service pages."""
     label = label or (lambda p: f"Custom millwork in {p['name']}")
     li = "".join(f'<li><a href="/service-areas/{p["slug"]}/">{E(label(p))}</a></li>' for p in places)
-    more = (f'<p class="arl__more">{lnk("/service-areas/", "All 50 towns and cities we serve")}</p>'
+    more = (f'<p class="arl__more">{lnk("/service-areas/", "Every town and city we serve")}</p>'
             if all_link else "")
     return (f'<section class="arl" aria-labelledby="{hid}"><div class="shell arl__g">'
             + sec_head(h2, hid, "Where we work", lede) + f'<div><ul class="arl__list">{li}</ul>{more}</div>'
@@ -325,13 +313,13 @@ def area_links(places, h2, hid, lede=None, label=None, all_link=True):
 
 
 def region_index(prefix_heading=3):
-    """Every place grouped by region, with straight-line distance."""
+    """Every place grouped by region, nearest first."""
     groups = []
     for region in REGION_ORDER:
         places = sorted((p for p in LOCATIONS if p["region"] == region), key=lambda p: p["km"])
         li = "".join(
             f'<li><a class="rx__a" href="/service-areas/{p["slug"]}/" data-slug="{p["slug"]}">'
-            f'<span class="rx__n">{E(p["name"])}</span><span class="rx__k">{p["km"]} km</span></a></li>'
+            f'<span class="rx__n">{E(p["name"])}</span></a></li>'
             for p in places)
         groups.append(f'<div class="rx__g"><h{prefix_heading} class="rx__h">{E(region)}</h{prefix_heading}>'
                       f'<ul class="rx__list">{li}</ul></div>')
@@ -345,14 +333,13 @@ def areas_section(h2, hid, lede, teaser=False):
         from locations import BY_SLUG
         li = "".join(f'<li><a href="/service-areas/{s}/">{E(BY_SLUG[s]["name"])}</a></li>' for s in top)
         side = (f'<ul class="arx__top">{li}</ul>'
-                f'<p class="arx__more">{btn("/service-areas/", "See all 50 areas", "paper")}</p>')
+                f'<p class="arx__more">{btn("/service-areas/", "See every area", "paper")}</p>')
     else:
         side = region_index()
     return (f'<section class="arx{" arx--teaser" if teaser else ""}" aria-labelledby="{hid}">'
             f'<div class="shell">{sec_head(h2, hid, "Service area", lede)}'
             f'<div class="arx__g"><div class="arx__map">{maps.hub_map()}'
-            f'<p class="arx__src">Shorelines from OpenStreetMap contributors. Distances are straight-line '
-            f'from our shop.</p></div><div class="arx__side">{side}</div></div></div></section>')
+            f'<p class="arx__src">Shorelines © OpenStreetMap contributors</p></div><div class="arx__side">{side}</div></div></div></section>')
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -592,42 +579,31 @@ def footer(year):
                   "markham", "richmond-hill", "pickering", "kitchener", "barrie"]
     from locations import BY_SLUG
     areas = " ".join(f'<a href="/service-areas/{s}/">{E(BY_SLUG[s]["name"])}</a>' for s in top_places)
-    lat = f'{abs(SHOP[0]):.4f}° N · {abs(SHOP[1]):.4f}° W'
     phone = (f'<p><a href="tel:{E(SITE["phone"])}">{E(SITE["phone"])}</a></p>' if SITE["phone"] else "")
-    idx = [("/services/", "Services", "What we make"), ("/projects/", "Projects", "Shell to service"),
-           ("/about/", "About Us", "The shop"), ("/service-areas/", "Service Areas", "Within 120 km"),
-           ("/guides/", "Guides", "Before you start"), ("/faq/", "FAQ", "Cost and timing"),
-           ("/contact/", "Contact", "Get a quote")]
-    rows = "".join(f'<li><a href="{h}"><span class="t">{t}</span><span class="m">{m}</span></a></li>'
-                   for h, t, m in idx)
+    idx = [("/services/", "Services"), ("/projects/", "Projects"), ("/about/", "About Us"),
+           ("/service-areas/", "Service Areas"), ("/guides/", "Guides"), ("/faq/", "FAQ"),
+           ("/contact/", "Contact")]
+    rows = "".join(f'<li><a href="{h}">{t}</a></li>' for h, t in idx)
+    cta = btn("/contact/#quote", "Start a project", "paper", lg=True)
     return f'''<footer class="foot">
-<div class="foot__rule foot__rule--top"><span>Custom millwork · Cabinetry · Restaurant and bar · Toronto and the GTA</span><span class="foot__coord">{lat}</span></div>
 <div class="foot__main">
 <div class="foot__lead">
-<span class="foot__flag"><i aria-hidden="true"></i>Enquiries open</span>
 <h2 class="foot__title">Bring us a room.</h2>
-<a class="foot__cta" href="/contact/#quote"><span>Start a project</span><i aria-hidden="true">{ARROW_LONG}</i></a>
-<dl class="foot__stats">
-<div><dt>Work</dt><dd>Residential &amp; commercial</dd></div>
-<div><dt>Region</dt><dd>Within 120 km</dd></div>
-<div><dt>Built</dt><dd>In our own shop</dd></div>
-<div><dt>Drawings</dt><dd>Measured on site</dd></div>
-</dl>
+{cta}
 </div>
 <div class="foot__aside">
-<span class="foot__label">Site index</span>
 <ul class="foot__index">{rows}</ul>
 <div class="foot__reach">
-<div><span class="foot__label">Shop</span><address><p>{E(SITE["street"])}<br>{E(SITE["locality"])}, {E(SITE["region"])} {E(SITE["postal"])}<br>Canada</p></address></div>
-<div><span class="foot__label">Direct</span><p><a href="mailto:{E(SITE["email"])}">{E(SITE["email"])}</a></p>{phone}</div>
+<address><p>{E(SITE["street"])}<br>{E(SITE["locality"])}, {E(SITE["region"])} {E(SITE["postal"])}</p></address>
+<div><p><a href="mailto:{E(SITE["email"])}">{E(SITE["email"])}</a></p>{phone}</div>
 </div>
 </div>
 </div>
 <nav class="foot__links" aria-label="Services and areas">
 <p><span class="foot__label">Services</span> {svc}</p>
-<p><span class="foot__label">Areas</span> {areas} <a href="/service-areas/">All 50 areas</a></p>
+<p><span class="foot__label">Areas</span> {areas} <a href="/service-areas/">Every area</a></p>
 </nav>
-<div class="foot__rule foot__rule--bottom"><span>© {year} Toronto Millworks · <a href="/privacy-policy/">Privacy</a></span><span class="foot__note">Measured. Milled. Installed.</span></div>
+<p class="foot__legal">© {year} Toronto Millworks · <a href="/privacy-policy/">Privacy</a></p>
 <div class="foot__mark">
 <svg class="foot__wordmark foot__wordmark--wide" viewBox="0 26 1120 76" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Toronto Millworks"><text x="0" y="100" textLength="1120" lengthAdjust="spacingAndGlyphs">TORONTO MILLWORKS</text></svg>
 <svg class="foot__wordmark foot__wordmark--stack" viewBox="0 26 602 164" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Toronto Millworks"><text x="0" y="100" textLength="498" lengthAdjust="spacingAndGlyphs">TORONTO</text><text x="0" y="188" textLength="602" lengthAdjust="spacingAndGlyphs">MILLWORKS</text></svg>

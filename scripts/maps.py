@@ -102,16 +102,14 @@ def hub_map(prefix="/"):
              _lakes_in(x0, y0, w, h)]
 
     # water names, set quietly in the lake
-    for name, (lx, ly), minor in (("Lake Ontario", (104, 22), False), ("Lake Simcoe", (34, -66), True),
-                                  ("Lake Erie", (-24, 131), False), ("Georgian Bay", (-74, -128), False)):
-        parts.append(f'<text class="mp-water{" mp-minor" if minor else ""}" x="{lx}" y="{ly}" '
-                     f'text-anchor="middle">{E(name)}</text>')
+    for name, (lx, ly) in (("Lake Ontario", (104, 22)), ("Lake Erie", (-24, 131)),
+                           ("Georgian Bay", (-74, -128))):
+        parts.append(f'<text class="mp-water" x="{lx}" y="{ly}" text-anchor="middle">{E(name)}</text>')
 
-    # distance rings, labelled out over the lake where nothing else lives
-    for r in (30, 60, 90, 120):
-        parts.append(f'<circle class="mp-ring{" mp-ring--edge" if r == 120 else ""}" cx="0" cy="0" r="{r}"/>')
-        a = math.radians(38)
-        parts.append(f'<text class="mp-rl" x="{r * math.cos(a) + 1.5:.1f}" y="{r * math.sin(a) + 1:.1f}">{r} km</text>')
+    # the one ring that matters, labelled out over the lake where nothing else lives
+    a = math.radians(38)
+    parts.append('<circle class="mp-ring" cx="0" cy="0" r="120"/>'
+                 f'<text class="mp-rl" x="{120 * math.cos(a) + 1.5:.1f}" y="{120 * math.sin(a) + 1:.1f}">120 km</text>')
 
     # the shop first, so towns are placed around it
     lab.block(0, 0, 4.5)
@@ -127,33 +125,23 @@ def hub_map(prefix="/"):
             f'<a href="{prefix}service-areas/{p["slug"]}/" class="mp-town" data-slug="{p["slug"]}" '
             f'tabindex="-1" aria-label="{E(p["name"])}"><circle class="mp-dot" cx="{x:.1f}" cy="{y:.1f}" r="1.25"/>'
             f'<circle class="mp-hit" cx="{x:.1f}" cy="{y:.1f}" r="4.5"/></a>')
-        if p["slug"] in ("north-york", "etobicoke", "east-york", "scarborough"):
-            continue                                     # the city's own districts sit under "Toronto"
+        if p["slug"] not in MAJOR:
+            continue                                     # the rest are named on hover and in the list
         spot = lab.place(x, y, p["name"])
         if spot:
             anchor, tx, ty = spot
-            minor = "" if p["slug"] in MAJOR else " mp-minor"
-            labels.append(f'<text class="mp-name{minor}" data-for="{p["slug"]}" x="{tx:.1f}" y="{ty:.1f}" '
+            labels.append(f'<text class="mp-name" data-for="{p["slug"]}" x="{tx:.1f}" y="{ty:.1f}" '
                           f'text-anchor="{anchor}">{E(p["name"])}</text>')
 
     shop = ('<g class="mp-shop"><circle class="mp-halo" cx="0" cy="0" r="4.2"/>'
             '<circle class="mp-core" cx="0" cy="0" r="1.9"/>'
             '<text class="mp-shopl" x="2.6" y="-6">Our shop</text></g>')
 
-    # north point and a 25 km scale bar, bottom left
-    furniture = (f'<g class="mp-furn" transform="translate({x0 + 12} {y0 + h - 14})">'
-                 '<path class="mp-n" d="M0,-12 L3,-4 L0,-6 L-3,-4 Z"/>'
-                 '<text class="mp-rl" x="0" y="-14.5" text-anchor="middle">N</text>'
-                 '<line class="mp-scale" x1="10" y1="0" x2="35" y2="0"/>'
-                 '<line class="mp-scale" x1="10" y1="-1.6" x2="10" y2="1.6"/>'
-                 '<line class="mp-scale" x1="35" y1="-1.6" x2="35" y2="1.6"/>'
-                 '<text class="mp-rl" x="22.5" y="-3" text-anchor="middle">25 km</text></g>')
-
     return (f'<svg class="mp mp--hub" viewBox="{x0} {y0} {w} {h}" role="img" '
             f'aria-labelledby="mp-hub-t" data-map>'
             f'<title id="mp-hub-t">Map of the {len(LOCATIONS)} towns and cities we serve within '
             f'120 km of our shop in Mississauga, with Lake Ontario to the south.</title>'
-            + "".join(parts) + "".join(dots) + "".join(labels) + shop + furniture + '</svg>')
+            + "".join(parts) + "".join(dots) + "".join(labels) + shop + '</svg>')
 
 
 def place_map(slug, prefix="/"):
@@ -169,15 +157,14 @@ def place_map(slug, prefix="/"):
     parts = [f'<rect class="mp-bg" x="{x0:.1f}" y="{y0:.1f}" width="{w:.1f}" height="{h:.1f}"/>',
              _lakes_in(x0, y0, w, h)]
 
-    # neighbours for context, faint, labelled only where there is room
-    far = []
+    # neighbours for context: faint dots, named on hover
     for n in nearest(slug, 8):
         nx, ny = proj(n["lat"], n["lon"])
         if x0 < nx < x0 + w and y0 < ny < y0 + h and math.hypot(nx, ny) > 3:
             parts.append(f'<a href="{prefix}service-areas/{n["slug"]}/" tabindex="-1" aria-label="{E(n["name"])}" class="mp-town">'
+                         f'<title>{E(n["name"])}</title>'
                          f'<circle class="mp-dot mp-dot--far" cx="{nx:.1f}" cy="{ny:.1f}" r="{w / 300:.2f}"/></a>')
             lab.block(nx, ny, w / 300 * 1.4)
-            far.append((nx, ny, n["name"]))
 
     r = w / 180
     lab.block(0, 0, r * 2.4); lab.block(cx, cy, r * 1.8)
@@ -192,12 +179,6 @@ def place_map(slug, prefix="/"):
                               (0, 0, "Our shop", "mp-shopl")):
         anchor, tx, ty = lab.place(x, y, text, gap=r * 2.6, force=True)
         labels.append(f'<text class="{cls}" x="{tx:.1f}" y="{ty:.1f}" text-anchor="{anchor}">{E(text)}</text>')
-    for nx, ny, name in far:
-        spot = lab.place(nx, ny, name, gap=w / 300 * 2.6)
-        if spot:
-            anchor, tx, ty = spot
-            labels.append(f'<text class="mp-name mp-minor mp-name--far" x="{tx:.1f}" y="{ty:.1f}" '
-                          f'text-anchor="{anchor}">{E(name)}</text>')
 
     # the distance, set on the line itself
     ang = math.degrees(math.atan2(cy, cx))

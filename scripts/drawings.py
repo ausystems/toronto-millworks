@@ -11,64 +11,82 @@ Every primitive carries pathLength="1" and an order index, so CSS can draw the
 sheet on in sequence. Without script, or with reduced motion, the drawing is
 simply there.
 
-Units are tenths of a millimetre scaled to taste: one unit is 10 mm unless a
-drawing says otherwise. Dimensions printed on a sheet are in millimetres.
+The sheets are linework only: no dimensions, labels or title blocks. Each one is
+cropped to what is drawn, so it sits in its frame without dead margins. One unit
+is 10 mm unless a drawing says otherwise.
 """
 import html
 import math
+import re
 
 E = lambda s: html.escape(str(s), quote=True)
 
 
-DRAWN = {"l", "t", "h", "d", "e", "led"}
+DRAWN = {"l", "t", "h", "d", "led"}
 
 
 def _pl(c):
     return ' pathLength="1"' if c in DRAWN else ""
 
 
+_TOK = re.compile(r"[MLCQA]|-?(?:\d+\.?\d*|\.\d+)")
+
+
+def _coords(d):
+    """The points of an absolute path, enough for its bounds (arcs by their ends)."""
+    out, cmd, buf = [], "", []
+    for t in _TOK.findall(d):
+        if t.isalpha():
+            cmd, buf = t, []
+            continue
+        buf.append(float(t))
+        if len(buf) == (7 if cmd == "A" else 2):
+            out += buf[-2:]
+            buf = []
+    return out
+
+
 class Sheet:
-    def __init__(self, key, w, h, title, note="Typical, not to scale", alt=""):
-        self.key, self.w, self.h = key, w, h
-        self.title, self.note, self.alt = title, note, alt or title
+    def __init__(self, key, title, alt=""):
+        self.key, self.title, self.alt = key, title, alt or title
         self.parts = []          # (order, svg)
         self.order = 0
+        self.bb = [math.inf, math.inf, -math.inf, -math.inf]
 
     # ── ordering: one index per component so each piece draws as a unit ───
     def next(self, step=1):
         self.order += step
         return self
 
-    def _add(self, svg):
+    def _add(self, svg, *xy):
         self.parts.append((self.order, svg))
+        b = self.bb
+        for x, y in zip(xy[::2], xy[1::2]):
+            b[0], b[1], b[2], b[3] = min(b[0], x), min(b[1], y), max(b[2], x), max(b[3], y)
 
     # ── primitives ────────────────────────────────────────────────────────
     def line(self, x1, y1, x2, y2, c="l"):
-        self._add(f'<line class="dw-{c}" x1="{x1:g}" y1="{y1:g}" x2="{x2:g}" y2="{y2:g}"{_pl(c)}/>')
+        self._add(f'<line class="dw-{c}" x1="{x1:g}" y1="{y1:g}" x2="{x2:g}" y2="{y2:g}"{_pl(c)}/>', x1, y1, x2, y2)
 
     def rect(self, x, y, w, h, c="l", rx=0):
         r = f' rx="{rx:g}"' if rx else ""
-        self._add(f'<rect class="dw-{c}" x="{x:g}" y="{y:g}" width="{w:g}" height="{h:g}"{r}{_pl(c)}/>')
+        self._add(f'<rect class="dw-{c}" x="{x:g}" y="{y:g}" width="{w:g}" height="{h:g}"{r}{_pl(c)}/>', x, y, x + w, y + h)
 
     def path(self, d, c="l"):
-        self._add(f'<path class="dw-{c}" d="{d}"{_pl(c)}/>')
+        self._add(f'<path class="dw-{c}" d="{d}"{_pl(c)}/>', *_coords(d))
 
     def poly(self, pts, c="l", closed=True):
         d = "M" + " L".join(f"{x:g},{y:g}" for x, y in pts) + (" Z" if closed else "")
         self.path(d, c)
 
     def circle(self, cx, cy, r, c="l"):
-        self._add(f'<circle class="dw-{c}" cx="{cx:g}" cy="{cy:g}" r="{r:g}"{_pl(c)}/>')
+        self._add(f'<circle class="dw-{c}" cx="{cx:g}" cy="{cy:g}" r="{r:g}"{_pl(c)}/>', cx - r, cy - r, cx + r, cy + r)
 
     def fill(self, x, y, w, h, c="f"):
-        self._add(f'<rect class="dw-{c}" x="{x:g}" y="{y:g}" width="{w:g}" height="{h:g}"/>')
+        self._add(f'<rect class="dw-{c}" x="{x:g}" y="{y:g}" width="{w:g}" height="{h:g}"/>', x, y, x + w, y + h)
 
     def fillpath(self, d, c="f"):
-        self._add(f'<path class="dw-{c}" d="{d}"/>')
-
-    def text(self, x, y, s, c="x", anchor="start", minor=False):
-        k = f"dw-{c}" + (" dw-minor" if minor else "")
-        self._add(f'<text class="{k}" x="{x:g}" y="{y:g}" text-anchor="{anchor}">{E(s)}</text>')
+        self._add(f'<path class="dw-{c}" d="{d}"/>', *_coords(d))
 
     # ── composites ────────────────────────────────────────────────────────
     def door(self, x, y, w, h, stile=5.5, handle="v", hside="r"):
@@ -86,43 +104,11 @@ class Sheet:
         self.rect(x + 4, y + 3.5, w - 8, h - 7, "t")
         self.line(x + w / 2 - 7, y + h / 2, x + w / 2 + 7, y + h / 2, "h")
 
-    def dim(self, x1, y1, x2, y2, label, off=10, minor=False):
-        """Horizontal or vertical dimension with extension lines and slashes."""
-        horiz = abs(y2 - y1) < abs(x2 - x1)
-        if horiz:
-            y = y1 - off
-            self.line(x1, y1 - 2, x1, y - 3, "e")
-            self.line(x2, y2 - 2, x2, y - 3, "e")
-            self.line(x1 - 3, y, x2 + 3, y, "d")
-            for x in (x1, x2):
-                self.line(x - 2.2, y + 2.2, x + 2.2, y - 2.2, "d")
-            self.text((x1 + x2) / 2, y - 3, label, "n", "middle", minor)
-        else:
-            x = x1 + off
-            self.line(x1 + 2, y1, x + 3, y1, "e")
-            self.line(x2 + 2, y2, x + 3, y2, "e")
-            self.line(x, y1 - 3, x, y2 + 3, "d")
-            for y in (y1, y2):
-                self.line(x - 2.2, y + 2.2, x + 2.2, y - 2.2, "d")
-            cy = (y1 + y2) / 2
-            self._add(f'<text class="dw-n{" dw-minor" if minor else ""}" x="{x - 3:g}" y="{cy:g}" '
-                      f'text-anchor="middle" transform="rotate(-90 {x - 3:g} {cy:g})">{E(label)}</text>')
-
-    def callout(self, x, y, tx, ty, label, anchor="start", minor=False):
-        """Leader from a dot on the work to a label off it."""
-        self.circle(x, y, .9, "dot")
-        if anchor == "middle":
-            ex, ey = tx, (ty - 9 if ty > y else ty + 3)
-        else:
-            ex, ey = (tx - 4 if anchor == "start" else tx + 4), ty - 3
-        self.path(f"M{x:g},{y:g} L{ex:g},{ey:g}", "e")
-        self.text(tx, ty, label, "x", anchor, minor)
-
     def hatch(self, d):
         self.fillpath(d, "hx")
 
     # ── output ────────────────────────────────────────────────────────────
-    def svg(self, uid="", cls=""):
+    def svg(self, uid="", cls="", bb=None):
         pid = f"dwh-{self.key}{uid}"
         tid = f"dwt-{self.key}{uid}"
         n_max = max(o for o, _ in self.parts) or 1
@@ -132,25 +118,23 @@ class Sheet:
             body.append(s.replace("/>", f' style="--i:{round(o * 46 / n_max)}"/>', 1)
                         if s.endswith("/>") else
                         s.replace(">", f' style="--i:{round(o * 46 / n_max)}">', 1))
-        tb = self.h - 26
+        x0, y0, x1, y1 = bb or self.bb
+        pad = 8                                          # room for strokes at the edge
+        vb = " ".join(f"{round(v, 1):g}" for v in (x0 - pad, y0 - pad, x1 - x0 + 2 * pad, y1 - y0 + 2 * pad))
         return (
-            f'<svg class="{("dw " + cls).strip()}" viewBox="0 0 {self.w:g} {self.h:g}" role="img" '
+            f'<svg class="{("dw " + cls).strip()}" viewBox="{vb}" role="img" '
             f'aria-labelledby="{tid}" preserveAspectRatio="xMidYMid meet" data-draw>'
             f'<title id="{tid}">{E(self.alt)}</title>'
             f'<defs><pattern id="{pid}" width="3.2" height="3.2" patternUnits="userSpaceOnUse" '
             f'patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="3.2" class="dw-hl"/></pattern></defs>'
-            f'<g class="dw-g" style="--hatch:url(#{pid})">' + "".join(body) + '</g>'
-            f'<g class="dw-tb"><line x1="{self.w - 170:g}" y1="{tb:g}" x2="{self.w - 8:g}" y2="{tb:g}" class="dw-e"/>'
-            f'<text class="dw-tt" x="{self.w - 8:g}" y="{tb + 11:g}" text-anchor="end">{E(self.title)}</text>'
-            f'<text class="dw-tn" x="{self.w - 8:g}" y="{tb + 21:g}" text-anchor="end">{E(self.note)}</text></g>'
-            '</svg>')
+            f'<g class="dw-g" style="--hatch:url(#{pid})">' + "".join(body) + '</g></svg>')
 
 
 # ══════════════════════════════════════════════════════════════════════════════
 #  Sheets
 # ══════════════════════════════════════════════════════════════════════════════
 def kitchen():
-    s = Sheet("kitchen", 530, 372, "Kitchen, elevation A",
+    s = Sheet("kitchen", "Kitchen, elevation A",
               alt="Shop drawing of a kitchen elevation: drawer stack, range with hood, "
                   "base and wall cabinets, a tall pantry and a panelled fridge.")
     F, C = 300, 32                                   # floor, ceiling
@@ -198,25 +182,11 @@ def kitchen():
     s.next()
     # scribe strip at the wall
     s.line(402, 43, 402, F, "l"); s.line(404.5, 43, 404.5, F, "t")
-    s.next()
-    # dimensions
-    s.dim(40, 43, 404.5, 43, "3,645", off=24)
-    s.next()
-    for x1, x2, lab in ((40, 100, "600"), (100, 176, "760"), (176, 251, "750"),
-                        (251, 311, "600"), (311, 404.5, "935")):
-        s.dim(x1, F + 2, x2, F + 2, lab, off=-14)
-    s.next()
-    s.dim(405, 208, 405, F, "910", off=9)
-    s.next()
-    s.callout(370, 132, 434, 120, "Fridge panel", "start", minor=True)
-    s.callout(296, 150, 434, 160, "Tall pantry", "start", minor=True)
-    s.callout(150, 126, 162, 52, "Hood", "start", minor=True)
-    s.callout(403, 250, 434, 262, "Scribe strip", "start", minor=True)
     return s
 
 
 def builtin():
-    s = Sheet("builtin", 530, 372, "Built-in wall, elevation",
+    s = Sheet("builtin", "Built-in wall, elevation",
               alt="Shop drawing of a built-in wall: a fireplace with mantel and surround, "
                   "flanked by bookcases over cabinets, with crown moulding at the ceiling.")
     F, C = 300, 32
@@ -250,20 +220,11 @@ def builtin():
     # overmantel frame
     s.rect(182, 104, 76, 64, "c")
     s.rect(160, 58, 120, 134, "t")
-    s.next()
-    s.dim(40, C, 400, C, "3,600", off=14)
-    s.next()
-    s.dim(402, C, 402, F, "2,700", off=11)
-    s.next()
-    s.callout(220, 194, 220, 330, "Mantel", "middle")
-    s.callout(70, 140, 70, 330, "Adjustable shelves", "middle", minor=True)
-    s.callout(340, 256, 434, 262, "Vented door", "start", minor=True)
-    s.callout(400, 150, 434, 150, "Scribed", "start", minor=True)
     return s
 
 
 def panelling():
-    s = Sheet("panelling", 470, 372, "Panelling and sections",
+    s = Sheet("panelling", "Panelling and sections",
               alt="Shop drawing of raised panel wainscot and upper panels with a built-up "
                   "cornice, beside hatched sections through the cornice and the baseboard.")
     F, C = 300, 40
@@ -294,23 +255,16 @@ def panelling():
              f"C{W + 62},96 {W + 58},70 {W + 82},64 "
              f"L{W + 82},52 L{W + 96},52 L{W + 96},46 L{W},46 Z")
     s.hatch(crown); s.path(crown, "l")
-    s.text(W + 6, 164, "Cornice, matched", "x")
     s.next()
     s.line(W, 196, W, F, "l"); s.line(W, F, 452, F, "l")
     base = (f"M{W},{F} L{W + 16},{F} L{W + 16},226 "
             f"C{W + 16},218 {W + 9},216 {W + 9},210 L{W + 9},200 L{W},200 Z")
     s.hatch(base); s.path(base, "l")
-    s.text(W + 26, 236, "Base section", "x")
-    s.next()
-    s.dim(W + 96, 46, W + 96, 140, "180", off=18, minor=True)
-    s.dim(W + 16, 200, W + 16, F, "200", off=26, minor=True)
-    s.next()
-    s.callout(77, 250, 77, 330, "Raised field", "middle", minor=True)
     return s
 
 
 def bar():
-    s = Sheet("bar", 470, 372, "Bar, section",
+    s = Sheet("bar", "Bar, section",
               alt="Shop drawing in section through a bar: guest side with footrail and "
                   "timber bar die, the working aisle, and back bar cabinets and shelving.")
     F, C = 300, 30
@@ -353,22 +307,11 @@ def bar():
     for x, h in ((232, 20), (240, 24), (248, 18)):
         s.path(f"M{x - 2.4},{176} L{x - 2.4},{176 - h + 6} C{x - 2.4},{176 - h + 2} {x - 1},{176 - h} {x - 1},{176 - h - 4} "
                f"L{x + 1},{176 - h - 4} C{x + 1},{176 - h} {x + 2.4},{176 - h + 2} {x + 2.4},{176 - h + 6} L{x + 2.4},{176}", "t")
-    s.next()
-    s.dim(24, 193, 24, F, "1,070", off=0)
-    s.dim(43, 280, 43, F, "200", off=-14, minor=True)
-    s.next()
-    s.dim(138, F + 2, 196, F + 2, "900 aisle", off=-14)
-    s.next()
-    s.callout(67, 240, 120, 150, "Timber bar die", "middle")
-    s.callout(134, 224, 168, 186, "Speed rail", "middle", minor=True)
-    s.callout(226, 250, 300, 250, "Undercounter fridge", "start", minor=True)
-    s.callout(254, 146, 300, 136, "Lit shelving", "start", minor=True)
-    s.callout(49, 277, 60, 334, "Footrail", "middle", minor=True)
     return s
 
 
 def reception():
-    s = Sheet("reception", 470, 372, "Reception desk",
+    s = Sheet("reception", "Reception desk",
               alt="Shop drawing of a reception desk: slatted front with a signage panel, "
                   "a raised transaction ledge, a lowered accessible counter, and a section.")
     F = 300
@@ -397,20 +340,11 @@ def reception():
     s.hatch(work); s.path(work)
     s.rect(X + 14, 236, 30, 8, "t")
     s.line(X + 66, 231, X + 66, F, "t")
-    s.next()
-    s.dim(24, 184, 24, F, "1,100", off=0)
-    s.dim(352, 209, 352, F, "860", off=0)
-    s.dim(X + 76, 226, X + 76, F, "740", off=0, minor=True)
-    s.next()
-    s.callout(155, 236, 155, 160, "Signage panel", "middle")
-    s.callout(306, 211, 306, 170, "Accessible counter", "middle")
-    s.callout(X + 29, 240, X + 52, 206, "Cable tray", "middle", minor=True)
-    s.callout(X + 20, 187, X + 20, 160, "Ledge", "middle", minor=True)
     return s
 
 
 def retail():
-    s = Sheet("retail", 530, 372, "Display wall, elevation",
+    s = Sheet("retail", "Display wall, elevation",
               alt="Shop drawing of a retail display wall: four bays of adjustable "
                   "shelving over storage drawers, with a lit header band.")
     F, C = 300, 32
@@ -441,19 +375,11 @@ def retail():
         s.next()
     for x in bays:
         s.drawer(x + 2, 252, 96, 22); s.drawer(x + 2, 274, 96, 20)
-    s.next()
-    s.dim(30, 54, 430, 54, "4,000", off=12)
-    s.next()
-    s.dim(432, 54, 432, F, "2,460", off=9)
-    s.next()
-    s.callout(230, 62, 300, 22, "Lit header", "start", minor=True)
-    s.callout(400, 150, 452, 150, "Adjustable", "start", minor=True)
-    s.callout(180, 284, 180, 334, "Storage drawers", "middle")
     return s
 
 
 def plan():
-    s = Sheet("plan", 470, 372, "Kitchen and living, plan",
+    s = Sheet("plan", "Kitchen and living, plan",
               alt="Shop drawing of a floor plan: an L-shaped kitchen with island seating, "
                   "tall pantry and fridge, a window, a door swing and a media wall.")
     X0, Y0, X1, Y1 = 40, 40, 420, 296
@@ -485,19 +411,12 @@ def plan():
     # media wall
     s.rect(290, Y1 - 22, 124, 22)
     s.rect(316, Y1 - 20, 72, 6, "c")
-    s.next()
-    s.dim(X0, Y0 - t, X1, Y0 - t, "6,100", off=12)
-    s.dim(X0 - t, Y0, X0 - t, Y1, "4,200", off=-14)
-    s.next()
-    s.callout(210, 156, 210, 236, "Island, four seats", "middle")
-    s.callout(60, 166, 96, 236, "Tall pantry", "start", minor=True)
-    s.callout(352, Y1 - 11, 352, 240, "Media wall", "middle")
     return s
 
 
 # ── process vignettes, smaller sheets ───────────────────────────────────────
 def measure():
-    s = Sheet("measure", 320, 236, "Site measure", note="Readings in mm",
+    s = Sheet("measure", "Site measure",
               alt="Drawing of a room corner being measured: a leaning wall, a level line, "
                   "a plumb line and widths recorded at three heights.")
     s.line(20, 196, 300, 196)
@@ -508,18 +427,14 @@ def measure():
     s.line(40, 120, 300, 120, "las")
     s.line(52, 30, 52, 196, "las")
     s.next()
-    for y, lab in ((180, "2,417"), (120, "2,421"), (52, "2,426")):
+    for y in (180, 120, 52):
         x1 = 40 + (196 - y) * 6 / 166
         s.line(x1, y, 280 - (196 - y) / 166, y, "d")
-        s.text(160, y - 4, lab, "n", "middle")
-        s.next()
-    s.callout(44, 70, 98, 74, "Wall leans 6 mm", "start", minor=True)
-    s.text(160, 214, "Floor falls 4 mm left to right", "x", "middle", minor=True)
-    return s
+        return s
 
 
 def draw():
-    s = Sheet("draw", 320, 236, "Shop drawing",
+    s = Sheet("draw", "Shop drawing",
               alt="A small shop drawing of a cabinet: two doors over three drawers, "
                   "with a chain of dimensions.")
     s.line(30, 190, 290, 190)
@@ -530,20 +445,11 @@ def draw():
         s.drawer(60, y, 100, h)
     s.next()
     s.door(176, 50, 84, 140, hside="l")
-    s.next()
-    s.dim(60, 50, 160, 50, "1,000", off=12)
-    s.dim(176, 50, 260, 50, "840", off=12)
-    s.dim(268, 50, 268, 190, "1,400", off=4)
-    s.next()
-    for y1, y2, lab in ((130, 148, "180"), (148, 168, "200"), (168, 190, "220")):
-        s.dim(46, y1, 46, y2, lab, off=0, minor=True)
-    s.next()
-    s.callout(218, 120, 300, 20, "Approved before cutting", "end", minor=True)
     return s
 
 
 def build():
-    s = Sheet("build", 320, 236, "Carcass, exploded", note="Dry fitted before delivery",
+    s = Sheet("build", "Carcass, exploded",
               alt="Exploded isometric drawing of a cabinet carcass: two sides, top, "
                   "bottom, back, a shelf and a door pulled apart along assembly lines.")
     c30, s30 = math.cos(math.radians(30)), math.sin(math.radians(30))
@@ -586,7 +492,7 @@ def build():
 
 
 def install():
-    s = Sheet("install", 320, 236, "Scribe at the wall, plan",
+    s = Sheet("install", "Scribe at the wall, plan",
               alt="Plan detail of a cabinet meeting an uneven wall: the wall as built, "
                   "the scribe line traced from it, and the trimmed scribe strip.")
     wall = "M40,20 C52,60 34,96 46,132 C58,168 38,190 48,216"
@@ -600,28 +506,37 @@ def install():
     s.fillpath(scribe, "fc"); s.path(scribe, "l")
     s.next()
     s.path("M41,40 C52,64 40,96 47,132 C54,168 42,186 49,200", "las")
-    s.next()
-    s.callout(44, 110, 120, 222, "Wall as built", "middle", minor=True)
-    s.callout(60, 76, 120, 26, "Scribe strip", "start")
     return s
 
 
 SHEETS = {f.__name__: f for f in (kitchen, builtin, panelling, bar, reception, retail,
                                   plan, measure, draw, build, install)}
+# sheets that are shown in the same frame share one crop, so they keep one scale
+# and one floor line instead of each swelling to fill the frame
+FAMILIES = (("kitchen", "builtin", "panelling", "bar", "reception", "retail", "plan"),
+            ("measure", "draw", "build", "install"))
 _CACHE = {}
+
+
+def _sheet(key):
+    if key not in _CACHE:
+        _CACHE[key] = SHEETS[key]()
+    return _CACHE[key]
+
+
+def _frame(key):
+    fam = next(f for f in FAMILIES if key in f)
+    bbs = [_sheet(k).bb for k in fam]
+    return [min(b[0] for b in bbs), min(b[1] for b in bbs), max(b[2] for b in bbs), max(b[3] for b in bbs)]
 
 
 def drawing(key, uid="", cls=""):
     """Inline SVG for a sheet. uid keeps ids unique if a page repeats a sheet."""
-    if key not in _CACHE:
-        _CACHE[key] = SHEETS[key]()
-    return _CACHE[key].svg(uid=uid, cls=cls)
+    return _sheet(key).svg(uid=uid, cls=cls, bb=_frame(key))
 
 
 def alt(key):
-    if key not in _CACHE:
-        _CACHE[key] = SHEETS[key]()
-    return _CACHE[key].alt
+    return _sheet(key).alt
 
 
 if __name__ == "__main__":

@@ -1,14 +1,13 @@
 /* ══════════════════════════════════════════════════════════════
    SHOP DRAWINGS
-   Hairline elevations, sections and plans. Ink for the work, brass for
-   anything that measures it.
+   Hairline elevations, sections and plans, linework only. Ink for the
+   work, brass for light and for anything that measures it.
 
-   A sheet scales with its column, but its type and line weights should not:
-   a 9px label that shrinks to 5px on a phone is unreadable, and a hairline
-   that swells to 2px on a wide screen stops being a hairline. Script writes
-   the sheet's current scale into --dws, and every size below is divided by
-   it, so labels and strokes land at the same pixel size at any width. The
-   default suits a desktop column, so without script the sheet still reads.
+   A sheet scales with its column, but its line weights should not: a
+   hairline that swells to 2px on a wide screen stops being a hairline.
+   Script writes the sheet's current scale into --dws, and every stroke
+   below is divided by it, so lines land at the same pixel weight at any
+   width. The default suits a desktop column, so without script it reads.
    ══════════════════════════════════════════════════════════════ */
 .dw{
   --dws: 1.2;
@@ -22,14 +21,12 @@
 }
 .dw .dw-h{ fill:none; stroke:var(--ink); stroke-width:calc(1.6px / var(--dws)); stroke-linecap:round; }
 .dw .dw-d{ fill:none; stroke:var(--brass); stroke-width:calc(.8px / var(--dws)); stroke-linecap:round; }
-.dw .dw-e{ fill:none; stroke:var(--brass); stroke-width:calc(.6px / var(--dws)); opacity:.85; }
 .dw .dw-led{ fill:none; stroke:var(--brass); stroke-width:calc(1.8px / var(--dws)); stroke-linecap:round; }
 .dw .dw-las{
   fill:none; stroke:var(--brass); stroke-width:calc(.9px / var(--dws)); stroke-linecap:round;
   stroke-dasharray:calc(1.5px / var(--dws)) calc(3.5px / var(--dws));
 }
 .dw .dw-dot{ fill:var(--brass); stroke:none; }
-.dw .dw-f{ fill:var(--paper-2); }
 .dw .dw-fa{ fill:#FFFFFF; }
 .dw .dw-fb{ fill:#ECE7DE; }
 .dw .dw-fc{ fill:#F5F2EC; }
@@ -38,29 +35,10 @@
 .dw .dw-wall{ fill:var(--ink); }
 .dw .dw-win{ fill:var(--paper); stroke:var(--ink); stroke-width:calc(.8px / var(--dws)); }
 
-.dw text{ font-family:inherit; }
-.dw .dw-x{
-  fill:var(--ink-70); font-size:calc(9.2px / var(--dws));
-  letter-spacing:.075em; text-transform:uppercase; font-weight:500;
-}
-.dw .dw-n{
-  fill:var(--brass-dk); font-size:calc(9.2px / var(--dws));
-  letter-spacing:.03em; font-weight:500; font-variant-numeric:tabular-nums;
-}
-.dw .dw-tt{
-  fill:var(--ink); font-size:calc(8.6px / var(--dws));
-  letter-spacing:.16em; text-transform:uppercase; font-weight:600;
-}
-.dw .dw-tn{ fill:var(--ink-45); font-size:calc(8.6px / var(--dws)); letter-spacing:.04em; }
-
-/* when a sheet is drawn small, secondary labels step aside */
-.dw[data-small] .dw-minor{ display:none; }
-
 /* draw-on, armed by script so a reader without it sees the finished sheet.
-   Quick by design: the whole sheet is down in about half a second */
+   Quick by design: the whole sheet is down in under half a second */
 .dw.is-armed .dw-g [pathLength]{ stroke-dasharray:1 1; stroke-dashoffset:1; }
 .dw.is-armed .dw-g > :not([pathLength]){ opacity:0; }
-.dw.is-armed .dw-tb{ opacity:0; }
 .dw.is-drawn .dw-g [pathLength]{
   stroke-dashoffset:0;
   transition:stroke-dashoffset .32s cubic-bezier(.3,.1,.2,1) calc(var(--i, 0) * 4ms);
@@ -68,8 +46,7 @@
 .dw.is-drawn .dw-g > :not([pathLength]){
   opacity:1; transition:opacity .22s var(--ease) calc(var(--i, 0) * 4ms + .12s);
 }
-.dw.is-drawn .dw-tb{ opacity:1; transition:opacity .22s var(--ease) .3s; }
 @media (prefers-reduced-motion:reduce){
   .dw.is-armed .dw-g [pathLength]{ stroke-dashoffset:0; }
-  .dw.is-armed .dw-g > *, .dw.is-armed .dw-tb{ opacity:1; }
+  .dw.is-armed .dw-g > *{ opacity:1; }
 }

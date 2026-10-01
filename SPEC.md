@@ -30,12 +30,16 @@ Three.js. Every page is complete HTML before any script runs.
   with negative tracking; UI at 500 to 600.
 - **Shape** pill chips with a brass dot, one corner radius token, hairlines.
 - **Signature** hairline shop drawings: the way a millwork job really starts.
-  They stand in where photography does not exist yet and draw themselves in.
+  They stand in where photography does not exist yet and draw themselves in,
+  each family (room elevations, process stages) cropped to one shared frame.
 - **Motion** one easing family. Reveals are once only, transforms and opacity
   only, and everything collapses under `prefers-reduced-motion`.
 - **Never** numbered lists of the 01 / 02 kind, decorative rules that carry no
   structure, gradients for their own sake, glass beyond the hero chip, cards
-  inside cards.
+  inside cards. No coordinates, no figures beside every link, no label columns
+  or meta rows that repeat what the heading says. Drawings are linework only:
+  no dimensions, callouts or title blocks. Hairlines stay only where they
+  separate rows you act on (index rows, FAQ, search results, data tables).
 - **Untouchable** the scroll-scrubbed fit-out sequence on the home page.
 
 ## 3. Pages

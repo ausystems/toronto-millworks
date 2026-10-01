@@ -182,23 +182,21 @@ SERVICE_AREA_LABEL = {
 
 
 def guide_items(slugs):
-    return [{"href": f"/guides/{g['slug']}/", "title": g["h1"], "text": g["lede"], "tag": "Guide",
+    return [{"href": f"/guides/{g['slug']}/", "title": g["h1"], "text": g["lede"],
              "drawing": g["drawing"]} for g in (GUIDE_BY_SLUG[s] for s in slugs)]
 
 
 def service(s):
     C.reset_images()
     path = f"/services/{s['slug']}/"
-    p = {"path": path, "label": s["kind"] + " · " + s["nav"],
+    p = {"path": path, "label": s["kind"],
          "crumbs": [("Services", "services"), (s["nav"], f"services/{s['slug']}")],
          "h1": s["h1"], "lede": s["lede"]}
     a, b, c = (s["plates"] + s["plates"])[:3]
     label = SERVICE_AREA_LABEL[s["slug"]]
     body = (C.page_header(p, visual=C.sheet(s["drawing"], cls="ph__sheet", uid="-ph"),
                           actions=C.btn(f"/contact/?type={s['slug']}#quote", "Get a quote", lg=True)
-                          + C.lnk("#process", "How it comes together"),
-                          meta=[("Work", s["kind"]), ("Built", "In our Mississauga shop"),
-                                ("Area", "Within 120 km")])
+                          + C.lnk("#process", "How it comes together"))
             + C.say(s["statement"])
             + C.builds(s["builds"], "What we build", "bld-h", "Scope", None, s["intro"])
             + C.pair(a, b)
@@ -253,8 +251,6 @@ def projects():
              'no two courses line up. The top is a single slab. Both were dry fitted in the shop '
              'before anything went to site, so the install fitted inside the window the rest of '
              'the fit-out allowed.</p>'
-             + C.facts([("Scope", "Bar, back bar, shelving, counter front"),
-                        ("Built", "In our shop, dry fitted"), ("On site", "Install and finish")])
              + C.lnk("/services/restaurant-and-bar-millwork/", "Restaurant and bar millwork")
              + '</div>' + C.figure("counter", wide="50vw", cls="case__f") + '</div></section>')
     case2 = ('<section class="case case--flip" aria-labelledby="c2-h"><div class="shell case__g">'
@@ -262,8 +258,6 @@ def projects():
              + '<p>Raised panel walls, cased openings and coffered ceilings with a gilded cornice, '
              'milled to a profile taken from the original house. Every panel was laid out from the '
              'real walls so the reveals land evenly in every corner.</p>'
-             + C.facts([("Scope", "Panelling, cornice, casings, ceilings"),
-                        ("Profiles", "Matched to the original"), ("Finish", "Painted in place")])
              + C.lnk("/services/architectural-millwork/", "Architectural millwork")
              + '</div>' + C.figure("cornice", wide="50vw", cls="case__f") + '</div></section>')
     drawn = ('<section class="drawn" aria-labelledby="dr-h"><div class="shell">'
@@ -456,8 +450,7 @@ def areas_hub():
                   f"built and installed by the same team.")}
     body = (C.page_header(p, actions=C.btn("/contact/#quote", "Get a quote", lg=True))
             + C.areas_section("Every town we serve", "arx-h",
-                              "Pick a place for local detail, or find it on the map. Distances are "
-                              "straight-line from the shop.")
+                              "Pick a place for local detail, or find it on the map.")
             + C.say("Almost no wall in this region is square. That is the whole reason anything "
                     "worth fitting is templated on site.")
             + C.index_list(C.service_items(), "What we build across the region", "svc-h", "Services",
@@ -542,13 +535,9 @@ def area(pl, i):
     pool = AREA_PLATES_COM if com else AREA_PLATES
     plate = pool[i % len(pool)]
     plate2 = (AREA_PLATES if com else AREA_PLATES_COM)[(i * 3) % len((AREA_PLATES if com else AREA_PLATES_COM))]
-    if pl["kind"] == "home-base":
-        where = "Home ground. Our shop is in Malton, near Pearson."
-    else:
-        where = f'About {pl["km"]} km {pl["dir"]} of our shop'
     hood = "".join(f"<li>{E(a)}</li>" for a in pl["areas"])
     svc_items = [{"href": f"/services/{s}/", "title": SERVICE_AREA_LABEL[s].format(pl["name"]),
-                  "text": SERVICE_BY_SLUG[s]["blurb"], "tag": SERVICE_BY_SLUG[s]["kind"],
+                  "text": SERVICE_BY_SLUG[s]["blurb"],
                   "plate": SERVICE_BY_SLUG[s]["plates"][0]} for s in pl["focus"]]
     km_line = ("" if pl["kind"] == "home-base" else
                f" {pl['name']} is about {pl['km']} km from the shop, so we book the site measure, "
@@ -559,9 +548,7 @@ def area(pl, i):
                     f"install, scribe and finish it on site.{km_line}")
     body = (C.page_header(p, visual=f'<div class="ph__map">{maps.place_map(pl["slug"])}</div>',
                           actions=C.btn(f"/contact/?area={pl['slug']}#quote", "Get a quote", lg=True)
-                          + C.lnk("#local", f"Working in {pl['name']}"),
-                          meta=[("Distance", where), ("Region", f'{pl["region"]}, Ontario'),
-                                ("Work", "Residential and commercial")], tone="ph--place")
+                          + C.lnk("#local", f"Working in {pl['name']}"), tone="ph--place")
             + '<section class="loc" id="local" aria-labelledby="loc-h"><div class="shell loc__g">'
             + C.figure(plate, wide="46vw", cls="loc__f")
             + '<div class="loc__t">' + C.sec_head(pl["name"] + ", as it is built", "loc-h", "Local")
@@ -632,11 +619,8 @@ def guide(g):
          "crumbs": [("Guides", "guides"), (g["h1"], f"guides/{g['slug']}")],
          "h1": g["h1"], "lede": g["lede"]}
     art, words = C.article(g)
-    mins = max(3, round(words / 220))
     others = [x["slug"] for x in GUIDES if x["slug"] != g["slug"]][:3]
-    body = (C.page_header(p, meta=[("Reading time", f"{mins} minutes"),
-                                   ("Updated", "October 2026"), ("By", "Toronto Millworks")],
-                          tone="ph--article")
+    body = (C.page_header(p, note="By Toronto Millworks · Updated October 2026", tone="ph--article")
             + art
             + C.faq(g["faq"], h2="Quick<br> answers", map_after=False)
             + C.index_list(C.service_items(g["services"]), "Where this applies", "rel-h", "Services",
@@ -684,7 +668,7 @@ def privacy():
     ]
     g = {"h1": p["h1"], "sections": secs, "drawing": None}
     art, _ = C.article(g)
-    body = C.page_header(p, meta=[("Updated", "October 2026")], tone="ph--article") + art
+    body = C.page_header(p, note="Updated October 2026", tone="ph--article") + art
     return _page(
         **p, active="", body_class="pg-guide pg-privacy",
         title="Privacy Policy | Toronto Millworks",

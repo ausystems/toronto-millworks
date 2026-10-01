@@ -8,8 +8,8 @@
 .art__toc{ align-self:start; }
 @media (min-width:1000px){ .art__toc{ position:sticky; top:calc(var(--nav-space) + 28px); } }
 .art__toc-h{ font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-45); margin-bottom:.9em; }
-.art__toc ol{ display:grid; border-top:1px solid var(--line); }
-.art__toc a{ display:block; padding:.62em 0; border-bottom:1px solid var(--line-soft);
+.art__toc ol{ display:grid; }
+.art__toc a{ display:block; padding:.45em 0;
   font-size:13.5px; line-height:1.4; color:var(--ink-70); transition:color .3s var(--ease), padding .45s var(--ease); }
 .art__toc a:hover{ color:var(--ink); }
 .art__toc a.is-on{ color:var(--ink); padding-left:10px; box-shadow:inset 2px 0 0 var(--brass); }
