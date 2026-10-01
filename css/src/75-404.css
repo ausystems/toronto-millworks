@@ -1,0 +1,41 @@
+/* ══════════════════════════════════════════════════════════════
+   404
+   A panelled wall in raking light with one panel missing. The light follows
+   the pointer the way a joiner tilts a lamp to read a surface. Without
+   WebGL the same wall is drawn instead.
+   ══════════════════════════════════════════════════════════════ */
+.pg-404 .nav-wrap{ background:transparent; }
+.nf{
+  position:relative; isolation:isolate; overflow:hidden;
+  min-height:calc(100svh - var(--nav-space));
+  margin:calc(var(--gutter) * .62) var(--gutter) 0; border-radius:var(--radius);
+  background:#ECE6DC; display:grid; align-items:end;
+}
+.nf__stage{ position:absolute; inset:0; z-index:-1; }
+.nf__cv{ position:absolute; inset:0; width:100%; height:100%; display:block; opacity:0; transition:opacity 1.2s var(--ease); }
+.nf.is-3d .nf__cv{ opacity:1; }
+.nf__fallback{ position:absolute; inset:6% 4% 6% 42%; display:grid; place-items:center; opacity:.9; transition:opacity .8s var(--ease); }
+.nf.is-3d .nf__fallback{ opacity:0; }
+.nf::after{ content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+  background:linear-gradient(90deg, rgba(236,230,220,.96) 0%, rgba(236,230,220,.82) 32%, rgba(236,230,220,0) 62%); }
+.nf__g{ position:relative; padding-block:clamp(40px,6vw,96px); }
+.nf__t{ max-width:min(640px, 100%); }
+.nf__code{ font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--brass-dk); }
+.nf__h{ margin-top:.5em; font-size:clamp(2.6rem,6.4vw,6.2rem); font-weight:400; line-height:.98; letter-spacing:-.048em; text-wrap:balance; }
+.nf__l{ margin-top:clamp(16px,1.8vw,26px); font-size:clamp(1rem,1.4vw,1.3rem); line-height:1.55; color:var(--ink-70); max-width:40ch; }
+.nf__s{ position:relative; margin-top:clamp(24px,2.8vw,40px); max-width:460px; }
+.nf__s input{ width:100%; padding:.95em 56px .95em 1.2em; border:1px solid rgba(23,20,15,.16); border-radius:999px;
+  background:rgba(255,255,255,.72); font-size:15px; transition:border-color .3s var(--ease), background-color .3s var(--ease); }
+.nf__s input:focus{ outline:none; border-color:var(--brass); background:#fff; }
+.nf__s button{ position:absolute; right:6px; top:50%; transform:translateY(-50%); width:40px; height:40px;
+  display:grid; place-items:center; border-radius:50%; background:var(--ink); color:#fff; }
+.nf__s button svg{ width:40%; }
+.nf__a{ margin-top:clamp(20px,2.4vw,32px); }
+.nf__links{ display:flex; flex-wrap:wrap; gap:.4em 1.4em; margin-top:clamp(26px,3vw,44px); padding-top:1.1em; border-top:1px solid rgba(23,20,15,.14); }
+.nf__links a{ font-size:14px; color:var(--ink-70); border-bottom:1px solid transparent; transition:color .3s var(--ease), border-color .3s var(--ease); }
+.nf__links a:hover{ color:var(--ink); border-bottom-color:var(--brass); }
+@media (max-width:860px){
+  .nf{ align-items:end; }
+  .nf::after{ background:linear-gradient(0deg, rgba(236,230,220,.98) 0%, rgba(236,230,220,.9) 44%, rgba(236,230,220,0) 78%); }
+  .nf__fallback{ inset:4% 6% 52% 6%; }
+}

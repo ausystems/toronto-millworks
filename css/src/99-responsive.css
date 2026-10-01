@@ -1,0 +1,89 @@
+@media (max-width:860px){
+  .nav__burger{ display:grid; }
+
+  .nav__menu{
+    display:none;
+    position:absolute; top:calc(100% + 8px); left:0; right:0;
+    padding:8px;
+    background:var(--paper);
+    border:1px solid var(--line-soft);
+    border-radius:20px;
+    box-shadow:var(--shadow-nav);
+  }
+  .nav__menu.is-shown{ display:block; }
+
+  .nav__links{ flex-direction:column; align-items:stretch; gap:0; margin:0; }
+  .nav__links a{ padding:13px 14px; font-size:15px; }
+  .nav__links li + li{ border-top:1px solid var(--line-soft); }
+
+  .nav__cta{ display:flex; justify-content:center; margin:8px 0 0; }
+
+  .hero{ height:auto; min-height:var(--hero-cap); }
+  .hero__right{ flex:0 1 auto; }
+  .hero__body{ flex-direction:column; align-items:flex-start; justify-content:flex-end; gap:clamp(20px,4vw,30px); }
+  .hero__right{ align-items:flex-start; text-align:left; max-width:46ch; }
+  .hero__media img{ object-position:center 46%; }
+
+  .about__inner{ grid-template-columns:1fr; gap:clamp(18px,3vw,26px); }
+  .about__label{ padding-top:0; }
+
+  .band__inner{ grid-template-columns:1fr; gap:clamp(16px,3vw,24px); align-items:start; }
+  .band__title{ max-width:18ch; }
+
+  /* both indexes stack, and the standing column stops standing */
+  .faq__grid, .map__grid{ grid-template-columns:1fr; gap:clamp(22px,4vw,34px); }
+  .faq__aside{ position:static; }
+  .faq__h, .map__h{ font-size:clamp(1.85rem,7.4vw,2.6rem); }
+  .faq__h br, .map__h br{ display:none; }
+  .faq__note, .map__note{ max-width:44ch; }
+  .faq__q-t{ max-width:none; }
+  .faq__a{ padding-right:clamp(18px,6vw,44px); }
+  /* a 16:10 letterbox is not a map once the column stacks */
+  .map__frame{ aspect-ratio:4/3; }
+
+  /* a full-height cover crop of a 16:9 plate throws away most of the width on a
+     portrait screen, cap the band so the crop stays sane */
+  /* the band takes the frames' own 16:9, so the cover fit has nothing to
+     discard and a phone sees the whole frame edge to edge, uncropped */
+  .reel{ --reel-media-h: calc(100vw * 9 / 16); }
+
+  .craft{
+    grid-template-columns:1fr;
+    gap:clamp(26px,5vw,40px);
+    padding:clamp(54px,8vw,84px) 0 clamp(88px,15vw,124px);
+  }
+  .craft__media{ border-radius:0; }
+  .craft__body{ padding-inline:var(--shell-pad); max-width:none; }
+
+  .cx__grid{ grid-template-columns:1fr; gap:clamp(30px,5vw,44px); }
+  .cx__steps{ grid-template-columns:1fr; gap:clamp(22px,4vw,32px); }
+  .cx__title{ max-width:none; }
+  .contact__grid{ grid-template-columns:1fr; gap:clamp(16px,3vw,24px); }
+
+  .foot__main{ grid-template-columns:1fr; gap:clamp(36px,6vw,52px); }
+  .foot__stats{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .foot__rule{ flex-direction:column; align-items:flex-start; gap:5px; line-height:1.5; }
+  .foot__coord, .foot__note{ white-space:normal; }
+  .foot__wordmark--wide{ display:none; }
+  .foot__wordmark--stack{ display:block; }
+}
+
+@media (max-width:560px){
+  .hero{ min-height:var(--hero-cap); }
+  .map__frame{ aspect-ratio:1/1; }
+  .foot__reach{ grid-template-columns:1fr; gap:22px; }
+  .foot__index .m{ display:none; }        /* keeps the row on one line at 320px */
+  .foot__index a{ grid-template-columns:26px minmax(0,1fr); }
+}
+
+/* a pinned, scroll-driven sequence is exactly what reduced-motion asks you not
+   to do, collapse the track and show a single finished frame instead */
+@media (prefers-reduced-motion:reduce){
+  .reel__track{ height:auto; }
+  .reel__pin{ position:static; height:auto; padding:clamp(40px,5vw,72px) 0; }
+  .reel__media{ height:min(66vh, 62vw); }
+  .faq__ico::before, .faq__ico::after{ transition:none; }
+  .faq__row::after, .faq__q-t, .map__embed{ transition:none; }
+  .btn, .btn > span, .btn__arrow{ transition:none; }
+}
+

@@ -1,0 +1,104 @@
+/* ══════════════════════════════════════════════════════════════
+   NAV
+   ══════════════════════════════════════════════════════════════ */
+.nav-wrap{
+  position:sticky; top:0; z-index:60;
+  padding:var(--gutter) var(--gutter) 0;
+  background:var(--paper);
+}
+.nav{
+  position:relative;
+  display:flex; align-items:center; gap:clamp(16px,2vw,34px);
+  height:var(--nav-h);
+  padding:0 6px 0 clamp(14px,1.5vw,22px);
+  border-radius:999px;
+  background:var(--paper);
+  border:1px solid var(--line-soft);
+  box-shadow:var(--shadow-nav);
+}
+
+.nav__menu{ display:contents; }   /* desktop: children stay direct flex items of .nav */
+
+.brand{ display:inline-flex; align-items:center; gap:.6em; flex:none; }
+.brand__mark{ display:block; width:clamp(26px,2.2vw,32px); color:var(--ink); }
+.brand__mark svg{ width:100%; height:auto; }
+.brand__name{
+  font-size:clamp(14.5px,1.18vw,17px);
+  font-weight:600;
+  letter-spacing:-.022em;
+}
+
+.nav__links{
+  display:flex; align-items:center; gap:clamp(14px,1.85vw,30px);
+  margin-inline:auto;
+}
+.nav__links a{
+  display:inline-flex; align-items:center; gap:.34em;
+  font-size:clamp(12.5px,1vw,14px);
+  font-weight:500;
+  letter-spacing:-.008em;
+  color:var(--ink-70);
+  transition:color .25s var(--ease);
+}
+.nav__links a:hover,
+.nav__links a.is-active{ color:var(--ink); }
+
+.nav__cta{ flex:none; margin-left:auto; }
+.nav__links + .nav__cta{ margin-left:0; }
+
+.nav__burger{
+  display:none; flex:none;
+  width:40px; height:40px; margin-left:auto;
+  place-items:center; align-content:center; gap:5px;
+}
+.nav__burger span{
+  display:block; width:17px; height:1.6px; border-radius:2px; background:var(--ink);
+  transition:transform .4s var(--ease), opacity .3s var(--ease);
+}
+.nav.is-open .nav__burger span:first-child{ transform:translateY(3.3px) rotate(45deg); }
+.nav.is-open .nav__burger span:last-child{ transform:translateY(-3.3px) rotate(-45deg); }
+
+
+/* ── services menu ───────────────────────────────────────────
+   Desktop: hovering Services, or pressing the caret beside it, opens a
+   panel under the nav with every service and a line on each. The Services
+   link itself still goes to the hub. */
+.nav-wrap{ view-transition-name:nav; }
+.has-sub{ position:static; display:flex; align-items:center; gap:.2em; }
+.nav__caret{
+  display:grid; place-items:center; width:22px; height:22px; margin-left:-2px;
+  border-radius:50%; color:var(--ink-45); transition:color .25s var(--ease), background-color .25s var(--ease);
+}
+.nav__caret i{
+  width:.42em; height:.42em; margin-top:-.2em;
+  border-right:1.4px solid currentColor; border-bottom:1.4px solid currentColor;
+  transform:rotate(45deg); transition:transform .45s var(--ease);
+}
+.nav__caret:hover{ color:var(--ink); background:var(--paper-2); }
+.has-sub.is-open .nav__caret i{ transform:translateY(.18em) rotate(225deg); }
+
+.nsub{
+  position:absolute; left:0; right:0; top:calc(100% + 10px); z-index:5;
+  padding:clamp(18px,1.8vw,28px);
+  background:var(--paper); border:1px solid var(--line-soft); border-radius:calc(var(--radius) + 2px);
+  box-shadow:0 1px 2px rgba(23,20,15,.05), 0 30px 60px -30px rgba(23,20,15,.35);
+  opacity:0; visibility:hidden; transform:translateY(-8px);
+  transition:opacity .35s var(--ease), transform .45s var(--ease), visibility 0s linear .45s;
+}
+.has-sub.is-open .nsub{ opacity:1; visibility:visible; transform:none;
+  transition:opacity .35s var(--ease), transform .45s var(--ease), visibility 0s; }
+.nsub__in{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,15rem); gap:clamp(18px,2.4vw,40px); }
+.nsub__list{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:2px clamp(12px,1.6vw,26px); }
+.nsub__a{
+  display:flex; flex-direction:column; gap:.18em; padding:.85em .95em; border-radius:14px;
+  transition:background-color .3s var(--ease);
+}
+.nsub__a:hover, .nsub__a:focus-visible{ background:var(--paper-2); }
+.nsub__t{ font-size:clamp(14px,1.08vw,16px); font-weight:500; letter-spacing:-.016em; color:var(--ink); }
+.nsub__d{ font-size:clamp(12px,.9vw,13.5px); line-height:1.45; color:var(--ink-45); }
+.nsub__aside{ display:flex; flex-direction:column; align-items:flex-start; gap:.3em;
+  padding:1em 0 1em clamp(16px,2vw,32px); border-left:1px solid var(--line-soft); }
+.nsub__k{ font-size:clamp(12.5px,.95vw,14px); line-height:1.5; color:var(--ink-70); margin-bottom:.8em; max-width:24ch; }
+.nsub__more{ font-size:clamp(13px,1vw,14.5px); font-weight:500; color:var(--ink);
+  padding:.2em 0; border-bottom:1px solid transparent; transition:border-color .3s var(--ease); }
+.nsub__more:hover{ border-bottom-color:var(--brass); }

@@ -1,0 +1,14 @@
+/* ══════════════════════════════════════════════════════════════
+   REVEAL
+   ══════════════════════════════════════════════════════════════ */
+.rv{ opacity:0; transform:translateY(18px); }
+.rv-on{ opacity:1; transform:none; transition:opacity 1s var(--ease), transform 1s var(--ease); }
+@media (prefers-reduced-motion:reduce){
+  .rv{ opacity:1; transform:none; }
+  .hero__media img{ animation:none; transform:none; }
+  *,*::before,*::after{ animation-duration:.01ms !important; transition-duration:.01ms !important; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════════════════ */

@@ -1,0 +1,49 @@
+/* ══════════════════════════════════════════════════════════════
+   MAPS
+   Drawn from data in kilometres around the shop. Same --dws trick as the
+   shop drawings: labels and strokes hold their pixel size at any width.
+   ══════════════════════════════════════════════════════════════ */
+.mp{ --dws: 2.3; display:block; width:100%; height:auto; overflow:hidden; font-family:inherit; }
+.mp .mp-bg{ fill:var(--paper); }
+.mp .mp-lake{ fill:#EFEAE1; stroke:#D9D0C2; stroke-width:calc(.8px / var(--dws)); stroke-linejoin:round; }
+.mp .mp-water{
+  fill:#A99C88; font-size:calc(9px / var(--dws)); font-style:italic;
+  letter-spacing:.08em;
+}
+.mp .mp-ring{
+  fill:none; stroke:var(--line); stroke-width:calc(.8px / var(--dws));
+  stroke-dasharray:calc(2px / var(--dws)) calc(4px / var(--dws));
+}
+.mp .mp-ring--edge{ stroke:var(--brass); stroke-dasharray:none; stroke-width:calc(1px / var(--dws)); opacity:.7; }
+.mp .mp-rl{ fill:var(--ink-45); font-size:calc(8.4px / var(--dws)); letter-spacing:.06em; font-variant-numeric:tabular-nums; }
+.mp .mp-dot{ fill:var(--ink); transition:fill .3s var(--ease); }
+.mp .mp-dot--far{ fill:var(--ink-45); }
+.mp .mp-hit{ fill:transparent; }
+.mp .mp-town{ cursor:pointer; }
+.mp .mp-name{
+  fill:var(--ink-70); font-size:calc(9.4px / var(--dws)); letter-spacing:.01em;
+  transition:fill .3s var(--ease);
+}
+.mp .mp-name--town{ fill:var(--ink); font-weight:600; font-size:calc(11px / var(--dws)); }
+.mp .mp-shopl{ fill:var(--brass-dk); font-size:calc(9.4px / var(--dws)); font-weight:600; letter-spacing:.04em; }
+.mp .mp-core{ fill:var(--brass); }
+.mp .mp-core--town{ fill:var(--ink); }
+.mp .mp-halo{ fill:none; stroke:var(--brass); stroke-width:calc(1px / var(--dws)); opacity:.55; }
+.mp .mp-route{
+  stroke:var(--brass); stroke-width:calc(1.4px / var(--dws)); stroke-linecap:round;
+  stroke-dasharray:calc(1px / var(--dws)) calc(5px / var(--dws));
+}
+.mp .mp-km{ fill:var(--brass-dk); font-size:calc(10px / var(--dws)); font-weight:600; letter-spacing:.04em; }
+.mp .mp-n{ fill:var(--ink); }
+.mp .mp-scale{ stroke:var(--ink); stroke-width:calc(1px / var(--dws)); }
+.mp[data-small] .mp-minor{ display:none; }
+
+/* a town under the pointer, or under keyboard focus in the list beside it */
+.mp .mp-town:hover .mp-dot, .mp .mp-town.is-on .mp-dot{ fill:var(--brass); }
+.mp .mp-name.is-on{ fill:var(--brass-dk); }
+
+@media (prefers-reduced-motion:no-preference){
+  .mp .mp-shop .mp-halo{ transform-origin:0 0; animation:mpPulse 3.2s var(--ease) infinite; }
+}
+@keyframes mpPulse{ 0%{ transform:scale(.7); opacity:.8; } 100%{ transform:scale(2.4); opacity:0; } }
+.mp .mp-name--far{ fill:var(--ink-45); font-size:calc(8.6px / var(--dws)); }

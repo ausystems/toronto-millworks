@@ -51,6 +51,30 @@ PLATES = {
                    "The finished bar with counter, shelving and equipment in place"),
     "counter":    (118, 0.44, 0.78, 0.42,
                    "Reclaimed timber boards laid up in a running bond on the bar front"),
+
+    # second pass: details the first set never reached
+    "frieze":     ("resi", 0.70, 0.13, 0.18,
+                   "Gilded ornamental frieze running along a lit tray ceiling"),
+    "cove":       ("resi", 0.80, 0.56, 0.22,
+                   "Cove lighting glowing in the tray ceiling of the next room, seen through a cased opening"),
+    "pot-light":  ("resi", 0.60, 0.42, 0.20,
+                   "A recessed light set into a moulded ceiling beam"),
+    "plinth":     ("resi", 0.36, 0.94, 0.16,
+                   "Raised panel moulding meeting the baseboard and a timber floor"),
+    "transom":    ("resi", 0.55, 0.80, 0.40,
+                   "A glazed door with a transom light, framed by casing and panelling"),
+    "panel-detail": ("resi", 0.31, 0.70, 0.24,
+                   "Applied mouldings forming a tall raised wall panel"),
+    "pendants":   (118, 0.62, 0.20, 0.48,
+                   "Brass pendant lights hung from exposed conduit over a bar"),
+    "espresso":   (118, 0.46, 0.55, 0.50,
+                   "An espresso machine and grinders on a timber clad service counter"),
+    "shelving":   (118, 0.80, 0.45, 0.55,
+                   "Floating timber shelves on a black back bar wall"),
+    "lounge":     (118, 0.18, 0.72, 0.56,
+                   "A lounge corner against exposed brick beside the bar"),
+    "pipes":      (118, 0.16, 0.36, 0.62,
+                   "Exposed brick with black iron pipework, kept as part of the finished room"),
 }
 
 ASPECTS = {
@@ -105,6 +129,22 @@ def main():
         print(f"  {name:<14} done")
 
     print(f"\n{len(os.listdir(OUT))} files, {total/1e6:.1f} MB -> assets/img/lib")
+
+    # blur-up placeholders, inlined by the generator as the figure's background
+    import base64, io, json
+    lqip = {}
+    for name, (src, fx, fy, cover, _alt) in PLATES.items():
+        im = resi if src == "resi" else cache[os.path.join(SEQ, f"{src:03d}.webp")]
+        W, H = im.size
+        for key, (aspect, _w) in ASPECTS.items():
+            crop = im.crop(box(W, H, fx, fy, cover, aspect))
+            tiny = crop.resize((24, round(24 / aspect)), Image.LANCZOS)
+            buf = io.BytesIO()
+            tiny.save(buf, "WEBP", quality=40, method=6)
+            lqip[f"{name}-{key}"] = "data:image/webp;base64," + base64.b64encode(buf.getvalue()).decode()
+    json.dump(lqip, open(os.path.join(ROOT, "scripts", "data", "lqip.json"), "w"), indent=0)
+    print(f"{len(lqip)} placeholders -> scripts/data/lqip.json, "
+          f"{sum(len(v) for v in lqip.values()) // 1024} KB")
 
 
 if __name__ == "__main__":

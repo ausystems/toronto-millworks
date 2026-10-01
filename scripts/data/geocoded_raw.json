@@ -1,0 +1,514 @@
+[
+ {
+  "name": "Toronto",
+  "q": "Toronto, Ontario",
+  "lat": 43.65348,
+  "lon": -79.38393,
+  "km": 22.7,
+  "display": "Toronto, Ontario, Canada"
+ },
+ {
+  "name": "North York",
+  "q": "North York, Toronto, Ontario",
+  "lat": 43.75432,
+  "lon": -79.44911,
+  "km": 17.8,
+  "display": "North York, Toronto, Ontario, Canada"
+ },
+ {
+  "name": "Etobicoke",
+  "q": "Etobicoke, Toronto, Ontario",
+  "lat": 43.64356,
+  "lon": -79.56563,
+  "km": 9.8,
+  "display": "Etobicoke, Toronto, Ontario, Canada"
+ },
+ {
+  "name": "Scarborough",
+  "q": "Scarborough, Toronto, Ontario",
+  "lat": 43.77297,
+  "lon": -79.25765,
+  "km": 33.1,
+  "display": "Scarborough, Toronto, Ontario, Canada"
+ },
+ {
+  "name": "East York",
+  "q": "East York, Toronto, Ontario",
+  "lat": 43.69997,
+  "lon": -79.33252,
+  "km": 26.1,
+  "display": "East York, Toronto, Ontario, Canada"
+ },
+ {
+  "name": "Mississauga",
+  "q": "Mississauga, Ontario",
+  "lat": 43.58847,
+  "lon": -79.64366,
+  "km": 12.6,
+  "display": "Mississauga, Peel Region, Ontario, Canada"
+ },
+ {
+  "name": "Brampton",
+  "q": "Brampton, Ontario",
+  "lat": 43.68583,
+  "lon": -79.75994,
+  "km": 8.4,
+  "display": "Brampton, Peel Region, Ontario, Canada"
+ },
+ {
+  "name": "Caledon",
+  "q": "Bolton, Caledon, Ontario",
+  "lat": 43.87955,
+  "lon": -79.73826,
+  "km": 20.8,
+  "display": "Bolton, Caledon, Peel Region, Ontario, L7E 1C8, Canada"
+ },
+ {
+  "name": "Oakville",
+  "q": "Oakville, Ontario",
+  "lat": 43.44744,
+  "lon": -79.66667,
+  "km": 28.3,
+  "display": "Oakville, Halton Region, Ontario, Canada"
+ },
+ {
+  "name": "Burlington",
+  "q": "Burlington, Ontario",
+  "lat": 43.32489,
+  "lon": -79.79668,
+  "km": 43.4,
+  "display": "Burlington, Halton Region, Ontario, Canada"
+ },
+ {
+  "name": "Milton",
+  "q": "Milton, Ontario",
+  "lat": 43.51367,
+  "lon": -79.88282,
+  "km": 27.7,
+  "display": "Milton, Halton Region, Ontario, Canada"
+ },
+ {
+  "name": "Halton Hills",
+  "q": "Georgetown, Halton Hills, Ontario",
+  "lat": 43.65538,
+  "lon": -79.91904,
+  "km": 21.6,
+  "display": "Georgetown, St Michaels Street, Georgetown, Halton Hills, Halton Region, Ontario, L7G 0P7,"
+ },
+ {
+  "name": "Hamilton",
+  "q": "Hamilton, Ontario",
+  "lat": 43.25608,
+  "lon": -79.87286,
+  "km": 52.5,
+  "display": "Hamilton, Ontario, Canada"
+ },
+ {
+  "name": "Ancaster",
+  "q": "Ancaster, Hamilton, Ontario",
+  "lat": 43.22569,
+  "lon": -79.97669,
+  "km": 58.8,
+  "display": "Ancaster, St. John's, Hamilton, Ontario, L9G 2B9, Canada"
+ },
+ {
+  "name": "Stoney Creek",
+  "q": "Stoney Creek, Hamilton, Ontario",
+  "lat": 43.21675,
+  "lon": -79.75676,
+  "km": 54.5,
+  "display": "Stoney Creek, Hamilton, Ontario, Canada"
+ },
+ {
+  "name": "Dundas",
+  "q": "Dundas, Hamilton, Ontario",
+  "lat": 43.26619,
+  "lon": -79.95463,
+  "km": 54.0,
+  "display": "Dundas, Central Business District, Hamilton, Ontario, L9H 1T7, Canada"
+ },
+ {
+  "name": "Waterdown",
+  "q": "Waterdown, Hamilton, Ontario",
+  "lat": 43.33142,
+  "lon": -79.89568,
+  "km": 45.4,
+  "display": "Waterdown, Hamilton, Ontario, L0R 2M0, Canada"
+ },
+ {
+  "name": "Grimsby",
+  "q": "Grimsby, Ontario",
+  "lat": 43.19317,
+  "lon": -79.56068,
+  "km": 57.1,
+  "display": "Grimsby, Niagara Region, Ontario, Canada"
+ },
+ {
+  "name": "Lincoln",
+  "q": "Beamsville, Lincoln, Ontario",
+  "lat": 43.16546,
+  "lon": -79.47518,
+  "km": 61.4,
+  "display": "Beamsville, Lincoln, Niagara Region, Ontario, L0R 1B0, Canada"
+ },
+ {
+  "name": "St. Catharines",
+  "q": "St. Catharines, Ontario",
+  "lat": 43.15798,
+  "lon": -79.2441,
+  "km": 69.1,
+  "display": "St. Catharines, Niagara Region, Ontario, Canada"
+ },
+ {
+  "name": "Niagara-on-the-Lake",
+  "q": "Niagara-on-the-Lake, Ontario",
+  "lat": 43.25561,
+  "lon": -79.07233,
+  "km": 68.5,
+  "display": "Niagara-on-the-Lake, Niagara Region, Ontario, Canada"
+ },
+ {
+  "name": "Niagara Falls",
+  "q": "Niagara Falls, Ontario, Canada",
+  "lat": 43.10656,
+  "lon": -79.0639,
+  "km": 81.7,
+  "display": "Niagara Falls, Niagara Region, Ontario, Canada"
+ },
+ {
+  "name": "Welland",
+  "q": "Welland, Ontario",
+  "lat": 42.99222,
+  "lon": -79.24842,
+  "km": 85.5,
+  "display": "Welland, Niagara Region, Ontario, Canada"
+ },
+ {
+  "name": "Thorold",
+  "q": "Thorold, Ontario",
+  "lat": 43.12491,
+  "lon": -79.20059,
+  "km": 74.0,
+  "display": "Thorold, Niagara Region, Ontario, Canada"
+ },
+ {
+  "name": "Fort Erie",
+  "q": "Fort Erie, Ontario",
+  "lat": 42.91308,
+  "lon": -78.91861,
+  "km": 106.1,
+  "display": "Fort Erie, Niagara Region, Ontario, Canada"
+ },
+ {
+  "name": "Port Colborne",
+  "q": "Port Colborne, Ontario",
+  "lat": 42.88624,
+  "lon": -79.25139,
+  "km": 96.4,
+  "display": "Port Colborne, Niagara Region, Ontario, Canada"
+ },
+ {
+  "name": "Vaughan",
+  "q": "Vaughan, Ontario",
+  "lat": 43.79415,
+  "lon": -79.5268,
+  "km": 14.7,
+  "display": "Vaughan, York Region, Ontario, Canada"
+ },
+ {
+  "name": "Richmond Hill",
+  "q": "Richmond Hill, Ontario",
+  "lat": 43.88012,
+  "lon": -79.43929,
+  "km": 26.5,
+  "display": "Richmond Hill, York Region, Ontario, Canada"
+ },
+ {
+  "name": "Markham",
+  "q": "Markham, Ontario",
+  "lat": 43.85637,
+  "lon": -79.33768,
+  "km": 30.9,
+  "display": "Markham, York Region, Ontario, Canada"
+ },
+ {
+  "name": "Aurora",
+  "q": "Aurora, Ontario",
+  "lat": 43.99973,
+  "lon": -79.46755,
+  "km": 36.5,
+  "display": "Aurora, York Region, Ontario, Canada"
+ },
+ {
+  "name": "Newmarket",
+  "q": "Newmarket, Ontario",
+  "lat": 44.05626,
+  "lon": -79.46171,
+  "km": 42.5,
+  "display": "Newmarket, York Region, Ontario, Canada"
+ },
+ {
+  "name": "King",
+  "q": "King City, Ontario",
+  "lat": 43.92949,
+  "lon": -79.52523,
+  "km": 27.5,
+  "display": "King City, King, York Region, Ontario, L7B 1A2, Canada"
+ },
+ {
+  "name": "Whitchurch-Stouffville",
+  "q": "Stouffville, Ontario",
+  "lat": 43.97176,
+  "lon": -79.24544,
+  "km": 44.7,
+  "display": "Stouffville, Whitchurch-Stouffville, York Region, Ontario, L4A 1E3, Canada"
+ },
+ {
+  "name": "East Gwillimbury",
+  "q": "Sharon, East Gwillimbury, Ontario",
+  "lat": 44.10225,
+  "lon": -79.43199,
+  "km": 48.1,
+  "display": "Sharon, East Gwillimbury, York Region, Ontario, L0G 1V0, Canada"
+ },
+ {
+  "name": "Georgina",
+  "q": "Keswick, Georgina, Ontario",
+  "lat": 44.23962,
+  "lon": -79.46866,
+  "km": 61.7,
+  "display": "Keswick, Georgina, York Region, Ontario, L4P 3W8, Canada"
+ },
+ {
+  "name": "Pickering",
+  "q": "Pickering, Ontario",
+  "lat": 43.83577,
+  "lon": -79.09058,
+  "km": 47.9,
+  "display": "Pickering, Durham Region, Ontario, Canada"
+ },
+ {
+  "name": "Ajax",
+  "q": "Ajax, Ontario",
+  "lat": 43.85053,
+  "lon": -79.02088,
+  "km": 53.7,
+  "display": "Ajax, Durham Region, Ontario, Canada"
+ },
+ {
+  "name": "Whitby",
+  "q": "Whitby, Ontario",
+  "lat": 43.87982,
+  "lon": -78.94218,
+  "km": 60.8,
+  "display": "Whitby, Durham Region, Ontario, Canada"
+ },
+ {
+  "name": "Oshawa",
+  "q": "Oshawa, Ontario",
+  "lat": 43.89756,
+  "lon": -78.86353,
+  "km": 67.4,
+  "display": "Oshawa, Durham Region, Ontario, Canada"
+ },
+ {
+  "name": "Clarington",
+  "q": "Bowmanville, Clarington, Ontario",
+  "lat": 43.9123,
+  "lon": -78.68917,
+  "km": 81.2,
+  "display": "Bowmanville, Clarington, Durham Region, Ontario, L1C 1N2, Canada"
+ },
+ {
+  "name": "Uxbridge",
+  "q": "Uxbridge, Ontario",
+  "lat": 44.10885,
+  "lon": -79.12268,
+  "km": 62.4,
+  "display": "Uxbridge, Durham Region, Ontario, Canada"
+ },
+ {
+  "name": "Scugog",
+  "q": "Port Perry, Scugog, Ontario",
+  "lat": 44.10542,
+  "lon": -78.94251,
+  "km": 72.8,
+  "display": "Port Perry, Scugog, Durham Region, Ontario, L9L 1B8, Canada"
+ },
+ {
+  "name": "Bradford West Gwillimbury",
+  "q": "Bradford, Ontario",
+  "lat": 44.11713,
+  "lon": -79.55601,
+  "km": 46.9,
+  "display": "Bradford, 300, Holland Street East, Bradford, Bradford West Gwillimbury, Simcoe County, Ce"
+ },
+ {
+  "name": "Innisfil",
+  "q": "Alcona, Innisfil, Ontario",
+  "lat": 44.31149,
+  "lon": -79.56625,
+  "km": 68.2,
+  "display": "Alcona Glen Elementary School, 1310, Innisfil Beach Road, Innisfil, Simcoe County, Central"
+ },
+ {
+  "name": "Barrie",
+  "q": "Barrie, Ontario",
+  "lat": 44.38932,
+  "lon": -79.69013,
+  "km": 76.5,
+  "display": "Barrie, Central Ontario, Ontario, Canada"
+ },
+ {
+  "name": "New Tecumseth",
+  "q": "Alliston, New Tecumseth, Ontario",
+  "lat": 44.15394,
+  "lon": -79.86923,
+  "km": 53.1,
+  "display": "Alliston, New Tecumseth, Simcoe County, Central Ontario, Ontario, L9R 1A0, Canada"
+ },
+ {
+  "name": "Orangeville",
+  "q": "Orangeville, Ontario",
+  "lat": 43.91932,
+  "lon": -80.09738,
+  "km": 42.8,
+  "display": "Orangeville, Dufferin County, Central Ontario, Ontario, Canada"
+ },
+ {
+  "name": "Guelph",
+  "q": "Guelph, Ontario",
+  "lat": 43.54605,
+  "lon": -80.24933,
+  "km": 50.7,
+  "display": "Guelph, Southwestern Ontario, Ontario, Canada"
+ },
+ {
+  "name": "Centre Wellington",
+  "q": "Fergus, Ontario",
+  "lat": 43.70594,
+  "lon": -80.37794,
+  "km": 57.9,
+  "display": "Fergus, Centre Wellington, Wellington County, Southwestern Ontario, Ontario, N1M 2J6, Cana"
+ },
+ {
+  "name": "Kitchener",
+  "q": "Kitchener, Ontario",
+  "lat": 43.45129,
+  "lon": -80.49278,
+  "km": 72.8,
+  "display": "Kitchener, Region of Waterloo, Southwestern Ontario, Ontario, Canada"
+ },
+ {
+  "name": "Waterloo",
+  "q": "Waterloo, Ontario",
+  "lat": 43.46527,
+  "lon": -80.5223,
+  "km": 74.4,
+  "display": "Waterloo, Region of Waterloo, Southwestern Ontario, Ontario, Canada"
+ },
+ {
+  "name": "Cambridge",
+  "q": "Cambridge, Ontario",
+  "lat": 43.36005,
+  "lon": -80.3123,
+  "km": 65.0,
+  "display": "Cambridge, Region of Waterloo, Southwestern Ontario, Ontario, Canada"
+ },
+ {
+  "name": "Brantford",
+  "q": "Brantford, Ontario",
+  "lat": 43.14082,
+  "lon": -80.26317,
+  "km": 79.2,
+  "display": "Brantford, Southwestern Ontario, Ontario, Canada"
+ },
+ {
+  "name": "Paris",
+  "q": "Paris, Brant, Ontario",
+  "lat": 43.19323,
+  "lon": -80.38428,
+  "km": 81.5,
+  "display": "Paris, Brant County, Southwestern Ontario, Ontario, N3L 2M3, Canada"
+ },
+ {
+  "name": "Caledonia",
+  "q": "Caledonia, Haldimand, Ontario",
+  "lat": 43.07379,
+  "lon": -79.95191,
+  "km": 73.7,
+  "display": "Caledonia, Haldimand County, Southwestern Ontario, Ontario, N3W 1C1, Canada"
+ },
+ {
+  "name": "Collingwood",
+  "q": "Collingwood, Ontario",
+  "lat": 44.50272,
+  "lon": -80.21724,
+  "km": 99.7,
+  "display": "Collingwood, Simcoe County, Central Ontario, Ontario, Canada"
+ },
+ {
+  "name": "Wasaga Beach",
+  "q": "Wasaga Beach, Ontario",
+  "lat": 44.52248,
+  "lon": -80.02032,
+  "km": 95.8,
+  "display": "Wasaga Beach, Simcoe County, Central Ontario, Ontario, Canada"
+ },
+ {
+  "name": "Orillia",
+  "q": "Orillia, Ontario",
+  "lat": 44.60661,
+  "lon": -79.41693,
+  "km": 102.5,
+  "display": "Orillia, Central Ontario, Ontario, Canada"
+ },
+ {
+  "name": "Port Hope",
+  "q": "Port Hope, Ontario",
+  "lat": 43.95158,
+  "lon": -78.29397,
+  "km": 112.9,
+  "display": "Port Hope, Northumberland County, Central Ontario, Ontario, Canada"
+ },
+ {
+  "name": "Cobourg",
+  "q": "Cobourg, Ontario",
+  "lat": 43.9596,
+  "lon": -78.16778,
+  "km": 122.9,
+  "display": "Cobourg, Northumberland County, Central Ontario, Ontario, Canada"
+ },
+ {
+  "name": "Shelburne",
+  "q": "Shelburne, Ontario",
+  "lat": 44.07847,
+  "lon": -80.20343,
+  "km": 60.6,
+  "display": "Shelburne, Dufferin County, Central Ontario, Ontario, Canada"
+ },
+ {
+  "name": "Erin",
+  "q": "Erin, Ontario",
+  "lat": 43.77506,
+  "lon": -80.07008,
+  "km": 34.1,
+  "display": "Erin, Wellington County, Southwestern Ontario, Ontario, Canada"
+ },
+ {
+  "name": "Puslinch",
+  "q": "Aberfoyle, Puslinch, Ontario",
+  "lat": 43.4716,
+  "lon": -80.14956,
+  "km": 47.2,
+  "display": "Aberfoyle, Puslinch, Wellington County, Southwestern Ontario, Ontario, N1H 6H9, Canada"
+ },
+ {
+  "name": "Halton Region Acton",
+  "q": "Acton, Halton Hills, Ontario",
+  "lat": 43.63407,
+  "lon": -80.03511,
+  "km": 31.3,
+  "display": "Acton, Young Street, Acton, Halton Region, Ontario, L7J 2E6, Canada"
+ }
+]

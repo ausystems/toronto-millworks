@@ -1,0 +1,188 @@
+/* ══════════════════════════════════════════════════════════════
+   FOOTER
+   Deep brass ground, white type. The gradient is kept dark enough that
+   plain white clears 5.4:1 at the lightest point and 7.2:1 at the darkest,
+   so every line here passes AA, nothing is dimmed to the point of fading.
+   ══════════════════════════════════════════════════════════════ */
+.foot{
+  --f-pad:   clamp(20px, 3.6vw, 56px);
+  --f-line:  rgba(255,255,255,.24);
+  --f-ink-2: rgba(255,255,255,.92);
+  --f-ink-3: rgba(255,255,255,.84);
+
+  position:relative;
+  margin-top:clamp(36px,5vw,88px);
+  color:#fff;
+  background:
+    radial-gradient(135% 88% at 14% -12%, rgba(255,255,255,.08), rgba(255,255,255,0) 62%),
+    linear-gradient(168deg, #8A5E25 0%, #815723 42%, #714E1E 100%);
+  overflow:hidden;                     /* belt-and-braces: nothing can spill sideways */
+}
+
+/* ── thin meta rules, top and bottom ─────────────────────── */
+.foot__rule{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:clamp(10px,2vw,28px);
+  padding:clamp(12px,1.25vw,16px) var(--f-pad);
+  font-size:clamp(9.5px,.74vw,11px);
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  color:var(--f-ink-3);
+  border-bottom:1px solid var(--f-line);
+}
+.foot__rule--bottom{ border-top:1px solid var(--f-line); border-bottom:0; }
+.foot__rule span{ min-width:0; }
+.foot__coord{ white-space:nowrap; }
+.foot__note{ color:#fff; white-space:nowrap; }
+
+/* ── body ────────────────────────────────────────────────── */
+.foot__main{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,clamp(290px,37%,500px));
+  gap:clamp(40px,5vw,88px);
+  padding:clamp(38px,4.8vw,72px) var(--f-pad) clamp(36px,4.4vw,64px);
+}
+
+.foot__lead{ display:flex; flex-direction:column; align-items:flex-start; min-width:0; }
+
+.foot__flag{
+  display:inline-flex; align-items:center; gap:.75em;
+  font-size:clamp(9.5px,.74vw,11px);
+  letter-spacing:.17em; text-transform:uppercase;
+  color:#fff;
+}
+.foot__flag i{ width:7px; height:7px; background:#fff; flex:none; }
+
+.foot__title{
+  margin:clamp(18px,2.4vw,34px) 0 clamp(26px,3.4vw,48px);
+  font-size:clamp(2.05rem,5.2vw,4.4rem);
+  font-weight:400; line-height:1.03; letter-spacing:-.038em;
+  color:#fff;
+}
+
+.foot__cta{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:20px; width:100%;
+  padding:clamp(14px,1.5vw,19px) 0;
+  border-top:1px solid var(--f-line);
+  border-bottom:1px solid var(--f-line);
+  font-size:clamp(10.5px,.84vw,12.5px);
+  letter-spacing:.16em; text-transform:uppercase;
+  color:#fff;
+  transition:border-color .4s var(--ease);
+}
+.foot__cta i{ display:block; width:clamp(22px,2vw,28px); flex:none; transition:transform .5s var(--ease); }
+.foot__cta i svg{ width:100%; height:auto; }
+.foot__cta:hover{ border-color:rgba(255,255,255,.55); }
+.foot__cta:hover i{ transform:translateX(6px); }
+
+.foot__stats{
+  display:grid; grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:clamp(13px,1.7vw,26px);
+  width:100%;
+  margin:auto 0 0;
+  padding-top:clamp(32px,4vw,58px);
+}
+.foot__stats > div{ padding-top:clamp(10px,1.1vw,14px); border-top:1px solid var(--f-line); min-width:0; }
+.foot__stats dt{
+  font-size:clamp(9.5px,.72vw,10.5px); letter-spacing:.15em; text-transform:uppercase;
+  color:var(--f-ink-3); margin-bottom:.85em;
+}
+.foot__stats dd{
+  margin:0; font-size:clamp(10.5px,.84vw,12.5px); letter-spacing:.055em;
+  text-transform:uppercase; line-height:1.35; color:#fff;
+}
+
+/* ── site index ──────────────────────────────────────────── */
+.foot__aside{ min-width:0; }
+.foot__label{
+  display:block;
+  font-size:clamp(9.5px,.72vw,10.5px); letter-spacing:.16em; text-transform:uppercase;
+  color:var(--f-ink-3);
+}
+
+.foot__index{ margin:clamp(13px,1.5vw,20px) 0 0; }
+.foot__index li{ border-top:1px solid var(--f-line); }
+.foot__index li:last-child{ border-bottom:1px solid var(--f-line); }
+.foot__index a{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:baseline;
+  gap:clamp(8px,1.2vw,18px);
+  padding:clamp(11px,1.15vw,15px) 0;
+}
+.foot__index .t{
+  font-size:clamp(14.5px,1.24vw,18.5px); letter-spacing:-.022em; color:#fff;
+  transition:transform .45s var(--ease);
+}
+.foot__index .m{
+  font-size:clamp(9.5px,.72vw,10.5px); letter-spacing:.13em; text-transform:uppercase;
+  color:var(--f-ink-3); text-align:right; white-space:nowrap;
+}
+@media (hover:hover){
+  .foot__index a:hover .t{ transform:translateX(5px); }
+  .foot__index a:hover .m{ color:#fff; }
+}
+
+.foot__reach{
+  display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:clamp(18px,2.4vw,34px);
+  margin-top:clamp(26px,3.2vw,44px);
+}
+.foot__reach p{
+  margin:.9em 0 0;
+  font-size:clamp(12.5px,.98vw,14.5px); line-height:1.6; letter-spacing:-.008em;
+  color:var(--f-ink-2);
+}
+.foot__reach a{ border-bottom:1px solid rgba(255,255,255,.38); word-break:break-word; }
+.foot__reach a:hover{ border-bottom-color:#fff; }
+
+/* ── wordmark ────────────────────────────────────────────── */
+.foot__mark{ padding:clamp(20px,2.8vw,40px) var(--f-pad) clamp(14px,1.8vw,26px); }
+.foot__wordmark{ display:block; width:100%; height:auto; overflow:visible; }
+.foot__wordmark text{
+  font-family:"Instrument Sans", ui-sans-serif, system-ui, -apple-system,
+              "Segoe UI", Helvetica, Arial, sans-serif;
+  font-weight:600;
+  font-size:100px;
+  fill:#fff;
+}
+.foot__wordmark--stack{ display:none; }
+
+
+/* ── every service and the main towns, one quiet line each ───── */
+.foot__links{
+  display:grid; gap:.7em; padding:clamp(16px,1.8vw,24px) var(--f-pad);
+  border-top:1px solid var(--f-line);
+}
+.foot__links p{ font-size:clamp(12.5px,.94vw,14px); line-height:1.9; color:var(--f-ink-2); }
+.foot__links .foot__label{ display:inline-block; min-width:7.5em; margin-right:.6em; }
+.foot__links a{ white-space:nowrap; margin-right:1.1em; border-bottom:1px solid transparent; transition:border-color .3s var(--ease); }
+.foot__links a:hover{ border-bottom-color:rgba(255,255,255,.7); }
+.foot__reach address p{ margin:.9em 0 0; }
+.foot__rule a{ border-bottom:1px solid rgba(255,255,255,.38); }
+.foot__rule a:hover{ border-bottom-color:#fff; }
+
+/* ══════════════════════════════════════════════════════════════
+   DOCK
+   A quote bar for phones. It waits until the first screen has passed,
+   steps aside near the footer, and never appears on the contact page.
+   ══════════════════════════════════════════════════════════════ */
+.dock{ display:none; }
+@media (max-width:860px){
+  .dock{
+    position:fixed; left:var(--gutter); right:var(--gutter); z-index:55;
+    bottom:calc(var(--gutter) + env(safe-area-inset-bottom, 0px));
+    display:grid; grid-template-columns:minmax(0,1fr) auto; gap:6px; padding:6px;
+    border-radius:999px; background:rgba(255,255,255,.86);
+    -webkit-backdrop-filter:blur(18px) saturate(160%); backdrop-filter:blur(18px) saturate(160%);
+    border:1px solid var(--line-soft); box-shadow:0 18px 40px -22px rgba(23,20,15,.55);
+    transform:translateY(calc(100% + 40px)); transition:transform .6s var(--ease);
+  }
+  .dock.is-on{ transform:none; }
+  .dock__q{ display:flex; align-items:center; justify-content:center; gap:.6em; min-height:48px;
+    border-radius:999px; background:var(--ink); color:#fff; font-size:15px; font-weight:500; }
+  .dock__q i{ width:15px; height:15px; color:var(--brass); }
+  .dock__b{ display:grid; place-items:center; min-height:48px; padding:0 1.3em; border-radius:999px;
+    font-size:15px; font-weight:500; color:var(--ink); }
+}

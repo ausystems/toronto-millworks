@@ -1,0 +1,240 @@
+/* ══════════════════════════════════════════════════════════════
+   HERO  , 16:9 card, content bottom-aligned, matching reference
+   ══════════════════════════════════════════════════════════════ */
+.hero{
+  /* The hero has to land inside the first screen with nothing clipped, so it
+     takes the smaller of its own 16:9 and the height left under the nav.
+
+     --hero-vw is the viewport width the hero *would* need for that capped
+     height, divided by 100. Every type and padding step below is written
+     against it instead of against 1vw, so when the window is too short the
+     whole composition scales down together rather than the corners walking
+     off the bottom edge. On a window that already fits it resolves to exactly
+     1vw and the reference framing is untouched. */
+  --hero-top:  calc(var(--gutter) * .62);
+  --hero-cap:  calc(100svh - var(--nav-space) - var(--hero-top));
+  --hero-vw:   min(1vw, calc((var(--hero-cap) * 16 / 9 + var(--gutter) * 2) / 100));
+  --pad-hero:  clamp(20px, calc(3.75 * var(--hero-vw)), 54px);
+
+  position:relative;
+  margin:var(--hero-top) var(--gutter) 0;
+  border-radius:var(--radius);
+  overflow:hidden;
+  height:var(--hero-cap);
+  isolation:isolate;
+  display:flex;
+  flex-direction:column;
+}
+.hero__media{ position:absolute; inset:0; z-index:0; }
+.hero__media img{
+  width:100%; height:100%;
+  object-fit:cover; object-position:center 48%;
+  transform:scale(1.035);
+  animation:heroIn 2.4s var(--ease) both;
+}
+@keyframes heroIn{ from{ transform:scale(1.09); } to{ transform:scale(1.035); } }
+
+.hero__scrim{
+  position:absolute; inset:0;
+  background:
+    linear-gradient(to top,
+      rgba(14,10,5,.90)  0%,
+      rgba(14,10,5,.78) 18%,
+      rgba(14,10,5,.50) 38%,
+      rgba(14,10,5,.18) 60%,
+      rgba(14,10,5,0)   80%),
+    linear-gradient(to bottom, rgba(14,10,5,.20) 0%, rgba(14,10,5,0) 26%);
+}
+
+.hero__body{
+  position:relative; z-index:1;
+  flex:1;
+  display:flex; align-items:flex-end; justify-content:space-between;
+  gap:clamp(24px,4vw,64px);
+  padding:var(--pad-hero) var(--pad-hero) calc(var(--pad-hero) * 1.45);
+}
+
+.hero__left{
+  display:flex; flex-direction:column; align-items:flex-start;
+  gap:clamp(10px, calc(1.55 * var(--hero-vw)), 22px);
+  min-width:0;
+}
+
+.hero__title{
+  font-size:clamp(1.9rem, calc(5.32 * var(--hero-vw)), 5.3rem);
+  font-weight:400;
+  line-height:1.055;
+  letter-spacing:-.035em;
+  color:#fff;
+  text-wrap:balance;
+  text-shadow:0 1px 26px rgba(0,0,0,.28);
+}
+
+.hero__right{
+  display:flex; flex-direction:column; align-items:flex-end;
+  gap:clamp(10px, calc(1.5 * var(--hero-vw)), 22px);
+  text-align:right;
+  max-width:clamp(252px, calc(30 * var(--hero-vw)), 430px);
+  padding-bottom:2px;
+  flex:none;
+}
+.hero__lede{
+  font-size:clamp(11.6px, calc(1.02 * var(--hero-vw)), 14.6px);
+  line-height:1.62;
+  letter-spacing:-.002em;
+  color:rgba(255,255,255,.82);
+  text-shadow:0 1px 16px rgba(0,0,0,.35);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ABOUT  , chip left / statement right, ~1:2 split
+   ══════════════════════════════════════════════════════════════ */
+.about{ padding:clamp(46px,5.4vw,78px) 0 clamp(56px,7vw,104px); }
+.about__inner{
+  width:100%; max-width:var(--shell-max); margin-inline:auto;
+  padding-inline:var(--shell-pad);
+  display:grid;
+  grid-template-columns:minmax(0,32%) minmax(0,68%);
+  align-items:start;
+  gap:clamp(20px,2vw,32px);
+}
+.about__label{ padding-top:.35em; }
+.about__text{
+  font-size:clamp(1.3rem, 2.72vw, 2.5rem);
+  font-weight:400;
+  line-height:1.42;
+  letter-spacing:-.026em;
+  color:var(--ink);
+  text-wrap:pretty;
+}
+
+/* the opening phrase carries the statement, so it reads a size up */
+.about__lead{
+  font-size:1.2em;
+  font-weight:500;
+  letter-spacing:-.034em;
+}
+
+/* ── the statement writes itself in ──────────────────────────
+   main.js splits the sentence into words and characters at runtime and
+   scrubs their opacity against scroll. Words stay inline-block so a word
+   never breaks mid-air across a line; characters stay plain inline so the
+   line box, wrapping and letter-spacing are exactly what they were before
+   the split. Without JS none of these classes exist and the paragraph is
+   simply the sentence. */
+.about__split{ display:inline; }
+.about__text .sw{ display:inline-block; }
+.about__text .sc{ display:inline; }
+
+/* ══════════════════════════════════════════════════════════════
+   REEL, scroll-scrubbed fit-out sequence
+   No frame, no card, no rail. Full-bleed, and feathered top and bottom
+   so it dissolves into the page instead of sitting in a box.
+   ══════════════════════════════════════════════════════════════ */
+.reel{
+  /* fill the viewport, but never grow past the frames' own 16:9, which is
+     what used to crop the sides on taller displays */
+  --reel-media-h: min(calc(100svh - var(--nav-space)), calc(100vw * 9 / 16));
+  --reel-feather: clamp(46px, 9vh, 128px);
+  --reel-fade: linear-gradient(to bottom,
+      transparent 0,
+      #000 var(--reel-feather),
+      #000 calc(100% - var(--reel-feather)),
+      transparent 100%);
+}
+
+.reel__track{ height:var(--reel-scroll); }
+
+.reel__pin{
+  position:sticky; top:0;
+  height:100vh; height:100svh;
+  display:flex; align-items:center; justify-content:center;
+  padding-top:var(--nav-space);
+}
+
+.reel__media{
+  position:relative;
+  width:100%;
+  height:var(--reel-media-h);
+  -webkit-mask-image:var(--reel-fade);
+          mask-image:var(--reel-fade);
+}
+.reel__media > *{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  display:block;
+}
+.reel__poster{ object-fit:cover; z-index:0; }
+.reel__canvas{ z-index:1; opacity:0; transition:opacity .6s var(--ease); }
+.reel.is-live .reel__canvas{ opacity:1; }
+
+/* ══════════════════════════════════════════════════════════════
+   CRAFT
+   ══════════════════════════════════════════════════════════════ */
+.craft{
+  display:grid;
+  grid-template-columns:minmax(0,46fr) minmax(0,54fr);
+  align-items:center;
+  gap:clamp(30px,5vw,92px);
+  padding:clamp(70px,9vw,148px) var(--shell-pad) clamp(78px,10vw,164px) 0;
+}
+
+.craft__media{
+  margin:0;
+  aspect-ratio:4/5;
+  overflow:hidden;
+  border-radius:0 var(--radius) var(--radius) 0;   /* runs off the left edge */
+  background:var(--paper-2);
+}
+.craft__media img{
+  width:100%; height:100%;
+  object-fit:cover; object-position:center 42%;
+  display:block;
+  transition:transform 1.6s var(--ease);
+}
+@media (hover:hover){
+  .craft__media:hover img{ transform:scale(1.028); }
+}
+
+.craft__body{
+  display:flex; flex-direction:column; align-items:flex-start;
+  gap:clamp(15px,1.8vw,25px);
+  max-width:34rem;
+}
+.craft__title{
+  font-size:clamp(1.85rem, 3.5vw, 3.35rem);
+  font-weight:400;
+  line-height:1.1;
+  letter-spacing:-.034em;
+  text-wrap:balance;
+}
+.craft__text{
+  font-size:clamp(14px,1.12vw,16.5px);
+  line-height:1.68;
+  color:var(--ink-70);
+  text-wrap:pretty;
+}
+
+.craft__meta{
+  display:flex; flex-wrap:wrap;
+  gap:clamp(24px,3.2vw,52px);
+  width:100%;
+  margin:clamp(2px,.5vw,8px) 0 0;
+  padding-top:clamp(16px,1.9vw,26px);
+  border-top:1px solid var(--line);
+}
+.craft__meta dt{
+  font-size:11.5px; letter-spacing:.085em; text-transform:uppercase;
+  color:var(--ink-45); margin-bottom:.5em;
+}
+@media (min-width:1500px){
+  .craft__body{ margin-inline:auto; }
+}
+
+.craft__meta dd{
+  margin:0;
+  font-size:clamp(13px,1vw,15px);
+  letter-spacing:-.012em;
+  color:var(--ink);
+}
+
