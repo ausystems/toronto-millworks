@@ -24,6 +24,9 @@ Redirect 301 /locations /service-areas/
 Redirect 301 /quote /contact/
 Redirect 301 /privacy /privacy-policy/
 
+# sources stay in the repository
+RedirectMatch 404 "^(?:/scripts/|/src/|/css/src/|/ci/|/\.claude/|/SPEC\.md$|/SEO\.md$|/README\.md$|/\.htaccess$|/_redirects$|/netlify\.toml$|/assets/og/\.hashes\.json$)"
+
 <IfModule mod_headers.c>
   Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains"
   Header always set X-Content-Type-Options "nosniff"

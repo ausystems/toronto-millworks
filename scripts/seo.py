@@ -11,6 +11,7 @@ import base64
 import hashlib
 import html
 import json
+import re
 import urllib.parse as _Q
 
 from site_content import SITE, SERVICES, FAQ, BUILD_DATE
@@ -195,6 +196,9 @@ def itemlist_node(page):
 
 
 def graph_for(page):
+    # the 404 answers at whatever address was asked for, so it describes no page
+    if page.get("anywhere"):
+        return {"@context": "https://schema.org", "@graph": [org_node()]}
     full = page["path"] in ("/", "/about/", "/contact/", "/service-areas/")
     g = [org_node(full=full), webpage_node(page)]
     if page["path"] == "/":
@@ -242,8 +246,10 @@ def head(page, asset_v):
         f'<title>{E(page["title"])}</title>',
         f'<meta name="description" content="{E(page["desc"])}">',
         f'<meta name="robots" content="{robots}">',
-        f'<link rel="canonical" href="{u}">',
     ]
+    # a page served at any address has no address of its own to declare
+    if not page.get("anywhere"):
+        lines.append(f'<link rel="canonical" href="{u}">')
     if not page.get("noindex"):
         lines += [f'<link rel="alternate" hreflang="en-ca" href="{u}">',
                   f'<link rel="alternate" hreflang="x-default" href="{u}">']
@@ -253,7 +259,10 @@ def head(page, asset_v):
         f'<meta property="og:type" content="{page.get("og_type", "website")}">',
         f'<meta property="og:site_name" content="{E(SITE["name"])}">',
         '<meta property="og:locale" content="en_CA">',
-        f'<meta property="og:url" content="{u}">',
+    ]
+    if not page.get("anywhere"):
+        lines.append(f'<meta property="og:url" content="{u}">')
+    lines += [
         f'<meta property="og:title" content="{E(page.get("og_title", page["title"]))}">',
         f'<meta property="og:description" content="{E(page["desc"])}">',
         f'<meta property="og:image" content="{img}">',
@@ -456,6 +465,18 @@ REDIRECTS = [("/home", "/"), ("/home/", "/"), ("/index.html", "/"),
              ("/quote", "/contact/"), ("/quote/", "/contact/"),
              ("/privacy", "/privacy-policy/"), ("/privacy/", "/privacy-policy/")]
 
+# Build inputs, tooling and docs belong to the repository, never to the site.
+# One list keeps them off every host: .vercelignore here, and a hard 404 in the
+# Apache and Netlify configs. A trailing slash marks a directory.
+PRIVATE = ["/scripts/", "/src/", "/css/src/", "/ci/", "/.claude/", "/SPEC.md", "/SEO.md",
+           "/README.md", "/.htaccess", "/_redirects", "/netlify.toml", "/assets/og/.hashes.json"]
+
+
+def vercelignore():
+    return ("# Written by scripts/build_site.py from seo.PRIVATE. The deployment is the\n"
+            "# generated site; everything listed here stays in the repository.\n"
+            + "\n".join(PRIVATE) + "\n")
+
 
 def csp():
     ep = SITE["form_endpoint"]
@@ -529,6 +550,9 @@ def other_hosts():
           "  RewriteCond %{REQUEST_URI} !(/$|\\.[a-zA-Z0-9]{2,5}$)",
           "  RewriteRule ^(.*)$ /$1/ [R=301,L]", "</IfModule>", ""]
     ht += [f"Redirect 301 {s} {d}" for s, d in REDIRECTS if not s.endswith("/")]
+    ht += ["", "# sources stay in the repository",
+           'RedirectMatch 404 "^(?:' + "|".join(re.escape(p) + ("" if p.endswith("/") else "$")
+                                               for p in PRIVATE) + ')"']
     ht += ["", "<IfModule mod_headers.c>"]
     ht += [f'  Header always set {k} "{v}"' for k, v in SECURITY_HEADERS]
     ht += [f'  Header always set Content-Security-Policy "{csp()}"', "</IfModule>", ""]
@@ -536,10 +560,15 @@ def other_hosts():
     nl = ["# Netlify", "[[headers]]", '  for = "/*"', "  [headers.values]"]
     nl += [f'    {k} = "{v}"' for k, v in SECURITY_HEADERS]
     nl += [f'    Content-Security-Policy = "{csp()}"', ""]
+    hide = [p + "*" if p.endswith("/") else p for p in PRIVATE]
+    for p in hide:
+        nl += ["[[redirects]]", f'  from = "{p}"', '  to = "/404.html"', "  status = 404",
+               "  force = true", ""]
     for s, d in REDIRECTS:
         nl += ["[[redirects]]", f'  from = "{s}"', f'  to = "{d}"', "  status = 301",
                "  force = true", ""]
     nl += ["[[redirects]]", '  from = "/*"', '  to = "/404.html"', "  status = 404", ""]
 
-    simple = [f"{s}  {d}  301" for s, d in REDIRECTS] + ["/*  /404.html  404", ""]
+    simple = ([f"{p}  /404.html  404!" for p in hide] + [f"{s}  {d}  301" for s, d in REDIRECTS]
+              + ["/*  /404.html  404", ""])
     return "\n".join(ht), "\n".join(nl), "\n".join(simple)

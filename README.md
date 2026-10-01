@@ -14,6 +14,7 @@ python3 scripts/build_site.py     # every page, sitemap, robots, llms files, red
 python3 scripts/audit.py          # the quality gate; must report 0 failures
 node scripts/og_cards.mjs         # social cards for pages whose spec changed (needs Chrome)
 node scripts/serve.mjs            # local server with production headers, redirects and 404s
+node scripts/smoke.mjs           # after a deploy: crawls the live site, exits 1 on any failure
 ```
 
 Requirements: Python 3.9+ with Pillow, Node 22+, Google Chrome for the social cards.
@@ -66,6 +67,10 @@ Reviews and ratings are deliberately absent until real ones exist.
 
 ## Deploy
 
-Push to `main`; Vercel builds nothing and serves the repository as it is. `vercel.json`
+Push to `main`; Vercel builds nothing and serves the generated files. `.vercelignore`
+(generated from `seo.PRIVATE`) keeps scripts, sources and docs off the site. `vercel.json`
 (generated) carries clean URLs, trailing slashes, redirects, cache rules and security
 headers including a Content-Security-Policy.
+
+Once the deployment is live, `node scripts/smoke.mjs` checks it end to end; run it
+against `node scripts/serve.mjs` with `node scripts/smoke.mjs http://localhost:4180`.

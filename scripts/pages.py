@@ -742,7 +742,7 @@ def not_found():
                  noindex=True, body=body, images=[], three="panel", no_dock=True,
                  og={"kind": "drawing", "drawing": "panelling", "kicker": "404",
                      "title": "This piece was never milled."},
-                 search_group="Page")
+                 anywhere=True)
 
 
 def all_pages():

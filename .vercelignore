@@ -1,0 +1,14 @@
+# Written by scripts/build_site.py from seo.PRIVATE. The deployment is the
+# generated site; everything listed here stays in the repository.
+/scripts/
+/src/
+/css/src/
+/ci/
+/.claude/
+/SPEC.md
+/SEO.md
+/README.md
+/.htaccess
+/_redirects
+/netlify.toml
+/assets/og/.hashes.json

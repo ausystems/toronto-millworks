@@ -178,6 +178,7 @@ def main():
         "search-index.json": seo.search_index(pages),
         "site.webmanifest": seo.manifest(),
         "vercel.json": seo.vercel_json(),
+        ".vercelignore": seo.vercelignore(),
     }
     ht, nl, simple = seo.other_hosts()
     files.update({".htaccess": ht, "netlify.toml": nl, "_redirects": simple})
@@ -190,7 +191,7 @@ def main():
     idx = sum(1 for p in pages if not p.get("noindex"))
     print(f"{len(pages)} pages ({idx} indexable), css from {n_css} parts ({css_len // 1024} KB)")
     print("sitemap.xml robots.txt llms.txt llms-full.txt search-index.json site.webmanifest")
-    print("vercel.json netlify.toml .htaccess _redirects, scripts/data/og_spec.json")
+    print("vercel.json .vercelignore netlify.toml .htaccess _redirects, scripts/data/og_spec.json")
 
 
 if __name__ == "__main__":

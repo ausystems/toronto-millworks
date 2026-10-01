@@ -14,8 +14,9 @@ enforces the checkable parts and fails the build when any of them break.
 | Imagery | `scripts/build_library.py` | Art directed crops, wide and tall, with blur-up placeholders |
 | Social cards | `scripts/og_cards.mjs` | 1200x630 JPEG per page, rendered by headless Chrome |
 | Quality gate | `scripts/audit.py` | SEO, accessibility, links, security and copy checks |
-| Styles | `css/style.css` | One sheet, tokens first, components in page order |
-| Behaviour | `js/main.js`, `js/three/*.js` | Progressive enhancement only; Three.js loaded on demand |
+| Deploy check | `scripts/smoke.mjs` | Crawls the live site: status codes, canonicals, redirects, 404, headers, private files |
+| Styles | `css/src/*.css` built into `css/style.css` | One sheet, tokens first, components in page order |
+| Behaviour | `js/main.js`, `js/scenes.js` | Progressive enhancement only; Three.js loaded on demand |
 | Hosting | Vercel, from `main` | `vercel.json` carries redirects and security headers |
 
 No framework, no bundler, no runtime dependency other than self-hosted GSAP and
@@ -58,8 +59,8 @@ neighbourhoods, local copy and nearest-neighbour links, so none is a doorway.
 1. Every indexable page has a unique `<title>` of 30 to 60 characters.
 2. Every indexable page has a unique meta description of 120 to 160 characters.
 3. Exactly one `<h1>` per page; headings never skip a level.
-4. Self-referencing absolute canonical on every page; noindex pages excluded
-   from the sitemap.
+4. Self-referencing absolute canonical on every page except the 404, which is
+   served at any address and declares none; noindex pages excluded from the sitemap.
 5. Open Graph and Twitter tags complete, with a 1200x630 JPEG that exists.
 6. Every JSON-LD block parses; required types present per page type.
 7. Every internal link and asset reference resolves to a built file.
@@ -70,6 +71,9 @@ neighbourhoods, local copy and nearest-neighbour links, so none is a doorway.
 12. Security headers present in `vercel.json`: CSP, HSTS, nosniff,
     frame-ancestors, referrer and permissions policies.
 13. Location pages: unique copy per page, distance under 120 km.
+14. Only the generated site is deployed: every top-level path is site output or
+    listed in `seo.PRIVATE`, which writes `.vercelignore` and the matching Apache
+    and Netlify rules. `scripts/smoke.mjs` confirms it on the live site.
 
 ## 5. Facts that must come from the business
 

@@ -18,6 +18,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "scripts"))
 from site_content import ORIGIN, SERVICES          # noqa: E402
 from locations import LOCATIONS, RADIUS_KM          # noqa: E402
+from seo import PRIVATE                             # noqa: E402
 
 EM = "\u2014"
 # case matters: an input's placeholder attribute is fine, a PLACEHOLDER left in copy is not
@@ -169,16 +170,21 @@ def main():
             if desc in descs:
                 F(u, f"description duplicates {descs[desc]}")
             titles[t], descs[desc] = u, u
-            want = ORIGIN + (u if u != "/404.html" else u)
-            if d.canonical != want:
-                F(u, f"canonical {d.canonical!r} should be {want!r}")
-            if want not in in_map:
+            if ORIGIN + u not in in_map:
                 F(u, "indexable page missing from sitemap")
         else:
             if (ORIGIN + u) in in_map:
                 F(u, "noindex page listed in the sitemap")
-        for k in ("og:title", "og:description", "og:image", "og:url", "og:type",
-                  "twitter:card", "twitter:image", "twitter:title"):
+        # the 404 answers at whatever address was asked for, so it may not claim one;
+        # every other page, indexed or not, names itself
+        anywhere = u == "/404.html"
+        if anywhere:
+            if d.canonical or d.meta.get("og:url"):
+                F(u, "served at any address, so it must not declare a canonical or og:url")
+        elif d.canonical != ORIGIN + u:
+            F(u, f"canonical {d.canonical!r} should be {ORIGIN + u!r}")
+        for k in ("og:title", "og:description", "og:image", "og:type",
+                  "twitter:card", "twitter:image", "twitter:title") + (() if anywhere else ("og:url",)):
             if not d.meta.get(k):
                 F(u, f"missing {k}")
         og = d.meta.get("og:image", "")
@@ -311,6 +317,19 @@ def main():
             fails.append(f"raw em dash in source {os.path.relpath(src, ROOT)}")
     for leak in glob.glob(os.path.join(ROOT, "__*.html")):
         fails.append(f"scratch file in the site root: {os.path.basename(leak)}")
+    # whatever sits at the top level either is the site or is kept off it
+    shipped = {"index.html", "404.html", "sitemap.xml", "robots.txt", "llms.txt", "llms-full.txt",
+               "search-index.json", "site.webmanifest", "vercel.json", ".vercelignore",
+               "assets", "css", "js", ".git", ".gitignore", ".DS_Store"}
+    for name in sorted(os.listdir(ROOT)):
+        if name in shipped or os.path.isfile(os.path.join(ROOT, name, "index.html")) \
+                or f"/{name}" in PRIVATE or f"/{name}/" in PRIVATE:
+            continue
+        fails.append(f"/{name} would be deployed with the site: list it in seo.PRIVATE or move it")
+    ignored = open(os.path.join(ROOT, ".vercelignore")).read().split()
+    for p in PRIVATE:
+        if p not in ignored:
+            fails.append(f".vercelignore does not exclude {p}")
 
     n = len(docs)
     print(f"audit: {n} pages, {len(in_map)} in sitemap, {len(fails)} failures")
