@@ -724,6 +724,25 @@ address{ font-style:normal; }
 .prc__d{ margin-top:.8em; font-size:clamp(14.5px,1.14vw,17px); line-height:1.66; color:var(--ink-70); max-width:40ch; text-wrap:pretty; }
 .js .prc__i{ opacity:.32; transition:opacity .6s var(--ease); }
 .js .prc__i.is-on{ opacity:1; }
+/* the calm form: four stages side by side, for pages whose scroll moment is
+   elsewhere. On a phone each stage is a compact row, drawing beside words. */
+.prc__row{
+  display:grid; grid-template-columns:1fr; gap:clamp(22px,4vw,56px) clamp(22px,2.6vw,40px);
+  margin-top:clamp(28px,3.6vw,56px);
+}
+.prc__c{ display:grid; grid-template-columns:38% minmax(0,1fr); column-gap:18px; align-items:center; }
+.prc__fig{ grid-row:1 / span 2; display:grid; place-items:center; aspect-ratio:296 / 220; }
+.prc__fig .dw{ width:100%; height:auto; }
+.prc--row .prc__t{ align-self:end; font-size:clamp(1.25rem,1.7vw,1.6rem); letter-spacing:-.03em; line-height:1.1; }
+.prc--row .prc__d{ align-self:start; margin-top:.45em; font-size:clamp(13.5px,1vw,15px); line-height:1.62; max-width:34ch; }
+@media (min-width:620px){
+  .prc__row{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .prc__c{ display:block; }
+  .prc__fig{ margin-bottom:clamp(16px,1.6vw,24px); }
+  .prc--row .prc__d{ margin-top:.6em; }
+}
+@media (min-width:1100px){ .prc__row{ grid-template-columns:repeat(4,minmax(0,1fr)); } }
+
 @media (min-width:900px){
   .prc__g{ grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); align-items:start; }
   .prc__stage{ top:calc(var(--nav-space) + 6vh); height:min(68vh, 560px); padding:0; }
@@ -1544,15 +1563,16 @@ address{ font-style:normal; }
 .dw .dw-win{ fill:var(--paper); stroke:var(--ink); stroke-width:calc(.8px / var(--dws)); }
 
 /* draw-on, armed by script so a reader without it sees the finished sheet.
-   Quick by design: the whole sheet is down in under half a second */
+   Quick by design: the whole sheet is down in under half a second. --dd
+   holds a sheet back, so one can follow a title or the sheet beside it */
 .dw.is-armed .dw-g [pathLength]{ stroke-dasharray:1 1; stroke-dashoffset:1; }
 .dw.is-armed .dw-g > :not([pathLength]){ opacity:0; }
 .dw.is-drawn .dw-g [pathLength]{
   stroke-dashoffset:0;
-  transition:stroke-dashoffset .32s cubic-bezier(.3,.1,.2,1) calc(var(--i, 0) * 4ms);
+  transition:stroke-dashoffset .32s cubic-bezier(.3,.1,.2,1) calc(var(--dd, 0ms) + var(--i, 0) * 4ms);
 }
 .dw.is-drawn .dw-g > :not([pathLength]){
-  opacity:1; transition:opacity .22s var(--ease) calc(var(--i, 0) * 4ms + .12s);
+  opacity:1; transition:opacity .22s var(--ease) calc(var(--dd, 0ms) + var(--i, 0) * 4ms + .12s);
 }
 @media (prefers-reduced-motion:reduce){
   .dw.is-armed .dw-g [pathLength]{ stroke-dashoffset:0; }
@@ -1601,7 +1621,7 @@ address{ font-style:normal; }
 .mp .mp-name.is-on{ fill:var(--brass-dk); }
 
 @media (prefers-reduced-motion:no-preference){
-  .mp .mp-shop .mp-halo{ transform-origin:0 0; animation:mpPulse 3.2s var(--ease) infinite; }
+  .mp.is-live .mp-shop .mp-halo{ transform-origin:0 0; animation:mpPulse 3.2s var(--ease) 3; }
 }
 @keyframes mpPulse{ 0%{ transform:scale(.7); opacity:.8; } 100%{ transform:scale(2.4); opacity:0; } }
 
@@ -1609,39 +1629,72 @@ address{ font-style:normal; }
 /* ── 95-motion.css ── */
 /* ══════════════════════════════════════════════════════════════
    MOTION
-   One easing family, transforms and opacity only, every effect once.
-   Everything here is armed by script, so a reader without it sees a
-   finished, static page.
+   Restraint first. A page has one or two strong moments (a scroll
+   sequence, a sticky stage, a drawing that sketches itself) and calm
+   between them; headings carry the rest, each with its own quick reveal.
+   Transforms, clips and opacity, every effect once. Everything is armed
+   by script, so a reader without it sees a finished, static page.
    ══════════════════════════════════════════════════════════════ */
 
-/* plain reveals; GSAP drives them when it is present */
-.js .rv{ opacity:0; transform:translateY(18px); }
-.js .rv-on{ opacity:1; transform:none; transition:opacity 1s var(--ease), transform 1s var(--ease); }
+/* ── headings ──────────────────────────────────────────────────
+   Four treatments, each played once as the heading arrives:
+   rise    page titles: characters lift out of their own word, ~10 ms apart
+   write   section titles: words uncovered left to right at a pen's pace,
+           the ink settling from brass
+   focus   the closing asks: characters pull into focus
+   ghost   statements: words darken from a faint first pass
+   Until script has split a heading it waits, with a timed safety net, and
+   so do the lines that follow a page title. */
+@media (prefers-reduced-motion:no-preference){
+  .js :is(.hero__title,.ph__t,.cx__title,.nf__h,.sh__t,.faq__h,.map__h,.fs__h,.craft__title,.cx__next-h,.qs__t,.foot__title,.say__t):not(.tx){
+    opacity:0; animation:txShow 0s 2.4s forwards;
+  }
+  .js :is(.ph__l,.ph__a,.ph__note,.hero__lede,.hero__right .btn):not(.tx-follow){
+    opacity:0; animation:txShow 0s 2.4s forwards;
+  }
+  .js .ph__sheet .dw[data-draw]:not(.is-armed){ opacity:0; animation:txShow 0s 2.4s forwards; }
+}
+@keyframes txShow{ to{ opacity:1; } }
 
-/* images rise into place behind a shutter, settling from a slight push-in */
-.js .fig.is-clip{ clip-path:inset(100% 0 0 0); transition:clip-path 1.2s cubic-bezier(.72,0,.2,1); }
-.js .fig.is-clip img{ transform:scale(1.1); transition:transform 1.7s cubic-bezier(.2,.7,.15,1), opacity .9s var(--ease); }
+/* split characters keep their kerned places, so no ligature may join them */
+.hero__title, .ph__t, .cx__title, .nf__h, .qs__t, .foot__title{ font-variant-ligatures:no-common-ligatures; }
+
+.tx-w, .tx-c{ display:inline-block; }
+
+.tx--rise .tx-w{ clip-path:inset(-.3em -.25em -.18em -.25em); }
+.tx--rise .tx-c{ transform:translateY(118%) rotate(5deg); transform-origin:0 100%; }
+.tx--rise.tx-in .tx-c{ transform:none; transition:transform .62s cubic-bezier(.2,.86,.24,1) var(--t, 0ms); }
+
+.tx--write .tx-w{ clip-path:inset(-.3em 100% -.3em -.2em); color:var(--brass-dk); }
+.tx--write.tx-in .tx-w{
+  clip-path:inset(-.3em -.2em -.3em -.2em); color:inherit;
+  transition:clip-path var(--d, 200ms) linear var(--t, 0ms),
+             color .8s var(--ease) calc(var(--t, 0ms) + var(--d, 200ms));
+}
+
+.tx--focus .tx-c{ opacity:0; filter:blur(.14em); transform:scale(1.06); }
+.tx--focus.tx-in .tx-c{
+  opacity:1; filter:blur(0); transform:none;
+  transition:opacity .45s var(--ease) var(--t, 0ms),
+             filter .75s cubic-bezier(.2,.8,.2,1) var(--t, 0ms),
+             transform .8s cubic-bezier(.2,.8,.2,1) var(--t, 0ms);
+}
+
+.tx--ghost .tx-w{ opacity:.14; }
+.tx--ghost.tx-in .tx-w{ opacity:1; transition:opacity .55s var(--ease) var(--t, 0ms); }
+
+/* the lede and actions under a page title settle in just behind it */
+.tx-follow{ opacity:0; }
+.tx-follow.tx-in{ opacity:1; transition:opacity .9s var(--ease) var(--t, 0ms); }
+
+/* a single feature image rises into place behind a shutter, settling from a
+   slight push-in. Galleries and pairs simply arrive. */
+.js .fig.is-clip{ clip-path:inset(100% 0 0 0); transition:clip-path 1.1s cubic-bezier(.72,0,.2,1); }
+.js .fig.is-clip img{ transform:scale(1.08); transition:transform 1.6s cubic-bezier(.2,.7,.15,1), opacity .9s var(--ease); }
 .js .fig.is-clip.is-shown{ clip-path:inset(0 0 0 0); }
 .js .fig.is-clip.is-shown img{ transform:none; }
 
-/* page titles arrive a line at a time from behind their own baseline */
-.ln{ display:block; overflow:hidden; padding-bottom:.1em; margin-bottom:-.1em; }
-.ln > span{ display:block; transform:translateY(104%); }
-.is-lined .ln > span{
-  transform:none;
-  transition:transform 1.15s cubic-bezier(.2,.75,.1,1) calc(var(--l, 0) * 95ms + 60ms);
-}
-
-/* titles wait for their line reveal, with a timed safety net: if script
-   never arrives they appear on their own */
-@media (prefers-reduced-motion:no-preference){
-  .js .ph__t:not(.is-ready), .js .cx__title:not(.is-ready), .js .nf__h:not(.is-ready){
-    opacity:0; animation:titleShow 0s 2.2s forwards;
-  }
-}
-@keyframes titleShow{ to{ opacity:1; } }
-
-/* the shop dot on the service map breathes */
+/* the shop dot on the service map breathes a few times when it is seen */
 .mp .mp-shop .mp-halo{ transform-box:fill-box; transform-origin:center; }
 
 /* ── between pages ──────────────────────────────────────────
@@ -1655,10 +1708,8 @@ address{ font-style:normal; }
 @keyframes vtIn{ from{ opacity:0; transform:translateY(12px); } }
 
 @media (prefers-reduced-motion:reduce){
-  .js .rv{ opacity:1; transform:none; }
   .js .fig.is-clip{ clip-path:none; }
   .js .fig.is-clip img{ transform:none; }
-  .ln > span{ transform:none; }
   .hero__media img{ animation:none; transform:none; }
   .mp .mp-shop .mp-halo{ animation:none !important; }
   ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*){ animation:none !important; }
@@ -1670,7 +1721,11 @@ address{ font-style:normal; }
   .nav-wrap, .dock, .qs, .map, .reel, .foot__mark, .foot__links, .prc__stage, .idx__peek,
   .nf__stage, .bench__stage{ display:none !important; }
   body{ color:#000; background:#fff; }
-  .js .rv, .js .fig img, .js .fig.is-clip{ opacity:1 !important; transform:none !important; clip-path:none !important; }
+  .js .fig img, .js .fig.is-clip, .tx-w, .tx-c, .tx-follow,
+  .js :is(.hero__title,.ph__t,.cx__title,.nf__h,.sh__t,.faq__h,.map__h,.fs__h,.craft__title,.cx__next-h,.qs__t,.foot__title,.say__t){
+    opacity:1 !important; transform:none !important; clip-path:none !important; filter:none !important;
+    animation:none !important;
+  }
   .foot{ background:#fff; color:#000; }
   a[href^="http"]::after{ content:" (" attr(href) ")"; font-size:.8em; }
 }

@@ -30,10 +30,20 @@ Three.js. Every page is complete HTML before any script runs.
   with negative tracking; UI at 500 to 600.
 - **Shape** pill chips with a brass dot, one corner radius token, hairlines.
 - **Signature** hairline shop drawings: the way a millwork job really starts.
-  They stand in where photography does not exist yet and draw themselves in,
-  each family (room elevations, process stages) cropped to one shared frame.
-- **Motion** one easing family. Reveals are once only, transforms and opacity
-  only, and everything collapses under `prefers-reduced-motion`.
+  They stand in where photography does not exist yet, draw themselves in only
+  at a page's important moments, and each family (room elevations, process
+  stages) is cropped to one shared frame.
+- **Motion** restraint first. A page gets one or two strong moments and calm
+  between them: the home frame sequence and its scroll-written statement, the
+  sticky process on service pages, the 3D bench on About. A drawing sketches
+  itself only at a page's important moments (its header sheet, a process stage
+  the first time it is reached, a row of sheets as one left-to-right gesture);
+  hover previews and fallbacks hold still. Headings carry the rest, each once:
+  page titles rise character by character out of a mask, section titles are
+  written on word by word with the ink settling from brass, closing asks pull
+  into focus, statements darken in. Split text keeps its kerned positions and
+  is restored when it lands. Everything collapses under
+  `prefers-reduced-motion`, and without script the page is simply finished.
 - **Never** numbered lists of the 01 / 02 kind, decorative rules that carry no
   structure, gradients for their own sake, glass beyond the hero chip, cards
   inside cards. No coordinates, no figures beside every link, no label columns

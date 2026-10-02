@@ -1,38 +1,71 @@
 /* ══════════════════════════════════════════════════════════════
    MOTION
-   One easing family, transforms and opacity only, every effect once.
-   Everything here is armed by script, so a reader without it sees a
-   finished, static page.
+   Restraint first. A page has one or two strong moments (a scroll
+   sequence, a sticky stage, a drawing that sketches itself) and calm
+   between them; headings carry the rest, each with its own quick reveal.
+   Transforms, clips and opacity, every effect once. Everything is armed
+   by script, so a reader without it sees a finished, static page.
    ══════════════════════════════════════════════════════════════ */
 
-/* plain reveals; GSAP drives them when it is present */
-.js .rv{ opacity:0; transform:translateY(18px); }
-.js .rv-on{ opacity:1; transform:none; transition:opacity 1s var(--ease), transform 1s var(--ease); }
+/* ── headings ──────────────────────────────────────────────────
+   Four treatments, each played once as the heading arrives:
+   rise    page titles: characters lift out of their own word, ~10 ms apart
+   write   section titles: words uncovered left to right at a pen's pace,
+           the ink settling from brass
+   focus   the closing asks: characters pull into focus
+   ghost   statements: words darken from a faint first pass
+   Until script has split a heading it waits, with a timed safety net, and
+   so do the lines that follow a page title. */
+@media (prefers-reduced-motion:no-preference){
+  .js :is(.hero__title,.ph__t,.cx__title,.nf__h,.sh__t,.faq__h,.map__h,.fs__h,.craft__title,.cx__next-h,.qs__t,.foot__title,.say__t):not(.tx){
+    opacity:0; animation:txShow 0s 2.4s forwards;
+  }
+  .js :is(.ph__l,.ph__a,.ph__note,.hero__lede,.hero__right .btn):not(.tx-follow){
+    opacity:0; animation:txShow 0s 2.4s forwards;
+  }
+  .js .ph__sheet .dw[data-draw]:not(.is-armed){ opacity:0; animation:txShow 0s 2.4s forwards; }
+}
+@keyframes txShow{ to{ opacity:1; } }
 
-/* images rise into place behind a shutter, settling from a slight push-in */
-.js .fig.is-clip{ clip-path:inset(100% 0 0 0); transition:clip-path 1.2s cubic-bezier(.72,0,.2,1); }
-.js .fig.is-clip img{ transform:scale(1.1); transition:transform 1.7s cubic-bezier(.2,.7,.15,1), opacity .9s var(--ease); }
+/* split characters keep their kerned places, so no ligature may join them */
+.hero__title, .ph__t, .cx__title, .nf__h, .qs__t, .foot__title{ font-variant-ligatures:no-common-ligatures; }
+
+.tx-w, .tx-c{ display:inline-block; }
+
+.tx--rise .tx-w{ clip-path:inset(-.3em -.25em -.18em -.25em); }
+.tx--rise .tx-c{ transform:translateY(118%) rotate(5deg); transform-origin:0 100%; }
+.tx--rise.tx-in .tx-c{ transform:none; transition:transform .62s cubic-bezier(.2,.86,.24,1) var(--t, 0ms); }
+
+.tx--write .tx-w{ clip-path:inset(-.3em 100% -.3em -.2em); color:var(--brass-dk); }
+.tx--write.tx-in .tx-w{
+  clip-path:inset(-.3em -.2em -.3em -.2em); color:inherit;
+  transition:clip-path var(--d, 200ms) linear var(--t, 0ms),
+             color .8s var(--ease) calc(var(--t, 0ms) + var(--d, 200ms));
+}
+
+.tx--focus .tx-c{ opacity:0; filter:blur(.14em); transform:scale(1.06); }
+.tx--focus.tx-in .tx-c{
+  opacity:1; filter:blur(0); transform:none;
+  transition:opacity .45s var(--ease) var(--t, 0ms),
+             filter .75s cubic-bezier(.2,.8,.2,1) var(--t, 0ms),
+             transform .8s cubic-bezier(.2,.8,.2,1) var(--t, 0ms);
+}
+
+.tx--ghost .tx-w{ opacity:.14; }
+.tx--ghost.tx-in .tx-w{ opacity:1; transition:opacity .55s var(--ease) var(--t, 0ms); }
+
+/* the lede and actions under a page title settle in just behind it */
+.tx-follow{ opacity:0; }
+.tx-follow.tx-in{ opacity:1; transition:opacity .9s var(--ease) var(--t, 0ms); }
+
+/* a single feature image rises into place behind a shutter, settling from a
+   slight push-in. Galleries and pairs simply arrive. */
+.js .fig.is-clip{ clip-path:inset(100% 0 0 0); transition:clip-path 1.1s cubic-bezier(.72,0,.2,1); }
+.js .fig.is-clip img{ transform:scale(1.08); transition:transform 1.6s cubic-bezier(.2,.7,.15,1), opacity .9s var(--ease); }
 .js .fig.is-clip.is-shown{ clip-path:inset(0 0 0 0); }
 .js .fig.is-clip.is-shown img{ transform:none; }
 
-/* page titles arrive a line at a time from behind their own baseline */
-.ln{ display:block; overflow:hidden; padding-bottom:.1em; margin-bottom:-.1em; }
-.ln > span{ display:block; transform:translateY(104%); }
-.is-lined .ln > span{
-  transform:none;
-  transition:transform 1.15s cubic-bezier(.2,.75,.1,1) calc(var(--l, 0) * 95ms + 60ms);
-}
-
-/* titles wait for their line reveal, with a timed safety net: if script
-   never arrives they appear on their own */
-@media (prefers-reduced-motion:no-preference){
-  .js .ph__t:not(.is-ready), .js .cx__title:not(.is-ready), .js .nf__h:not(.is-ready){
-    opacity:0; animation:titleShow 0s 2.2s forwards;
-  }
-}
-@keyframes titleShow{ to{ opacity:1; } }
-
-/* the shop dot on the service map breathes */
+/* the shop dot on the service map breathes a few times when it is seen */
 .mp .mp-shop .mp-halo{ transform-box:fill-box; transform-origin:center; }
 
 /* ── between pages ──────────────────────────────────────────
@@ -46,10 +79,8 @@
 @keyframes vtIn{ from{ opacity:0; transform:translateY(12px); } }
 
 @media (prefers-reduced-motion:reduce){
-  .js .rv{ opacity:1; transform:none; }
   .js .fig.is-clip{ clip-path:none; }
   .js .fig.is-clip img{ transform:none; }
-  .ln > span{ transform:none; }
   .hero__media img{ animation:none; transform:none; }
   .mp .mp-shop .mp-halo{ animation:none !important; }
   ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*){ animation:none !important; }
@@ -61,7 +92,11 @@
   .nav-wrap, .dock, .qs, .map, .reel, .foot__mark, .foot__links, .prc__stage, .idx__peek,
   .nf__stage, .bench__stage{ display:none !important; }
   body{ color:#000; background:#fff; }
-  .js .rv, .js .fig img, .js .fig.is-clip{ opacity:1 !important; transform:none !important; clip-path:none !important; }
+  .js .fig img, .js .fig.is-clip, .tx-w, .tx-c, .tx-follow,
+  .js :is(.hero__title,.ph__t,.cx__title,.nf__h,.sh__t,.faq__h,.map__h,.fs__h,.craft__title,.cx__next-h,.qs__t,.foot__title,.say__t){
+    opacity:1 !important; transform:none !important; clip-path:none !important; filter:none !important;
+    animation:none !important;
+  }
   .foot{ background:#fff; color:#000; }
   a[href^="http"]::after{ content:" (" attr(href) ")"; font-size:.8em; }
 }

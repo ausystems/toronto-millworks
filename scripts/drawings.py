@@ -8,8 +8,9 @@ where photography does not exist yet, and they say something true about the
 work instead of decorating it.
 
 Every primitive carries pathLength="1" and an order index, so CSS can draw the
-sheet on in sequence. Without script, or with reduced motion, the drawing is
-simply there.
+sheet on in sequence. Drawing on is reserved for a page's important moments:
+only a sheet asked for with draw=True carries data-draw. Without script, or
+with reduced motion, every drawing is simply there.
 
 The sheets are linework only: no dimensions, labels or title blocks. Each one is
 cropped to what is drawn, so it sits in its frame without dead margins. One unit
@@ -108,7 +109,7 @@ class Sheet:
         self.fillpath(d, "hx")
 
     # ── output ────────────────────────────────────────────────────────────
-    def svg(self, uid="", cls="", bb=None):
+    def svg(self, uid="", cls="", bb=None, draw=False):
         pid = f"dwh-{self.key}{uid}"
         tid = f"dwt-{self.key}{uid}"
         n_max = max(o for o, _ in self.parts) or 1
@@ -123,7 +124,7 @@ class Sheet:
         vb = " ".join(f"{round(v, 1):g}" for v in (x0 - pad, y0 - pad, x1 - x0 + 2 * pad, y1 - y0 + 2 * pad))
         return (
             f'<svg class="{("dw " + cls).strip()}" viewBox="{vb}" role="img" '
-            f'aria-labelledby="{tid}" preserveAspectRatio="xMidYMid meet" data-draw>'
+            f'aria-labelledby="{tid}" preserveAspectRatio="xMidYMid meet"{" data-draw" if draw else ""}>'
             f'<title id="{tid}">{E(self.alt)}</title>'
             f'<defs><pattern id="{pid}" width="3.2" height="3.2" patternUnits="userSpaceOnUse" '
             f'patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="3.2" class="dw-hl"/></pattern></defs>'
@@ -530,9 +531,10 @@ def _frame(key):
     return [min(b[0] for b in bbs), min(b[1] for b in bbs), max(b[2] for b in bbs), max(b[3] for b in bbs)]
 
 
-def drawing(key, uid="", cls=""):
-    """Inline SVG for a sheet. uid keeps ids unique if a page repeats a sheet."""
-    return _sheet(key).svg(uid=uid, cls=cls, bb=_frame(key))
+def drawing(key, uid="", cls="", draw=False):
+    """Inline SVG for a sheet. uid keeps ids unique if a page repeats a sheet;
+    draw=True lets it draw itself on."""
+    return _sheet(key).svg(uid=uid, cls=cls, bb=_frame(key), draw=draw)
 
 
 def alt(key):

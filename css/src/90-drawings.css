@@ -36,15 +36,16 @@
 .dw .dw-win{ fill:var(--paper); stroke:var(--ink); stroke-width:calc(.8px / var(--dws)); }
 
 /* draw-on, armed by script so a reader without it sees the finished sheet.
-   Quick by design: the whole sheet is down in under half a second */
+   Quick by design: the whole sheet is down in under half a second. --dd
+   holds a sheet back, so one can follow a title or the sheet beside it */
 .dw.is-armed .dw-g [pathLength]{ stroke-dasharray:1 1; stroke-dashoffset:1; }
 .dw.is-armed .dw-g > :not([pathLength]){ opacity:0; }
 .dw.is-drawn .dw-g [pathLength]{
   stroke-dashoffset:0;
-  transition:stroke-dashoffset .32s cubic-bezier(.3,.1,.2,1) calc(var(--i, 0) * 4ms);
+  transition:stroke-dashoffset .32s cubic-bezier(.3,.1,.2,1) calc(var(--dd, 0ms) + var(--i, 0) * 4ms);
 }
 .dw.is-drawn .dw-g > :not([pathLength]){
-  opacity:1; transition:opacity .22s var(--ease) calc(var(--i, 0) * 4ms + .12s);
+  opacity:1; transition:opacity .22s var(--ease) calc(var(--dd, 0ms) + var(--i, 0) * 4ms + .12s);
 }
 @media (prefers-reduced-motion:reduce){
   .dw.is-armed .dw-g [pathLength]{ stroke-dashoffset:0; }

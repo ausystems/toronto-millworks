@@ -52,7 +52,7 @@ def home():
                            "them.", cls="idx--home")
             + C.process(PROCESS, "How a project runs", "prc-h",
                         "Four stages, in this order, every time. Skipping one is how filler strips "
-                        "and site fixes happen.")
+                        "and site fixes happen.", row=True)
             + C.gallery(["frieze", "espresso", "transom", "pendants", "plinth", "shelving"],
                         "From the shop floor", "gal-h", "Work",
                         "Residential panelling and a commercial bar, photographed as built.")
@@ -123,7 +123,7 @@ def services_hub():
              + C.lnk("/services/office-millwork/", "Office millwork")
              + C.lnk("/services/commercial-fit-outs/", "Commercial fit-outs") + '</article>'
              '</div></div></section>')
-    body = (C.page_header(p, visual=C.sheet("build", cls="ph__sheet", uid="-ph"),
+    body = (C.page_header(p, visual=C.sheet("plan", cls="ph__sheet", uid="-ph", draw=True),
                           actions=C.btn("/contact/#quote", "Get a quote", lg=True)
                           + C.lnk("#process", "How a project runs"))
             + C.index_list(C.service_items(), "What we make", "svc-h", None,
@@ -194,7 +194,7 @@ def service(s):
          "h1": s["h1"], "lede": s["lede"]}
     a, b, c = (s["plates"] + s["plates"])[:3]
     label = SERVICE_AREA_LABEL[s["slug"]]
-    body = (C.page_header(p, visual=C.sheet(s["drawing"], cls="ph__sheet", uid="-ph"),
+    body = (C.page_header(p, visual=C.sheet(s["drawing"], cls="ph__sheet", uid="-ph", draw=True),
                           actions=C.btn(f"/contact/?type={s['slug']}#quote", "Get a quote", lg=True)
                           + C.lnk("#process", "How it comes together"))
             + C.say(s["statement"])
@@ -265,7 +265,7 @@ def projects():
                           "Every project starts as a set of drawings like these. They are where "
                           "changes are cheap, and they are what you approve.")
              + '<div class="drawn__g">'
-             + "".join(f'<a class="drawn__i" href="/services/{s}/">{C.sheet(k, uid="-pj")}'
+             + "".join(f'<a class="drawn__i" href="/services/{s}/">{C.sheet(k, uid="-pj", draw=True)}'
                        f'<span class="drawn__t">{E(t)}</span></a>'
                        for k, s, t in (("kitchen", "custom-kitchens", "Kitchen elevation"),
                                        ("reception", "office-millwork", "Reception desk"),
@@ -345,8 +345,9 @@ def about():
             + C.say("Most joinery passes through four companies before it is hung. Every handover is "
                     "a chance for a dimension to drift.")
             + bench
-            + C.process(PROCESS, "How we work", "prc-h", None, "Process")
-            + who + wont
+            + who
+            + C.process(PROCESS, "How we work", "prc-h", None, "Process", row=True, draw=False)
+            + wont
             + C.pair("archway", "base")
             + C.faq(faq_pick("Do you build in your own shop?", "Can I visit the shop?",
                              "Do you handle installation and finishing?",
@@ -595,7 +596,7 @@ def guides_hub():
          "h1": "Read this before you buy cabinetry.",
          "lede": ("Plain guides to cost, materials, finishes and planning, written from the bench "
                   "rather than the showroom.")}
-    body = (C.page_header(p, visual=C.sheet("draw", cls="ph__sheet", uid="-ph"))
+    body = (C.page_header(p, visual=C.sheet("draw", cls="ph__sheet", uid="-ph", draw=True))
             + C.index_list(guide_items([g["slug"] for g in GUIDES]), "All guides", "gd-h", None,
                            None, cls="idx--guides")
             + C.quote_starter("Rather talk it through?"))

@@ -38,6 +38,6 @@
 .mp .mp-name.is-on{ fill:var(--brass-dk); }
 
 @media (prefers-reduced-motion:no-preference){
-  .mp .mp-shop .mp-halo{ transform-origin:0 0; animation:mpPulse 3.2s var(--ease) infinite; }
+  .mp.is-live .mp-shop .mp-halo{ transform-origin:0 0; animation:mpPulse 3.2s var(--ease) 3; }
 }
 @keyframes mpPulse{ 0%{ transform:scale(.7); opacity:.8; } 100%{ transform:scale(2.4); opacity:0; } }

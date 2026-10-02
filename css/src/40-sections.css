@@ -138,6 +138,25 @@
 .prc__d{ margin-top:.8em; font-size:clamp(14.5px,1.14vw,17px); line-height:1.66; color:var(--ink-70); max-width:40ch; text-wrap:pretty; }
 .js .prc__i{ opacity:.32; transition:opacity .6s var(--ease); }
 .js .prc__i.is-on{ opacity:1; }
+/* the calm form: four stages side by side, for pages whose scroll moment is
+   elsewhere. On a phone each stage is a compact row, drawing beside words. */
+.prc__row{
+  display:grid; grid-template-columns:1fr; gap:clamp(22px,4vw,56px) clamp(22px,2.6vw,40px);
+  margin-top:clamp(28px,3.6vw,56px);
+}
+.prc__c{ display:grid; grid-template-columns:38% minmax(0,1fr); column-gap:18px; align-items:center; }
+.prc__fig{ grid-row:1 / span 2; display:grid; place-items:center; aspect-ratio:296 / 220; }
+.prc__fig .dw{ width:100%; height:auto; }
+.prc--row .prc__t{ align-self:end; font-size:clamp(1.25rem,1.7vw,1.6rem); letter-spacing:-.03em; line-height:1.1; }
+.prc--row .prc__d{ align-self:start; margin-top:.45em; font-size:clamp(13.5px,1vw,15px); line-height:1.62; max-width:34ch; }
+@media (min-width:620px){
+  .prc__row{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .prc__c{ display:block; }
+  .prc__fig{ margin-bottom:clamp(16px,1.6vw,24px); }
+  .prc--row .prc__d{ margin-top:.6em; }
+}
+@media (min-width:1100px){ .prc__row{ grid-template-columns:repeat(4,minmax(0,1fr)); } }
+
 @media (min-width:900px){
   .prc__g{ grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); align-items:start; }
   .prc__stage{ top:calc(var(--nav-space) + 6vh); height:min(68vh, 560px); padding:0; }

@@ -82,69 +82,6 @@
     phone.addEventListener("change", function () { setMenu(false); setSub(false); });
   })();
 
-  /* ── scroll reveal ───────────────────────────────────────── */
-  if (!reduced && "IntersectionObserver" in window) {
-    var targets = document.querySelectorAll(
-      ".about__label, .craft__media, .craft__body > *"
-    );
-
-    Array.prototype.forEach.call(targets, function (el) { el.classList.add("rv"); });
-
-    var rio = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        var el = entry.target;
-
-        /* stagger against ready siblings so a group arrives as one gesture */
-        var peers = el.parentElement
-          ? Array.prototype.filter.call(el.parentElement.children, function (c) {
-              return c.classList.contains("rv");
-            })
-          : [];
-        var i = peers.indexOf(el);
-        if (i > 0) el.style.transitionDelay = Math.min(i, 5) * 80 + "ms";
-
-        el.classList.add("rv-on");
-        rio.unobserve(el);
-      });
-    }, { rootMargin: "0px 0px -6% 0px", threshold: 0 });
-
-    Array.prototype.forEach.call(targets, function (el) { rio.observe(el); });
-
-    /* Safety net. IntersectionObserver reports changes in intersection, so an
-       element that goes from below the viewport to above it without ever
-       intersecting (a jump scroll, an End keypress, a restored scroll position,
-       a deep link) never fires and would stay at opacity 0 for good. Sweep for
-       anything already scrolled past and reveal it outright. */
-    var pending = Array.prototype.slice.call(targets);
-    var queued = false;
-
-    function sweep() {
-      queued = false;
-      pending = pending.filter(function (el) {
-        if (el.classList.contains("rv-on")) return false;
-        if (el.getBoundingClientRect().bottom <= 0) {
-          el.style.transition = "none";
-          el.classList.add("rv-on");
-          rio.unobserve(el);
-          return false;
-        }
-        return true;
-      });
-      if (!pending.length) window.removeEventListener("scroll", onScroll);
-    }
-
-    function onScroll() {
-      if (queued) return;
-      queued = true;
-      requestAnimationFrame(sweep);
-    }
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("load", sweep);
-    sweep();
-  }
-
   /* ══════════════════════════════════════════════════════════
      REEL, scroll-scrubbed frame sequence
      ══════════════════════════════════════════════════════════ */
@@ -603,15 +540,22 @@ var TM = (function () {
     svg.classList.add("is-drawn");
   }
 
+  /* Only a sheet marked data-draw sketches itself in, once, as it arrives. A
+     process stage draws when it is picked, and a page title's own sheet draws
+     with the title; both are left to their sections. Sheets that arrive
+     together go left to right, a beat apart, as one gesture. */
   if (!reduced && "IntersectionObserver" in window) {
     var solo = [].filter.call(document.querySelectorAll("svg.dw[data-draw]"), function (s) {
-      return !s.closest(".prc__sheet, .idx__pk");
+      return !s.closest(".prc__sheet, .ph__sheet");
     });
     solo.forEach(function (s) { s.classList.add("is-armed"); });
     var io = new IntersectionObserver(function (es) {
-      es.forEach(function (e) {
-        if (e.isIntersecting) { e.target.classList.add("is-drawn"); io.unobserve(e.target); }
-      });
+      es.filter(function (e) { return e.isIntersecting; })
+        .sort(function (a, b) { return a.boundingClientRect.left - b.boundingClientRect.left; })
+        .forEach(function (e, k) {
+          if (k) e.target.style.setProperty("--dd", k * 150 + "ms");
+          e.target.classList.add("is-drawn"); io.unobserve(e.target);
+        });
     }, { rootMargin: "0px 0px -10% 0px", threshold: 0.12 });
     solo.forEach(function (s) { io.observe(s); });
     /* anything already scrolled past is simply finished */
@@ -620,6 +564,14 @@ var TM = (function () {
         if (s.getBoundingClientRect().bottom < 0) { s.classList.add("is-drawn"); io.unobserve(s); }
       });
     });
+  }
+  if (!reduced && "IntersectionObserver" in window) {
+    var mo = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add("is-live"); mo.unobserve(e.target); }
+      });
+    }, { threshold: 0.3 });
+    document.querySelectorAll("svg.mp").forEach(function (m) { mo.observe(m); });
   }
   return { draw: draw, reduced: reduced };
 })();
@@ -669,7 +621,7 @@ var TM = (function () {
   });
 })();
 
-/* ── images: fade in over their placeholder, rise into place ──── */
+/* ── images: fade in over their placeholder; features rise into place ── */
 (function () {
   "use strict";
   document.querySelectorAll(".fig img").forEach(function (img) {
@@ -679,8 +631,8 @@ var TM = (function () {
   });
   if (TM.reduced || !("IntersectionObserver" in window)) return;
 
-  var figs = [].slice.call(document.querySelectorAll(
-    ".gal__f, .pair .fig, .fs__f, .case__f, .loc__f, .two__f, .strip__f"));
+  /* the shutter is for single feature images; galleries and pairs simply arrive */
+  var figs = [].slice.call(document.querySelectorAll(".fs__f, .case__f, .loc__f"));
   var io = new IntersectionObserver(function (es) {
     es.forEach(function (e) {
       if (!e.isIntersecting) return;
@@ -706,34 +658,198 @@ var TM = (function () {
   }, { passive: true });
 })();
 
-/* ── page titles arrive a line at a time ──────────────────────── */
+/* ── headings: four quick reveals, each played once ─────────────
+   rise   page titles: characters lift out of their own word, ~10 ms apart
+   write  section titles: words uncovered left to right at a pen's pace,
+          the ink settling from brass
+   focus  the closing asks: characters pull into focus
+   ghost  statements: words darken from a faint first pass
+   A heading is split only while it moves. Where each character really
+   sits, kerning included, is measured first and kept, and the heading's
+   own markup goes back the moment it lands, so the page keeps its text. */
 (function () {
   "use strict";
-  var hs = document.querySelectorAll(".ph__t, .cx__title, .nf__h");
-  if (TM.reduced) { hs.forEach(function (h) { h.classList.add("is-ready"); }); return; }
-  function esc (s) { return s.replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  if (TM.reduced || !("IntersectionObserver" in window)) return;
+  var KINDS = [
+    ["rise", ".hero__title, .ph__t, .cx__title, .nf__h"],
+    ["write", ".sh__t, .faq__h, .map__h, .fs__h, .craft__title, .cx__next-h"],
+    ["focus", ".qs__t, .foot__title"],
+    ["ghost", ".say__t"]
+  ];
+  var CHARS = { rise: true, focus: true };
+  var FOLLOW = ".ph__l, .ph__a, .ph__note, .hero__lede, .hero__right .btn";
 
-  hs.forEach(function (h) {
-    var text = h.textContent.trim();
-    var words = text.split(/\s+/);
-    h.innerHTML = words.map(function (w) { return '<span class="w">' + esc(w) + "</span>"; }).join(" ");
-    var lines = [], line = [], top = null;
-    h.querySelectorAll(".w").forEach(function (s) {
-      if (top === null || Math.abs(s.offsetTop - top) > 4) {
-        if (line.length) lines.push(line);
-        line = []; top = s.offsetTop;
+  function texts (root) {
+    var out = [];
+    (function walk (n) {
+      [].forEach.call(n.childNodes, function (c) {
+        if (c.nodeType === 3) out.push(c);
+        else if (c.nodeType === 1 && c.tagName !== "BR") walk(c);
+      });
+    })(root);
+    return out;
+  }
+
+  /* the left edge of every visible character, as the browser set it */
+  function lefts (h) {
+    var xs = [], r = document.createRange();
+    texts(h).forEach(function (t) {
+      for (var i = 0; i < t.nodeValue.length; i++) {
+        if (/\s/.test(t.nodeValue.charAt(i))) continue;
+        r.setStart(t, i); r.setEnd(t, i + 1);
+        xs.push(r.getBoundingClientRect().left);
       }
-      line.push(s.textContent);
     });
-    if (line.length) lines.push(line);
-    h.innerHTML = '<span class="sr-only">' + esc(text) + "</span>" + lines.map(function (l, i) {
-      return '<span class="ln" aria-hidden="true" style="--l:' + i + '"><span>' + esc(l.join(" ")) + "</span></span>";
-    }).join("");
-    h.classList.add("is-ready");
-    requestAnimationFrame(function () { requestAnimationFrame(function () { h.classList.add("is-lined"); }); });
-    /* afterwards the heading gets its plain text back, so it reflows freely */
-    setTimeout(function () { h.textContent = text; h.classList.remove("is-lined"); }, 1300 + lines.length * 95);
-  });
+    return xs;
+  }
+
+  function split (h, chars) {
+    var words = [];
+    texts(h).forEach(function (t) {
+      var frag = document.createDocumentFragment();
+      t.nodeValue.split(/(\s+)/).forEach(function (tok) {
+        if (!tok) return;
+        if (/^\s+$/.test(tok)) { frag.appendChild(document.createTextNode(" ")); return; }
+        /* a hyphen is a place the line may break, so it ends a unit too */
+        tok.match(/[^-]+-?|-/g).forEach(function (part) {
+          var w = document.createElement("span");
+          w.className = "tx-w";
+          if (chars) {
+            for (var i = 0; i < part.length; i++) {
+              var c = document.createElement("span");
+              c.className = "tx-c";
+              c.textContent = part.charAt(i);
+              w.appendChild(c);
+            }
+          } else w.textContent = part;
+          frag.appendChild(w);
+          words.push(w);
+        });
+      });
+      t.parentNode.replaceChild(frag, t);
+    });
+    return words;
+  }
+
+  function prepare () {
+    var items = [];
+    KINDS.forEach(function (k) {
+      document.querySelectorAll(k[1]).forEach(function (h) {
+        if (!h.classList.contains("tx")) items.push({ h: h, kind: k[0], chars: !!CHARS[k[0]] });
+      });
+    });
+    /* after the safety net has shown the headings, leave them be */
+    if (performance.now() > 2200) {
+      items.forEach(function (it) { it.h.classList.add("tx"); });
+      return [];
+    }
+    /* reads, then writes, then reads, then writes: four layouts, not hundreds.
+       Widths are read before the effect's class goes on, while nothing is
+       turned or scaled, so they are the characters' true advances. */
+    items.forEach(function (it) { it.orig = it.h.innerHTML; if (it.chars) it.xs = lefts(it.h); });
+    items.forEach(function (it) {
+      it.words = split(it.h, it.chars);
+      it.h.setAttribute("aria-label", it.h.textContent.replace(/\s+/g, " ").trim());
+    });
+    items.forEach(function (it) {
+      it.fs = parseFloat(getComputedStyle(it.h).fontSize) || 16;
+      if (!it.chars) return;
+      it.cs = [].slice.call(it.h.querySelectorAll(".tx-c"));
+      it.ws = it.cs.map(function (c) { return c.getBoundingClientRect().width; });
+    });
+    items.forEach(function (it) {
+      if (it.chars && it.xs.length === it.cs.length) {
+        var k = 0;
+        it.words.forEach(function (w) {
+          for (var j = 0; j < w.children.length; j++, k++) {
+            if (!j) continue;
+            var m = (it.xs[k] - it.xs[k - 1]) - it.ws[k - 1];
+            if (Math.abs(m) > 0.05) it.cs[k].style.marginLeft = (m / it.fs).toFixed(4) + "em";
+          }
+        });
+      }
+      it.h.classList.add("tx", "tx--" + it.kind);
+    });
+    return items;
+  }
+
+  function play (it) {
+    var h = it.h, t0 = h.classList.contains("hero__title") ? 160 : 0, end;
+    if (it.chars) {
+      var n = it.cs.length, rise = it.kind === "rise";
+      var st = Math.min(rise ? 11 : 16, (rise ? 380 : 420) / Math.max(n, 1));
+      it.cs.forEach(function (c, i) { c.style.setProperty("--t", Math.round(t0 + i * st) + "ms"); });
+      end = t0 + (n - 1) * st + (rise ? 620 : 800);
+    } else if (it.kind === "write") {
+      var t = t0;
+      it.words.forEach(function (w) {
+        var d = Math.max(70, w.getBoundingClientRect().width / it.fs / 30 * 1000);   /* 30 em a second */
+        w.style.setProperty("--t", Math.round(t) + "ms");
+        w.style.setProperty("--d", Math.round(d) + "ms");
+        t += d + 8;
+      });
+      end = t + 800;
+    } else {
+      var gs = Math.min(30, 700 / Math.max(it.words.length, 1));
+      it.words.forEach(function (w, i) { w.style.setProperty("--t", Math.round(t0 + i * gs) + "ms"); });
+      end = t0 + (it.words.length - 1) * gs + 550;
+    }
+    h.classList.add("tx-in");
+    if (it.kind === "rise") follow(h, t0);
+    setTimeout(function () {
+      h.innerHTML = it.orig;
+      h.removeAttribute("aria-label");
+      h.classList.remove("tx--" + it.kind, "tx-in");
+    }, end + 80);
+  }
+
+  /* a page title brings its lede, its actions and its drawing in behind it */
+  function follow (h, t0) {
+    var scope = h.closest(".ph, .hero");
+    if (!scope) return;
+    [].forEach.call(scope.querySelectorAll(FOLLOW), function (el, i) {
+      el.classList.add("tx-follow");
+      el.style.setProperty("--t", t0 + 220 + i * 90 + "ms");
+      requestAnimationFrame(function () { el.classList.add("tx-in"); });
+    });
+    var dw = scope.querySelector(".ph__sheet svg.dw[data-draw]");
+    if (dw) {
+      dw.style.setProperty("--dd", t0 + 340 + "ms");
+      requestAnimationFrame(function () { dw.classList.add("is-drawn"); });
+    }
+  }
+
+  function start () {
+    var items = prepare();
+    if (!items.length) return;
+    document.querySelectorAll(".ph__sheet svg.dw[data-draw]").forEach(function (s) { s.classList.add("is-armed"); });
+    var map = new Map(items.map(function (it) { return [it.h, it]; }));
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        io.unobserve(e.target);
+        requestAnimationFrame(function () { play(map.get(e.target)); });
+      });
+    }, { rootMargin: "0px 0px -8% 0px" });
+    items.forEach(function (it) { io.observe(it.h); });
+  }
+
+  /* Measure with the real face, never the fallback: fonts.ready can resolve
+     before a preloaded face is in use, so wait for the face itself. If it is
+     not here in time, the headings simply stay as they are. */
+  var FACE = "400 1em 'Instrument Sans'";
+  var begun = false;
+  var go = function (loaded) {
+    if (begun) return;
+    begun = true;
+    if (loaded) start();
+    else document.querySelectorAll(KINDS.map(function (k) { return k[1]; }).join(", "))
+      .forEach(function (h) { h.classList.add("tx"); });
+  };
+  if (document.fonts && document.fonts.load) {
+    document.fonts.load(FACE).then(function () { go(document.fonts.check(FACE)); }, function () { go(false); });
+    setTimeout(function () { go(false); }, 1500);
+  } else go(false);
 })();
 
 /* ── service index: the row you are on shows its drawing ─────── */
@@ -742,15 +858,11 @@ var TM = (function () {
   document.querySelectorAll(".idx__g--peek").forEach(function (g) {
     var pks = g.querySelectorAll(".idx__pk");
     var cur = -1;
-    if (!TM.reduced) pks.forEach(function (p) { var s = p.querySelector("svg.dw"); if (s) s.classList.add("is-armed"); });
+    /* a quiet cross-fade: the drawing is there, it does not draw itself again */
     function show (i) {
       if (i === cur) return;
       cur = i;
-      pks.forEach(function (p) {
-        var on = p.getAttribute("data-peek") === String(i);
-        p.classList.toggle("is-on", on);
-        if (on) TM.draw(p.querySelector("svg.dw"));
-      });
+      pks.forEach(function (p) { p.classList.toggle("is-on", p.getAttribute("data-peek") === String(i)); });
     }
     g.querySelectorAll(".idx__i").forEach(function (r) {
       var i = +r.getAttribute("data-peek");
@@ -775,16 +887,17 @@ var TM = (function () {
     var sheets = sec.querySelectorAll(".prc__sheet");
     var stage = sec.querySelector(".prc__stage");
     if (!items.length) return;
-    var cur = -1, live = false, queued = false;
-    if (!TM.reduced) sheets.forEach(function (s) { var d = s.querySelector("svg.dw"); if (d) d.classList.add("is-armed"); });
+    var cur = -1, live = false, queued = false, drawn = [];
+    if (!TM.reduced) sheets.forEach(function (s) { var d = s.querySelector("svg.dw[data-draw]"); if (d) d.classList.add("is-armed"); });
 
+    /* each stage draws the first time it is reached; after that it cross-fades */
     function set (i) {
       if (i === cur) return;
       cur = i;
       items.forEach(function (it, k) { it.classList.toggle("is-on", k === i); });
       sheets.forEach(function (s, k) {
         s.classList.toggle("is-on", k === i);
-        if (k === i) TM.draw(s.querySelector("svg.dw"));
+        if (k === i && !drawn[k]) { drawn[k] = true; TM.draw(s.querySelector("svg.dw[data-draw]")); }
       });
     }
     function pick () {
@@ -1048,52 +1161,13 @@ var TM = (function () {
 })();
 
 /* ── scroll choreography ──────────────────────────────────────────
-   GSAP earns its place here: one shared scroll listener, correct refresh
-   on resize and font load, and easing CSS transitions cannot match. Without
-   it, or with reduced motion, everything is simply shown. */
+   GSAP earns its place in two spots: the About statement above, and a slow
+   drift inside each full-bleed plate here. Everything else holds still, so
+   the moments that move have room to. */
 (function () {
   "use strict";
-  var TARGETS = ".sh, .ph__l, .ph__a, .ph__note, .ph__v, .say__t, .bld__i, .mat__i, .who__i, " +
-                ".wont__list li, .two__c, .near__list li, .arl__list li, .rx__g, .idx__i, " +
-                ".faq__aside > *, .faq__row, .map__aside > *, .map__frame, .qs__head, .qs__side, " +
-                ".cx__step, .loc__t > *, .case__t > *, .drawn__i, .fs__t > *, .art__s, .arx__map, " +
-                ".arx__side, .bench__t, .strip__c, .nf__t > *";
-
-  var els = [].filter.call(document.querySelectorAll(TARGETS), function (el) {
-    return !el.closest(".nsub, .qf");
-  });
-  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (!window.gsap || !window.ScrollTrigger || reduced) return;
+  if (!window.gsap || !window.ScrollTrigger || TM.reduced) return;
   gsap.registerPlugin(ScrollTrigger);
-
-  /* things on screen at load are left alone, so nothing visible blinks */
-  var vh = window.innerHeight;
-  els = els.filter(function (el) { return el.getBoundingClientRect().top > vh * 0.92; });
-  els.forEach(function (el) { el.classList.add("rv"); });
-
-  /* siblings arrive as one gesture rather than a queue */
-  var groups = new Map();
-  els.forEach(function (el) {
-    var key = el.parentElement || document.body;
-    if (!groups.has(key)) groups.set(key, []);
-    groups.get(key).push(el);
-  });
-  groups.forEach(function (items) {
-    gsap.set(items, { y: 22 });
-    ScrollTrigger.batch(items, {
-      start: "top 90%", once: true,
-      onEnter: function (batch) {
-        gsap.to(batch, {
-          opacity: 1, y: 0, duration: 0.95, ease: "power3.out", stagger: 0.07, overwrite: true,
-          onComplete: function () {
-            /* hand the finished state to the stylesheet, then drop the inline styles */
-            batch.forEach(function (el) { el.classList.add("rv-on"); });
-            gsap.set(batch, { clearProps: "transform,opacity" });
-          }
-        });
-      }
-    });
-  });
 
   /* a slow drift inside each full-bleed plate; the image is oversized by the
      same amount it travels, so the crop never runs out of picture */

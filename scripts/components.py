@@ -137,10 +137,10 @@ def figure(name, wide="100vw", tall="100vw", cls="", eager=False, caption=None, 
     return f'<figure class="{klass}" style="--lq:url({lq})">{src}{cap}</figure>'
 
 
-def sheet(key, caption=None, cls="", uid=""):
-    """A shop drawing set as a figure."""
+def sheet(key, caption=None, cls="", uid="", draw=False):
+    """A shop drawing set as a figure; draw=True for one of the page's few moments."""
     cap = f'<figcaption class="dwfig__c">{E(caption)}</figcaption>' if caption else ""
-    return f'<figure class="{cx("dwfig", cls)}">{drawings.drawing(key, uid=uid)}{cap}</figure>'
+    return f'<figure class="{cx("dwfig", cls)}">{drawings.drawing(key, uid=uid, draw=draw)}{cap}</figure>'
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -179,14 +179,24 @@ def builds(items, h2, hid, eyebrow=None, lede=None, intro=None):
             f'<ul class="bld__list">{li}</ul></div></section>')
 
 
-def process(stages, h2, hid, lede=None, eyebrow="Process", sid="process"):
-    """Stages read down the right; their drawings hold still on the left and change
-    as each stage reaches the middle of the screen. On a phone the drawing rides
-    along at the top of the section."""
+def process(stages, h2, hid, lede=None, eyebrow="Process", sid="process", row=False, draw=True):
+    """Two forms. The sticky one is a page's scroll moment: stages read down the
+    right while their drawings hold still on the left and change as each stage
+    reaches the middle of the screen (on a phone the drawing rides along at the
+    top). The row is the calm form, the four stages side by side, for pages whose
+    scroll moment is elsewhere; its drawings draw once, left to right, or not at all."""
     keys = ["measure", "draw", "build", "install"]
+    if row:
+        cards = "".join(
+            f'<li class="prc__c"><div class="prc__fig" aria-hidden="true">'
+            f'{drawings.drawing(keys[i % 4], uid=f"-{sid}", draw=draw)}</div>'
+            f'<h3 class="prc__t">{E(t)}</h3><p class="prc__d">{E(d)}</p></li>'
+            for i, st in enumerate(stages) for t, d in [st[:2]])
+        return (f'<section class="prc prc--row" id="{sid}" aria-labelledby="{hid}"><div class="shell">'
+                + sec_head(h2, hid, eyebrow, lede) + f'<ol class="prc__row">{cards}</ol></div></section>')
     sheets = "".join(
         f'<div class="prc__sheet{" is-on" if i == 0 else ""}" data-step="{i}">'
-        f'{drawings.drawing(keys[i % 4], uid=f"-{sid}")}</div>' for i in range(len(stages)))
+        f'{drawings.drawing(keys[i % 4], uid=f"-{sid}", draw=draw)}</div>' for i in range(len(stages)))
     items = "".join(
         f'<li class="prc__i{" is-on" if i == 0 else ""}" data-step="{i}">'
         f'<h3 class="prc__t">{E(t)}</h3><p class="prc__d">{E(d)}</p></li>'
@@ -520,7 +530,7 @@ def article(guide):
                              f'<table class="art__tb"><thead><tr>{head}</tr></thead><tbody>{rows}</tbody></table></div>')
         if i == 1 and guide.get("drawing"):
             parts.append(sheet(guide["drawing"], caption=drawings.alt(guide["drawing"]), cls="art__fig",
-                               uid="-art"))
+                               uid="-art", draw=True))
         secs.append('<section class="art__s">' + "".join(parts) + '</section>')
     html_ = (f'<div class="shell art"><aside class="art__toc" aria-label="On this page">'
              f'<p class="art__toc-h">On this page</p><ol>{toc}</ol>'
