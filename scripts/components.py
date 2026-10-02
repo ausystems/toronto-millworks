@@ -410,9 +410,31 @@ QUOTE_TYPES = [("custom-kitchens", "A kitchen"), ("cabinetry-and-built-ins", "Bu
                ("interior-renovation", "A renovation")]
 
 
+# What saying yes costs, stated where the site asks for it. Each line is a fact
+# the site already stands behind, never a promise the business has not made.
+REASSURE = ("No obligation to go ahead", "Measured in your room", "Built in our own shop")
+COST_GUIDE = "/guides/custom-cabinetry-cost/"
+
+
+def reassure(cls=""):
+    return f'<ul class="{cx("ok", cls)}">' + "".join(f"<li>{E(t)}</li>" for t in REASSURE) + "</ul>"
+
+
+def ask(text, href, label="Get a quote", inline=False):
+    """A mid-page ask at a long page's natural decision point: one sentence, one
+    button, and what it costs to say yes."""
+    inner = (f'<p class="ask__t">{E(text)}</p>'
+             f'<div class="ask__a">{btn(href, label, lg=True)}{reassure()}</div>')
+    if inline:
+        return f'<aside class="ask ask--inline" aria-label="Request a quote">{inner}</aside>'
+    return (f'<aside class="ask" aria-label="Request a quote"><div class="shell">'
+            f'<div class="ask__g">{inner}</div></div></aside>')
+
+
 def quote_starter(h2="Tell us about the room.", text=None, area=None, hid="qs-h", lead=None):
     """The closing ask on every page: one tap on what you are planning opens the
-    quote form with that answer already filled in."""
+    quote form with that answer already filled in. Price, the first question
+    anyone has, is answered one click away."""
     text = text or ("Send drawings, a photo or just the dimensions. We come back with a "
                     "measured quote, not a per foot guess.")
     q = f"&area={area}" if area else ""
@@ -421,11 +443,11 @@ def quote_starter(h2="Tell us about the room.", text=None, area=None, hid="qs-h"
     lead_html = f'<p class="qs__lead">{E(lead)}</p>' if lead else ""
     return (f'<section class="qs" aria-labelledby="{hid}"><div class="shell qs__g">'
             f'<div class="qs__head">{lead_html}<h2 class="qs__t" id="{hid}">{E(h2)}</h2>'
-            f'<p class="qs__l">{E(text)}</p></div>'
+            f'<p class="qs__l">{E(text)}</p>{lnk(COST_GUIDE, "What affects the cost", "qs__cost")}</div>'
             '<div class="qs__side"><p class="qs__k" id="' + hid + '-k">What are you planning?</p>'
             f'<ul class="qs__chips" aria-labelledby="{hid}-k">{chips}</ul>'
-            + btn(f"/contact/{'?area=' + area if area else ''}#quote", "Start a project", lg=True)
-            + '</div></div></section>')
+            + btn(f"/contact/{'?area=' + area if area else ''}#quote", "Get a quote", lg=True)
+            + reassure() + '</div></div></section>')
 
 
 def quote_form():
@@ -491,8 +513,9 @@ def quote_form():
 <button class="btn btn--brass btn--lg qf__next" type="button"><span>Continue</span><i class="btn__arrow" aria-hidden="true">{ARROW}</i></button>
 <button class="btn btn--brass btn--lg qf__send" type="submit"><span>Send the details</span><i class="btn__arrow" aria-hidden="true">{ARROW}</i></button>
 </div>
+{reassure("qf__ok")}
 <div class="qf__done" tabindex="-1" hidden>
-<h2 class="qf__done-t">Thank you. It is on its way.</h2>
+<h2 class="qf__done-t" data-mail-title="One last step: press send.">Thank you. It is on its way.</h2>
 <p class="qf__done-p" data-mail-copy>Your email app should have opened with everything filled in. If it did not, send the summary below to <a href="mailto:{E(SITE['email'])}">{E(SITE['email'])}</a>.</p>
 <pre class="qf__sum" hidden></pre>
 <button class="lnk qf__copy" type="button" hidden><span>Copy the summary</span></button>
@@ -507,8 +530,9 @@ def _slug(s):
     return re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
 
 
-def article(guide):
-    """Guide body: a standing contents list beside the sections. Returns html and words."""
+def article(guide, ask_html=""):
+    """Guide body: a standing contents list beside the sections, with an optional
+    ask after the figure. Returns html and words."""
     toc = "".join(f'<li><a href="#{_slug(t)}">{E(t)}</a></li>' for t, _ in guide["sections"])
     words = 0
     secs = []
@@ -531,6 +555,7 @@ def article(guide):
         if i == 1 and guide.get("drawing"):
             parts.append(sheet(guide["drawing"], caption=drawings.alt(guide["drawing"]), cls="art__fig",
                                uid="-art", draw=True))
+            parts.append(ask_html)
         secs.append('<section class="art__s">' + "".join(parts) + '</section>')
     html_ = (f'<div class="shell art"><aside class="art__toc" aria-label="On this page">'
              f'<p class="art__toc-h">On this page</p><ol>{toc}</ol>'

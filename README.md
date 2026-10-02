@@ -74,3 +74,12 @@ headers including a Content-Security-Policy.
 
 Once the deployment is live, `node scripts/smoke.mjs` checks it end to end; run it
 against `node scripts/serve.mjs` with `node scripts/smoke.mjs http://localhost:4180`.
+
+## Measuring conversions
+
+The site pushes events to `window.dataLayer`: `quote_click`, `email_click` and
+`call_click` (with `cta_location` and `cta_text`), `quote_step` and
+`quote_submit` (with `method`, `project` and `area`). Add Google Tag Manager,
+GA4 or any tag that reads the dataLayer and they are collected; until then
+nothing leaves the page. Set `form_endpoint` in `scripts/site_content.py` so
+requests are delivered directly instead of through the visitor's email app.

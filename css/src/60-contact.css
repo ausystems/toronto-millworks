@@ -118,3 +118,5 @@
   font:13px/1.6 ui-monospace, "SF Mono", Menlo, monospace; white-space:pre-wrap; color:var(--ink-70); max-height:16em; overflow:auto; }
 .qf__copy{ margin-top:.9em; }
 .qf.is-sent > :not(.qf__done){ display:none !important; }
+.qf__ok{ margin-top:18px; }
+.qf.is-sent .qf__ok{ display:none; }

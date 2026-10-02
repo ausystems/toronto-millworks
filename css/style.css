@@ -59,8 +59,9 @@
 *,*::before,*::after{ box-sizing:border-box; }
 html{ -webkit-text-size-adjust:100%; }
 /* on a large monitor the whole rem scale grows with the screen, so headings
-   keep their lead over the larger paragraph text: 16px at 1700 wide, 20 at 2560 */
-@media (min-width:1700px){ html{ font-size:calc(16px + (100vw - 1700px) * .00465); } }
+   keep their lead over the larger paragraph text: 16px at 1700 wide, 20 from 2560
+   up, so a 34 or 49 inch ultrawide reads like a 27 inch monitor, only wider */
+@media (min-width:1700px){ html{ font-size:min(calc(16px + (100vw - 1700px) * .00465), 20px); } }
 body,h1,h2,h3,p,figure,ol,ul{ margin:0; }
 ol,ul{ padding:0; list-style:none; }
 img,svg{ display:block; max-width:100%; }
@@ -457,6 +458,16 @@ address{ font-style:normal; }
   color:rgba(255,255,255,.82);
   text-shadow:0 1px 16px rgba(0,0,0,.35);
 }
+
+/* the ask, with the work one quiet step beside it */
+.hero__cta{ display:flex; flex-wrap:wrap; align-items:center; justify-content:flex-end; gap:12px clamp(16px, calc(1.6 * var(--hero-vw)), 26px); }
+.hero__more{
+  font-size:clamp(14px, calc(1.1 * var(--hero-vw)), 18px); font-weight:500; letter-spacing:-.01em;
+  color:#fff; padding-block:.4em; text-shadow:0 1px 14px rgba(0,0,0,.35);
+  background:linear-gradient(currentColor,currentColor) 0 100% / 100% 1px no-repeat;
+  transition:background-size .55s var(--ease);
+}
+@media (hover:hover){ .hero__more:hover{ background-size:0 1px; background-position:100% 100%; } }
 
 /* ══════════════════════════════════════════════════════════════
    ABOUT  , chip left / statement right, ~1:2 split
@@ -1042,6 +1053,31 @@ address{ font-style:normal; }
 .srch__d{ display:block; margin-top:.35em; font-size:var(--t-small); line-height:1.55; color:var(--ink-70); }
 .srch__out mark{ background:rgba(192,138,60,.22); color:inherit; border-radius:2px; }
 
+/* ── the ask ────────────────────────────────────────────────
+   What saying yes costs, beside every request: three short facts, each
+   marked with the house brass dot. */
+.ok{ display:flex; flex-wrap:wrap; gap:.35em 1.2em; font-size:var(--t-fine); line-height:1.4; color:var(--ink-70); }
+.ok li{ display:inline-flex; align-items:center; gap:.55em; }
+.ok li::before{ content:""; width:.42em; height:.42em; border-radius:50%; background:var(--brass); flex:none; }
+
+/* a mid-page ask, at a long page's natural decision point */
+.ask{ padding:clamp(24px,4vw,64px) 0; }
+.ask__g{
+  display:grid; gap:clamp(22px,2.8vw,40px); align-items:center;
+  padding:clamp(28px,4.4vw,72px); border-radius:var(--radius); background:var(--paper-2);
+}
+@media (min-width:980px){ .ask__g{ grid-template-columns:minmax(0,1fr) auto; } }
+.ask__t{
+  font-size:clamp(1.45rem,2.5vw,2.45rem); font-weight:400; line-height:1.14; letter-spacing:-.034em;
+  max-width:24ch; text-wrap:balance;
+}
+.ask__a{ display:flex; flex-direction:column; align-items:flex-start; gap:16px; }
+.ask--inline{ display:grid; gap:18px; margin:2.2em 0; padding:clamp(22px,3vw,36px); border-radius:var(--radius); background:var(--paper-2); }
+.ask--inline .ask__t{ font-size:clamp(1.2rem,1.7vw,1.6rem); max-width:none; }
+
+.qs__cost{ margin-top:clamp(14px,1.6vw,22px); }
+.qs__side .ok{ margin-top:2px; }
+
 
 /* ── 50-faq-map.css ── */
 /* ══════════════════════════════════════════════════════════════
@@ -1332,6 +1368,8 @@ address{ font-style:normal; }
   font:13px/1.6 ui-monospace, "SF Mono", Menlo, monospace; white-space:pre-wrap; color:var(--ink-70); max-height:16em; overflow:auto; }
 .qf__copy{ margin-top:.9em; }
 .qf.is-sent > :not(.qf__done){ display:none !important; }
+.qf__ok{ margin-top:18px; }
+.qf.is-sent .qf__ok{ display:none; }
 
 
 /* ── 70-article.css ── */
@@ -1661,7 +1699,7 @@ address{ font-style:normal; }
   .js :is(.hero__title,.ph__t,.cx__title,.nf__h,.sh__t,.faq__h,.map__h,.fs__h,.craft__title,.cx__next-h,.qs__t,.foot__title,.say__t):not(.tx){
     opacity:0; animation:txShow 0s 2.4s forwards;
   }
-  .js :is(.ph__l,.ph__a,.ph__note,.hero__lede,.hero__right .btn):not(.tx-follow){
+  .js :is(.ph__l,.ph__a,.ph__note,.hero__lede,.hero__cta):not(.tx-follow){
     opacity:0; animation:txShow 0s 2.4s forwards;
   }
   .js .ph__sheet .dw[data-draw]:not(.is-armed){ opacity:0; animation:txShow 0s 2.4s forwards; }
@@ -1793,6 +1831,7 @@ address{ font-style:normal; }
   .hero__right{ flex:0 1 auto; }
   .hero__body{ flex-direction:column; align-items:flex-start; justify-content:flex-end; gap:clamp(20px,4vw,30px); }
   .hero__right{ align-items:flex-start; text-align:left; max-width:46ch; }
+  .hero__cta{ flex-direction:row-reverse; justify-content:flex-end; }
   .hero__media img{ object-position:center 46%; }
 
   .about__inner{ grid-template-columns:1fr; gap:clamp(18px,3vw,26px); }
@@ -1850,4 +1889,21 @@ address{ font-style:normal; }
   .btn, .btn > span, .btn__arrow{ transition:none; }
   .bench{ height:auto; }
   .bench__pin{ position:static; height:auto; padding:clamp(56px,8vw,110px) 0; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TOUCH
+   A finger needs about 44px, whatever the screen width: phones, foldables,
+   and tablets wide enough for the desk layout alike. Hit areas grow; the
+   type and layout do not move.
+   ══════════════════════════════════════════════════════════════ */
+@media (pointer:coarse){
+  .brand, .lnk, .nav__links > li > a, .cx__mail, .cx__copy, .foot__index a, .nf__links a,
+  .qf__back, .hero__more{ min-height:44px; display:inline-flex; align-items:center; }
+  /* links set inside running text keep their lines, and reach further */
+  .crumbs a, .foot__links a, .art__s p a, .foot__legal a, .qf__legal a{ padding-block:.6em; }
+  .nf__links a{ padding-inline:.4em; margin-inline:-.4em; }
+}
+@media (pointer:coarse) and (min-width:861px){
+  .nav__caret{ width:44px; height:44px; margin:-11px -11px -11px -13px; }
 }

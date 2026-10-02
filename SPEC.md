@@ -71,6 +71,25 @@ Location pages cover every major municipality within 120 km straight-line of
 the shop at 2585 Drew Rd, Mississauga. Each carries its own map, distance,
 neighbourhoods, local copy and nearest-neighbour links, so none is a doorway.
 
+## 3b. Conversion
+
+- Every page asks in three places: the header (or the hero's brass Get a Quote),
+  a mid-page ask at the long page's natural decision point (home after the work,
+  service pages after materials, towns after the local story, projects after the
+  case studies, guides inside the article), and the closing quote prompt.
+- Each ask carries what saying yes costs: no obligation to go ahead, measured in
+  your room, built in our own shop. Only facts the site already stands behind;
+  never free, fast or rated claims the business has not made.
+- Price, the first objection, is answered beside the closing ask (What affects
+  the cost). Service and town links arrive in the form with the answer filled in.
+- The form keeps a half-finished request for the session, says so honestly when
+  the visitor's email app has to send it, and counts every step.
+- Measurement: quote, email and call clicks (with where they came from),
+  quote_step and quote_submit go to window.dataLayer for whatever analytics is
+  connected. Nothing leaves the page until one is.
+- Touch: anything a finger presses is at least 44px tall on coarse pointers,
+  from phones and foldables to tablets showing the desk layout.
+
 ## 4. Acceptance criteria (enforced by `scripts/audit.py`)
 
 1. Every indexable page has a unique `<title>` of 30 to 60 characters.

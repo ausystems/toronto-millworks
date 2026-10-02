@@ -56,6 +56,8 @@ def home():
             + C.gallery(["frieze", "espresso", "transom", "pendants", "plinth", "shelving"],
                         "From the shop floor", "gal-h", "Work",
                         "Residential panelling and a commercial bar, photographed as built.")
+            + C.ask("Seen enough to picture your own room? Tell us about it, and we come back with "
+                    "a measured quote.", "/contact/#quote")
             + C.areas_section("Within 120 km of the bench", "arx-h",
                               "Toronto and the region around it, from Hamilton and Niagara to Barrie "
                               "and Durham, measured, built and installed by the same team.",
@@ -206,6 +208,8 @@ def service(s):
             + C.materials(s["materials"], "Materials and finishes", "mat-h", lede=(
                 "Chosen for where the piece lives and how hard it works. We bring samples to the "
                 "site measure."))
+            + C.ask("Ready to see yours drawn? Send what you know about the room, and we come back "
+                    "with a measured quote.", f"/contact/?type={s['slug']}#quote")
             + C.bleed(c)
             + C.area_links([BY_SLUG[x] for x in TOP_AREAS], f"Where we build {s['nav'].lower()}",
                            "arl-h", f"From our shop in Mississauga to every town within 120 km.",
@@ -271,9 +275,11 @@ def projects():
                                        ("reception", "office-millwork", "Reception desk"),
                                        ("builtin", "cabinetry-and-built-ins", "Built-in wall")))
              + '</div></div></section>')
-    body = (C.page_header(p, actions=C.btn("/contact/#quote", "Start a project", lg=True))
+    body = (C.page_header(p, actions=C.btn("/contact/#quote", "Get a quote", lg=True))
             + C.bleed("finished", eager=True)
             + strip + case1 + case2
+            + C.ask("Picturing your own room? Send what you know, and we come back with a measured "
+                    "quote.", "/contact/#quote")
             + C.gallery(["frieze", "transom", "pendants", "plinth", "espresso", "cove", "shelving",
                          "panel-detail", "pipes", "archway", "lounge", "sconce"],
                         "From the bench", "gal-h", "Gallery",
@@ -559,6 +565,8 @@ def area(pl, i):
                            None, cls="idx--small")
             + C.figsay(plate2, f"How {_a(pl['name'])} {pl['name']} project runs", "how-h", process_note, flip=True,
                        extra=C.lnk("/guides/how-custom-millwork-is-made/", "How custom millwork is made"))
+            + C.ask(f"Tell us about the room in {pl['name']}, and we come back with a measured quote.",
+                    f"/contact/?area={pl['slug']}#quote")
             + C.faq(_area_faq(pl), h2=f"Questions from<br> {E(pl['name'])}", map_after=True)
             + C.nearby(nearest(pl["slug"], 6), "Nearby areas we serve", "near-h")
             + C.quote_starter(f"Planning a project in {pl['name']}?", area=pl["slug"]))
@@ -619,7 +627,9 @@ def guide(g):
     p = {"path": path, "label": "Guide",
          "crumbs": [("Guides", "guides"), (g["h1"], f"guides/{g['slug']}")],
          "h1": g["h1"], "lede": g["lede"]}
-    art, words = C.article(g)
+    art, words = C.article(g, ask_html=C.ask(
+        "Pricing a room of your own? Send the dimensions, and we come back with a measured quote.",
+        f"/contact/?type={g['services'][0]}#quote", inline=True))
     others = [x["slug"] for x in GUIDES if x["slug"] != g["slug"]][:3]
     body = (C.page_header(p, note="By Toronto Millworks · Updated October 2026", tone="ph--article")
             + art
@@ -719,7 +729,8 @@ def not_found():
             '<label class="sr-only" for="nfq">Search this site</label>'
             '<input id="nfq" name="q" type="search" placeholder="Search the site">'
             f'<button type="submit"><span class="sr-only">Search</span><i aria-hidden="true">{C.ARROW}</i></button>'
-            '</form><div class="nf__a">' + C.btn("/", "Back to the home page", lg=True) + '</div>'
+            '</form><div class="nf__a">' + C.btn("/", "Back to the home page", lg=True)
+            + C.lnk("/contact/#quote", "Or get a quote") + '</div>'
             f'<ul class="nf__links" aria-label="Popular pages">{links}</ul></div></div></section>')
     return _page(**p, active="", body_class="pg-404", title="Page Not Found | Toronto Millworks",
                  desc=("The page you asked for does not exist. Browse custom millwork services, the "

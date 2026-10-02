@@ -86,6 +86,16 @@
   text-shadow:0 1px 16px rgba(0,0,0,.35);
 }
 
+/* the ask, with the work one quiet step beside it */
+.hero__cta{ display:flex; flex-wrap:wrap; align-items:center; justify-content:flex-end; gap:12px clamp(16px, calc(1.6 * var(--hero-vw)), 26px); }
+.hero__more{
+  font-size:clamp(14px, calc(1.1 * var(--hero-vw)), 18px); font-weight:500; letter-spacing:-.01em;
+  color:#fff; padding-block:.4em; text-shadow:0 1px 14px rgba(0,0,0,.35);
+  background:linear-gradient(currentColor,currentColor) 0 100% / 100% 1px no-repeat;
+  transition:background-size .55s var(--ease);
+}
+@media (hover:hover){ .hero__more:hover{ background-size:0 1px; background-position:100% 100%; } }
+
 /* ══════════════════════════════════════════════════════════════
    ABOUT  , chip left / statement right, ~1:2 split
    ══════════════════════════════════════════════════════════════ */

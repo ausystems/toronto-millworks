@@ -20,7 +20,7 @@
   .js :is(.hero__title,.ph__t,.cx__title,.nf__h,.sh__t,.faq__h,.map__h,.fs__h,.craft__title,.cx__next-h,.qs__t,.foot__title,.say__t):not(.tx){
     opacity:0; animation:txShow 0s 2.4s forwards;
   }
-  .js :is(.ph__l,.ph__a,.ph__note,.hero__lede,.hero__right .btn):not(.tx-follow){
+  .js :is(.ph__l,.ph__a,.ph__note,.hero__lede,.hero__cta):not(.tx-follow){
     opacity:0; animation:txShow 0s 2.4s forwards;
   }
   .js .ph__sheet .dw[data-draw]:not(.is-armed){ opacity:0; animation:txShow 0s 2.4s forwards; }

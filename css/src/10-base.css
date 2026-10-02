@@ -39,8 +39,9 @@
 *,*::before,*::after{ box-sizing:border-box; }
 html{ -webkit-text-size-adjust:100%; }
 /* on a large monitor the whole rem scale grows with the screen, so headings
-   keep their lead over the larger paragraph text: 16px at 1700 wide, 20 at 2560 */
-@media (min-width:1700px){ html{ font-size:calc(16px + (100vw - 1700px) * .00465); } }
+   keep their lead over the larger paragraph text: 16px at 1700 wide, 20 from 2560
+   up, so a 34 or 49 inch ultrawide reads like a 27 inch monitor, only wider */
+@media (min-width:1700px){ html{ font-size:min(calc(16px + (100vw - 1700px) * .00465), 20px); } }
 body,h1,h2,h3,p,figure,ol,ul{ margin:0; }
 ol,ul{ padding:0; list-style:none; }
 img,svg{ display:block; max-width:100%; }

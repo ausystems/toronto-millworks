@@ -677,7 +677,7 @@ var TM = (function () {
     ["ghost", ".say__t"]
   ];
   var CHARS = { rise: true, focus: true };
-  var FOLLOW = ".ph__l, .ph__a, .ph__note, .hero__lede, .hero__right .btn";
+  var FOLLOW = ".ph__l, .ph__a, .ph__note, .hero__lede, .hero__cta";
 
   function texts (root) {
     var out = [];
@@ -826,12 +826,32 @@ var TM = (function () {
     var map = new Map(items.map(function (it) { return [it.h, it]; }));
     var io = new IntersectionObserver(function (es) {
       es.forEach(function (e) {
-        if (!e.isIntersecting) return;
+        if (!e.isIntersecting || !map.has(e.target)) return;
         io.unobserve(e.target);
-        requestAnimationFrame(function () { play(map.get(e.target)); });
+        var it = map.get(e.target);
+        map.delete(e.target);
+        requestAnimationFrame(function () { play(it); });
       });
     }, { rootMargin: "0px 0px -8% 0px" });
     items.forEach(function (it) { io.observe(it.h); });
+    /* a heading flung past between two frames is never seen to arrive; put it
+       back as it is, rather than leave it waiting above the reader */
+    var queued = false;
+    window.addEventListener("scroll", function () {
+      if (queued || !map.size) return;
+      queued = true;
+      requestAnimationFrame(function () {
+        queued = false;
+        map.forEach(function (it, h) {
+          if (h.getBoundingClientRect().bottom >= 0) return;
+          io.unobserve(h);
+          map.delete(h);
+          h.innerHTML = it.orig;
+          h.removeAttribute("aria-label");
+          h.classList.remove("tx--" + it.kind);
+        });
+      });
+    }, { passive: true });
   }
 
   /* Measure with the real face, never the fallback: fonts.ready can resolve
@@ -921,6 +941,26 @@ var TM = (function () {
   });
 })();
 
+/* ── measurement: every step toward a quote is counted ─────────
+   Events go to window.dataLayer, so a tag manager or analytics added later
+   sees them without touching this file. Nothing leaves the page until one
+   is. Where a click came from is read off the section it sits in. */
+var track = function (event, data) {
+  var o = { event: event };
+  for (var k in data) o[k] = data[k];
+  (window.dataLayer = window.dataLayer || []).push(o);
+};
+document.addEventListener("click", function (e) {
+  var a = e.target.closest && e.target.closest('a[href*="/contact/"], a[href^="mailto:"], a[href^="tel:"]');
+  if (!a) return;
+  var h = a.getAttribute("href");
+  var where = a.closest(".nav, .dock, .hero, .ph, .ask, .qs, .foot, .nf, .cx, .map, .idx, section");
+  track(h.indexOf("tel:") === 0 ? "call_click" : h.indexOf("mailto:") === 0 ? "email_click" : "quote_click", {
+    cta_location: where ? where.className.split(" ")[0] || "section" : "page",
+    cta_text: a.textContent.replace(/\s+/g, " ").trim().slice(0, 60)
+  });
+});
+
 /* ── the quote form ─────────────────────────────────────────────
    Three short screens, validated as you go. Sends to the configured form
    endpoint; without one, or if it fails, it composes a complete email in
@@ -936,8 +976,35 @@ var TM = (function () {
   var endpoint = f.getAttribute("data-endpoint"), email = f.getAttribute("data-email");
   var cur = 0;
 
+  var KEY = "tm-quote", seen = 0;
+  function save () {
+    try {
+      var o = { _step: cur };
+      new FormData(f).forEach(function (v, k) { if (k !== "company_site") o[k] = v; });
+      sessionStorage.setItem(KEY, JSON.stringify(o));
+    } catch (e) {}
+  }
+  function restore () {
+    try {
+      var o = JSON.parse(sessionStorage.getItem(KEY) || "null");
+      if (!o) return 0;
+      Object.keys(o).forEach(function (k) {
+        if (k === "_step" || !o[k]) return;
+        if (k === "type") {
+          var r = f.querySelector('input[name="type"][value="' + o[k] + '"]');
+          if (r) r.checked = true;
+        } else if (f.elements[k] && f.elements[k].tagName) f.elements[k].value = o[k];
+      });
+      return Math.min(o._step || 0, steps.length - 1);
+    } catch (e) { return 0; }
+  }
+  f.addEventListener("input", save);
+  f.addEventListener("change", save);
+
   function show (i, focus) {
     cur = i;
+    if (i > seen) { seen = i; track("quote_step", { step: i + 1 }); }
+    save();
     steps.forEach(function (s, k) { s.classList.toggle("is-on", k === i); });
     bar.style.width = ((i + 1) / steps.length * 100) + "%";
     now.textContent = "Step " + (i + 1);
@@ -999,12 +1066,13 @@ var TM = (function () {
     if (el) el.addEventListener("change", function () { if (el.getAttribute("aria-invalid") === "true") valid(cur); });
   });
 
-  /* arrive with whatever the link already told us */
-  var qs = new URLSearchParams(location.search), start = 0;
+  /* arrive with what was typed before, then whatever the link tells us */
+  var start = restore();
+  var qs = new URLSearchParams(location.search);
   var t = qs.get("type"), area = qs.get("area");
   if (t) {
     var r = [].filter.call(f.querySelectorAll('input[name="type"]'), function (x) { return x.value === t; })[0];
-    if (r) { r.checked = true; start = 1; }
+    if (r) { r.checked = true; start = Math.max(start, 1); }
   }
   if (area) {
     var sel = f.querySelector("#area");
@@ -1033,7 +1101,13 @@ var TM = (function () {
   function finish (viaMail, s) {
     f.classList.add("is-sent");
     done.hidden = false;
+    try { sessionStorage.removeItem(KEY); } catch (e) {}
+    var type = f.querySelector('input[name="type"]:checked');
+    track("quote_submit", { method: viaMail ? "email_app" : "form", project: type ? type.value : "",
+                            area: f.querySelector("#area").value });
     if (viaMail) {
+      var t = done.querySelector(".qf__done-t");
+      t.textContent = t.getAttribute("data-mail-title");
       sum.hidden = false; sum.textContent = s.subject + "\n\n" + s.body;
       if (navigator.clipboard) copy.hidden = false;
     } else {

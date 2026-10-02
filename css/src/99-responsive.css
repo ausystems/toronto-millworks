@@ -47,6 +47,7 @@
   .hero__right{ flex:0 1 auto; }
   .hero__body{ flex-direction:column; align-items:flex-start; justify-content:flex-end; gap:clamp(20px,4vw,30px); }
   .hero__right{ align-items:flex-start; text-align:left; max-width:46ch; }
+  .hero__cta{ flex-direction:row-reverse; justify-content:flex-end; }
   .hero__media img{ object-position:center 46%; }
 
   .about__inner{ grid-template-columns:1fr; gap:clamp(18px,3vw,26px); }
@@ -104,4 +105,21 @@
   .btn, .btn > span, .btn__arrow{ transition:none; }
   .bench{ height:auto; }
   .bench__pin{ position:static; height:auto; padding:clamp(56px,8vw,110px) 0; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TOUCH
+   A finger needs about 44px, whatever the screen width: phones, foldables,
+   and tablets wide enough for the desk layout alike. Hit areas grow; the
+   type and layout do not move.
+   ══════════════════════════════════════════════════════════════ */
+@media (pointer:coarse){
+  .brand, .lnk, .nav__links > li > a, .cx__mail, .cx__copy, .foot__index a, .nf__links a,
+  .qf__back, .hero__more{ min-height:44px; display:inline-flex; align-items:center; }
+  /* links set inside running text keep their lines, and reach further */
+  .crumbs a, .foot__links a, .art__s p a, .foot__legal a, .qf__legal a{ padding-block:.6em; }
+  .nf__links a{ padding-inline:.4em; margin-inline:-.4em; }
+}
+@media (pointer:coarse) and (min-width:861px){
+  .nav__caret{ width:44px; height:44px; margin:-11px -11px -11px -13px; }
 }
