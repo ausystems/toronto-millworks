@@ -74,12 +74,12 @@
   display:flex; flex-direction:column; align-items:flex-end;
   gap:clamp(10px, calc(1.5 * var(--hero-vw)), 22px);
   text-align:right;
-  max-width:clamp(252px, calc(30 * var(--hero-vw)), 430px);
+  max-width:clamp(270px, calc(34 * var(--hero-vw)), 560px);
   padding-bottom:2px;
   flex:none;
 }
 .hero__lede{
-  font-size:clamp(11.6px, calc(1.02 * var(--hero-vw)), 14.6px);
+  font-size:clamp(15px, calc(1.26 * var(--hero-vw)), 20.5px);
   line-height:1.62;
   letter-spacing:-.002em;
   color:rgba(255,255,255,.82);
@@ -209,7 +209,7 @@
   text-wrap:balance;
 }
 .craft__text{
-  font-size:clamp(14px,1.12vw,16.5px);
+  font-size:var(--t-body);
   line-height:1.68;
   color:var(--ink-70);
   text-wrap:pretty;

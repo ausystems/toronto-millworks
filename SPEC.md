@@ -27,7 +27,10 @@ Three.js. Every page is complete HTML before any script runs.
 - **Palette** paper `#FFFFFF`, paper-2 `#F7F5F1`, ink `#17140F`, ink-70, ink-45,
   brass `#C08A3C`, deep brass footer. Nothing else is introduced.
 - **Type** Instrument Sans, self-hosted variable woff2. Display at weight 400
-  with negative tracking; UI at 500 to 600.
+  with negative tracking; UI at 500 to 600. Paragraphs use one fluid scale in
+  10-base.css (--t-lede, --t-body, --t-small, --t-fine, --t-label): body is
+  17.5px on a phone, about 19.5px on a laptop and 24px on a 2560 monitor, and
+  above 1700px wide the rem scale grows too, so headings keep their lead.
 - **Shape** pill chips with a brass dot, one corner radius token, hairlines.
 - **Signature** hairline shop drawings: the way a millwork job really starts.
   They stand in where photography does not exist yet, draw themselves in only

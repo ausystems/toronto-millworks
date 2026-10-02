@@ -23,7 +23,7 @@
 .brand__mark{ display:block; width:clamp(26px,2.2vw,32px); color:var(--ink); }
 .brand__mark svg{ width:100%; height:auto; }
 .brand__name{
-  font-size:clamp(14.5px,1.18vw,17px);
+  font-size:clamp(14.5px, 12px + .3vw, 19.5px);
   font-weight:600;
   letter-spacing:-.022em;
 }
@@ -34,7 +34,7 @@
 }
 .nav__links > li > a{
   display:inline-flex; align-items:center; gap:.34em;
-  font-size:clamp(12.5px,1vw,14px);
+  font-size:clamp(13px, 11px + .2vw, 16.5px);
   font-weight:500;
   letter-spacing:-.008em;
   color:var(--ink-70);
@@ -95,10 +95,10 @@
 }
 .nsub__a:hover, .nsub__a:focus-visible{ background:var(--paper-2); }
 .nsub__t{ font-size:clamp(14px,1.08vw,16px); font-weight:500; letter-spacing:-.016em; color:var(--ink); }
-.nsub__d{ font-size:clamp(12px,.9vw,13.5px); line-height:1.45; color:var(--ink-45); }
+.nsub__d{ font-size:var(--t-fine); line-height:1.45; color:var(--ink-45); }
 .nsub__aside{ display:flex; flex-direction:column; align-items:flex-start; gap:.3em;
   padding:1em 0 1em clamp(16px,2vw,32px); border-left:1px solid var(--line-soft); }
-.nsub__k{ font-size:clamp(12.5px,.95vw,14px); line-height:1.5; color:var(--ink-70); margin-bottom:.8em; max-width:24ch; }
-.nsub__more{ font-size:clamp(13px,1vw,14.5px); font-weight:500; color:var(--ink);
+.nsub__k{ font-size:var(--t-fine); line-height:1.5; color:var(--ink-70); margin-bottom:.8em; max-width:24ch; }
+.nsub__more{ font-size:var(--t-small); font-weight:500; color:var(--ink);
   padding:.2em 0; border-bottom:1px solid transparent; transition:border-color .3s var(--ease); }
 .nsub__more:hover{ border-bottom-color:var(--brass); }

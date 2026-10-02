@@ -4,13 +4,14 @@
    standing beside it and a hairline that fills as you read.
    ══════════════════════════════════════════════════════════════ */
 .art{ display:grid; grid-template-columns:1fr; gap:clamp(28px,4vw,72px); padding-bottom:clamp(40px,5vw,80px); }
-@media (min-width:1000px){ .art{ grid-template-columns:minmax(0,16rem) minmax(0,44rem); } }
+/* the reading column is measured in the text's own size, so it widens with it */
+@media (min-width:1000px){ .art{ grid-template-columns:minmax(0,calc(var(--t-body) * 14)) minmax(0,calc(var(--t-body) * 38)); } }
 .art__toc{ align-self:start; }
 @media (min-width:1000px){ .art__toc{ position:sticky; top:calc(var(--nav-space) + 28px); } }
-.art__toc-h{ font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-45); margin-bottom:.9em; }
+.art__toc-h{ font-size:var(--t-label); letter-spacing:.16em; text-transform:uppercase; color:var(--ink-45); margin-bottom:.9em; }
 .art__toc ol{ display:grid; }
 .art__toc a{ display:block; padding:.45em 0;
-  font-size:13.5px; line-height:1.4; color:var(--ink-70); transition:color .3s var(--ease), padding .45s var(--ease); }
+  font-size:var(--t-fine); line-height:1.4; color:var(--ink-70); transition:color .3s var(--ease), padding .45s var(--ease); }
 .art__toc a:hover{ color:var(--ink); }
 .art__toc a.is-on{ color:var(--ink); padding-left:10px; box-shadow:inset 2px 0 0 var(--brass); }
 .art__progress{ display:none; height:1px; margin-top:1.2em; background:var(--line); overflow:hidden; }
@@ -22,15 +23,15 @@
 .art__s + .art__s{ margin-top:clamp(36px,4vw,60px); }
 .art__h{ font-size:clamp(1.55rem,2.6vw,2.3rem); font-weight:400; line-height:1.1; letter-spacing:-.038em;
   margin-bottom:.75em; text-wrap:balance; }
-.art__s p{ font-size:clamp(1.02rem,1.18vw,1.13rem); line-height:1.78; color:#2D2822; margin:0 0 1.1em; text-wrap:pretty; }
+.art__s p{ font-size:var(--t-body); line-height:1.78; color:#2D2822; margin:0 0 1.1em; text-wrap:pretty; }
 .art__s ul{ margin:0 0 1.2em; display:grid; gap:.65em; }
-.art__s li{ position:relative; padding-left:1.3em; font-size:clamp(1rem,1.12vw,1.08rem); line-height:1.66; color:#2D2822; }
+.art__s li{ position:relative; padding-left:1.3em; font-size:var(--t-body); line-height:1.66; color:#2D2822; }
 .art__s li::before{ content:""; position:absolute; left:.15em; top:.68em; width:6px; height:6px; border-radius:50%; background:var(--brass); }
 .art__fig{ margin:clamp(26px,3vw,40px) 0; padding:clamp(14px,1.8vw,24px); background:var(--paper-2); border-radius:var(--radius); }
 .art__tw{ margin:0 0 1.4em; overflow-x:auto; border-top:1px solid var(--ink); }
 .art__tw:focus-visible{ outline-offset:4px; }
-.art__tb{ width:100%; min-width:520px; border-collapse:collapse; font-size:14px; }
+.art__tb{ width:100%; min-width:520px; border-collapse:collapse; font-size:var(--t-fine); }
 .art__tb th, .art__tb td{ text-align:left; padding:.8em 1em .8em 0; border-bottom:1px solid var(--line); vertical-align:top; line-height:1.45; }
-.art__tb thead th{ font-size:10.5px; font-weight:500; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-45); }
+.art__tb thead th{ font-size:var(--t-label); font-weight:500; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-45); }
 .art__tb tbody th{ font-weight:500; color:var(--ink); }
 .art__tb td{ color:var(--ink-70); font-variant-numeric:tabular-nums; }
